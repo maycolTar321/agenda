@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Z-Core ULTIMATE PRO</title>
-    <link rel="manifest" href="manifest.json">
+    <title>Z-Core ULTIMATE PRO v2</title>
     <link rel="icon" href="assets/icon.png">
     <meta name="theme-color" content="#ff0080">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -32,167 +31,117 @@
         .user-pill { display:flex; align-items:center; gap:12px; }
         .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); padding:2px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
 
-        /* Search Bar */
-        #search-container { margin-bottom: 20px; display: none; animation: fadeIn 0.3s; }
-        .search-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 1px solid #eee; background: #fbfbfb; font-family: inherit; outline: none; }
-
-        .cal-container { overflow-x: auto; display: flex; gap: 12px; padding: 10px 0 30px; scroll-behavior: smooth; }
-        .cal-container::-webkit-scrollbar { display: none; }
-        .cal-item { flex: 0 0 65px; display:flex; flex-direction:column; align-items:center; padding:15px 5px; border-radius:24px; cursor:pointer; transition:0.3s; border:1.5px solid #f0f0f0; background: white; }
-        .cal-item.active { background: var(--dark); border-color: var(--dark); color:white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: scale(1.05); }
-
-        .motivation-card { background: var(--grad); border-radius: 30px; padding:25px; color:white; margin-bottom:30px; position:relative; overflow:hidden; }
-        .motivation-card i { position: absolute; right: -10px; top: -10px; font-size: 5rem; opacity: 0.1; }
-        .quote-text { font-size: 1rem; font-weight: 700; font-style: italic; position: relative; z-index: 2; }
-
-        /* Fitness Card */
-        .fitness-card { background: #000; color: #fff; border-radius: 30px; padding: 25px; margin-bottom: 30px; border: 1px solid #333; position: relative; overflow: hidden; }
-        .fitness-card::after { content:''; position:absolute; top:-50%; right:-20%; width:100px; height:100px; background:var(--c); filter:blur(50px); opacity:0.3; }
+        /* Fitness Card Mejorada */
+        .fitness-card { background: #000; color: #fff; border-radius: 30px; padding: 25px; margin-bottom: 30px; border: 1px solid #333; position: relative; }
+        .fit-btns { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-fit { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-size: 0.7rem; }
+        .btn-ok { background: var(--c); color: #000; }
+        .btn-no { background: #333; color: #fff; }
 
         .glass-card { background: white; border-radius: var(--br); padding:25px; box-shadow: var(--shadow); border: 1px solid #f0f0f0; margin-bottom:30px; }
-        .stats-grid { display:flex; justify-content:space-between; align-items:flex-end; height:100px; margin-top:15px; }
-        .stat-bar-outer { width:20px; height:100px; background:#f4f4f4; border-radius:10px; position:relative; overflow:hidden; }
-        .stat-bar-inner { position:absolute; bottom:0; width:100%; background:var(--grad); transition: height 0.8s; height: 10%; }
-
-        /* Task Item */
-        .task-item { display:flex; align-items:center; gap:15px; padding:20px; background:white; border-radius:24px; margin-bottom:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border:1px solid #f9f9f9; cursor:pointer; }
-        .task-check { width:26px; height:26px; border:2.5px solid #eee; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:0.3s; }
-        .task-item.done { opacity:0.6; }
-        .task-item.done .task-check { background:var(--p); border-color:transparent; }
+        
+        /* Items Estilizados */
+        .task-item { display:flex; align-items:center; gap:15px; padding:20px; background:white; border-radius:24px; margin-bottom:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border:1px solid #f9f9f9; }
+        .task-check { width:26px; height:26px; border:2.5px solid #eee; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+        .task-item.done { background: #f0fff0; border-color: #d0f0d0; }
+        .task-item.done .task-check { background: #2ecc71; border-color: transparent; }
         .task-item.done .task-check::after { content:'\f00c'; font-family:'Font Awesome 6 Free'; font-weight:900; color:white; font-size:0.75rem; }
-        .task-info h4 { font-size: 1rem; font-weight: 700; }
-        .task-info p { font-size: 0.7rem; font-weight: 800; color:var(--p); text-transform: uppercase; }
 
-        .bottom-tabs { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:92%; max-width:400px; background:rgba(17,17,17,0.98); padding:10px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; }
+        /* Compras */
+        .shop-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .report-card { background: #f8f9fa; border-radius: 20px; padding: 15px; margin-top: 20px; border: 1px dashed #ccc; }
+
+        /* Bottom Nav */
+        .bottom-tabs { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:92%; max-width:400px; background:rgba(17,17,17,0.95); padding:10px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; }
         .tab-icon { color:#555; font-size:1.4rem; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
         .tab-icon.active { color:white; background:rgba(255,255,255,0.1); }
 
-        .z-input { width:100%; padding:18px; border-radius:20px; border:1px solid #eee; background:#fbfbfb; margin-bottom:15px; font-size:1rem; font-family:inherit; outline:none; }
-        .z-btn { background:var(--grad); color:white; border:none; padding:18px; border-radius:20px; width:100%; font-size:1.1rem; font-weight:800; cursor:pointer; }
+        .z-input, select { width:100%; padding:15px; border-radius:15px; border:1px solid #eee; background:#fbfbfb; margin-bottom:10px; font-family:inherit; outline:none; }
+        .z-btn { background:var(--grad); color:white; border:none; padding:18px; border-radius:20px; width:100%; font-size:1.1rem; font-weight:800; }
         
-        .toolbar { display:flex; gap:10px; margin-bottom:15px; background:#f0f0f0; padding:10px; border-radius:18px; overflow-x:auto; }
-        .toolbar button { flex-shrink:0; width:35px; height:35px; border:none; background:white; border-radius:10px; font-weight:800; }
-        #rich-editor { min-height:350px; outline:none; font-size:1.1rem; line-height:1.6; }
-
-        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        #note-list, #home-task-list, #check-list { margin-top: 20px; }
+        .note-card { background: #fff; padding: 20px; border-radius: 20px; border: 1px solid #eee; margin-bottom: 15px; position: relative; }
     </style>
 </head>
 <body>
 
     <main>
-        <!-- INICIO -->
         <div id="v-inicio" class="view">
             <header class="app-header">
                 <div class="user-pill">
                     <div class="avatar">M</div>
-                    <div>
-                        <p style="font-size: 0.7rem; font-weight: 700; color:var(--gray);">Bienvenido,</p>
-                        <h1 id="user-display">Maycol</h1>
-                    </div>
+                    <div><p style="font-size: 0.7rem; font-weight: 700; color:var(--gray);">Bienvenido,</p><h1>Maycol</h1></div>
                 </div>
-                <div style="display:flex; gap:15px; font-size: 1.2rem;">
-                    <i class="fas fa-search" onclick="z.toggleSearch()"></i>
-                    <i class="fas fa-bell" onclick="z.askPerms()" style="color:var(--p);"></i>
-                </div>
+                <i class="fas fa-bolt" style="color:var(--p);"></i>
             </header>
 
-            <div id="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="Buscar misiones..." oninput="z.renderTasks()">
-            </div>
-
-            <div class="motivation-card">
-                <i class="fas fa-bolt"></i>
-                <p class="quote-text" id="quote-text">"La persistencia es la clave del éxito."</p>
-            </div>
-
             <div class="fitness-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <h3 style="color:#fff; margin:0;">RETO FITNESS</h3>
-                    <i class="fas fa-dumbbell" style="color:var(--c);"></i>
-                </div>
-                <p id="fit-challenge" style="font-size:1.1rem; font-weight:800;">Subir 3 pisos por las escaleras</p>
-                <button onclick="z.genFit()" style="background:transparent; border:none; color:var(--c); font-size:0.7rem; font-weight:800; margin-top:10px; cursor:pointer;">CAMBIAR RETO <i class="fas fa-sync"></i></button>
-            </div>
-
-            <div class="cal-container" id="cal-strip"></div>
-
-            <div class="glass-card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3>Productividad</h3>
-                    <span id="main-pct" style="font-size: 0.8rem; font-weight: 800; color:var(--p);">0%</span>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-0"></div></div><span class="stat-label">L</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-1"></div></div><span class="stat-label">M</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-2"></div></div><span class="stat-label">M</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-3"></div></div><span class="stat-label">J</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-4"></div></div><span class="stat-label">V</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-5"></div></div><span class="stat-label">S</span></div>
-                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-6"></div></div><span class="stat-label">D</span></div>
+                <h3 style="color:#fff;">RETO FITNESS</h3>
+                <p id="fit-challenge" style="font-size:1.1rem; font-weight:800; color:var(--c);">Cargando reto...</p>
+                <div class="fit-btns" id="fit-actions">
+                    <button class="btn-fit btn-ok" onclick="z.completeFit(true)">LOGRADO</button>
+                    <button class="btn-fit btn-no" onclick="z.completeFit(false)">PASAR</button>
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:15px;">
-                <h2>Mi Agenda</h2>
-                <div style="display:flex; gap:10px;">
-                    <span id="tab-today" class="active" style="font-size:0.7rem; font-weight:800; color:var(--p); cursor:pointer;" onclick="z.setGlobalList(false)">DÍA</span>
-                    <span id="tab-global" style="font-size:0.7rem; font-weight:800; color:var(--gray); cursor:pointer;" onclick="z.setGlobalList(true)">TODO</span>
-                </div>
-            </div>
+            <div id="cal-strip" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:25px;"></div>
+
+            <h2>Mi Agenda</h2>
             <div id="home-task-list"></div>
         </div>
 
-        <!-- PROGRAMAR / EDITAR -->
         <div id="v-programar" class="view hidden">
-            <div class="editor-wrap">
-                <h2 id="form-title">Programar Misión</h2>
-                <input type="hidden" id="edit-id">
-                <input type="text" id="add-name" class="z-input" placeholder="Nombre de la misión" spellcheck="true">
-                <input type="datetime-local" id="add-time" class="z-input">
-                <select id="add-cat" class="z-input">
-                    <option value="Trabajo">Trabajo</option>
-                    <option value="Mercado">Mercado</option>
-                    <option value="Personal">Personal</option>
-                    <option value="Ejercicio">Salud / Fit</option>
-                </select>
-                <button class="z-btn" id="btn-save" onclick="z.saveTask()">Guardar en Agenda</button>
-                <button class="z-btn" id="btn-cancel" style="background:#eee; color:#666; margin-top:10px; display:none;" onclick="z.resetForm()">Cancelar</button>
-            </div>
+            <h2>Nueva Misión</h2>
+            <input type="text" id="add-name" class="z-input" placeholder="¿Qué harás?">
+            <input type="datetime-local" id="add-time" class="z-input">
+            <select id="add-cat" class="z-input">
+                <option value="Trabajo">💼 Trabajo</option>
+                <option value="Personal">👤 Personal</option>
+                <option value="Estudio">🎓 UCATEC</option>
+            </select>
+            <button class="z-btn" onclick="z.saveTask()">Guardar Agenda</button>
         </div>
 
-        <!-- NOTAS -->
         <div id="v-notas" class="view hidden">
-            <div class="editor-wrap">
-                <h2>Editor de Notas Z</h2>
-                <div class="toolbar">
-                    <button onclick="z.exec('bold')">B</button>
-                    <button onclick="z.exec('italic')">I</button>
-                    <button onclick="z.exec('insertUnorderedList')">Bullet</button>
-                </div>
-                <div id="rich-editor" contenteditable="true" oninput="z.saveNotes()"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2>Mis Notas</h2>
+                <button class="z-btn" style="width:50px; height:50px; padding:0; border-radius:50%;" onclick="z.newNote()">+</button>
             </div>
+            <div id="note-editor" class="hidden">
+                <input type="text" id="note-title" class="z-input" placeholder="Título">
+                <div id="rich-editor" contenteditable="true" class="z-input" style="min-height:200px; background:white;"></div>
+                <button class="z-btn" onclick="z.saveNote()">Guardar Nota</button>
+                <button class="z-btn" style="background:#eee; color:#666; margin-top:10px;" onclick="z.closeNote()">Cancelar</button>
+            </div>
+            <div id="note-list"></div>
         </div>
 
-        <!-- MERCADO -->
         <div id="v-mercado" class="view hidden">
-            <div class="editor-wrap">
-                <h2>Lista de Compras</h2>
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <input type="text" id="in-check" class="z-input" style="margin:0;" placeholder="Nuevo item...">
-                    <button onclick="z.addCheck()" class="z-btn" style="width:60px; padding:0;">+</button>
+            <h2>Lista de Compras</h2>
+            <div class="shop-form">
+                <input type="text" id="shop-item" class="z-input" placeholder="Producto (ej: Papas)">
+                <div class="shop-grid">
+                    <input type="number" id="shop-qty" class="z-input" placeholder="Cant.">
+                    <select id="shop-unit" class="z-input">
+                        <option value="Kilo">Kilo</option>
+                        <option value="Arroba">@</option>
+                        <option value="Cuartilla">Cuartilla</option>
+                        <option value="Media @">1/2 @</option>
+                        <option value="Unidad">Und.</option>
+                    </select>
+                    <input type="number" id="shop-price" class="z-input" placeholder="Bs.">
                 </div>
-                <div id="check-list"></div>
+                <button class="z-btn" onclick="z.addShop()">Añadir a la lista</button>
             </div>
+            <div id="check-list"></div>
+            <div id="shop-report" class="report-card"></div>
         </div>
 
-        <!-- AJUSTES -->
         <div id="v-ajustes" class="view hidden">
-            <div class="editor-wrap" style="text-align:center;">
-                <h2>Ajustes</h2>
-                <button class="z-btn" style="background:#333; margin-bottom:10px;" onclick="z.export()">Backup</button>
-                <input type="file" id="f-in" style="display:none" onchange="z.import(event)">
-                <button class="z-btn" style="background:#444;" onclick="document.getElementById('f-in').click()">Importar</button>
-                <button class="z-btn" style="background:#ff4757; margin-top:50px;" onclick="z.wipe()">RESET</button>
+            <div style="text-align:center; padding-top:40px;">
+                <h2>Configuración</h2>
+                <button class="z-btn" style="background:#333; margin-bottom:10px;" onclick="z.export()">Backup JSON</button>
+                <button class="z-btn" style="background:#ff4757;" onclick="z.wipe()">Borrar Todo</button>
             </div>
         </div>
     </main>
@@ -200,186 +149,188 @@
     <nav class="bottom-tabs">
         <div class="tab-icon active" onclick="z.nav('inicio', this)"><i class="fas fa-home"></i></div>
         <div class="tab-icon" onclick="z.nav('programar', this)"><i class="fas fa-calendar-plus"></i></div>
-        <div class="tab-icon" onclick="z.nav('notas', this)"><i class="fas fa-edit"></i></div>
-        <div class="tab-icon" onclick="z.nav('mercado', this)"><i class="fas fa-shopping-basket"></i></div>
+        <div class="tab-icon" onclick="z.nav('notas', this)"><i class="fas fa-sticky-note"></i></div>
+        <div class="tab-icon" onclick="z.nav('mercado', this)"><i class="fas fa-shopping-cart"></i></div>
         <div class="tab-icon" onclick="z.nav('ajustes', this)"><i class="fas fa-cog"></i></div>
     </nav>
 
     <script>
         const z = {
-            tasks: [], checks: [], notes: "", selDay: new Date().toISOString().split('T')[0], isGlobal: false,
-            quotes: ["Haz de cada día tu obra maestra.", "Cree en ti mismo y serás imparable.", "La disciplina vence al talento.", "Tu tiempo es hoy."],
-            fitness: ["10 Sentadillas rápidas", "Subir 3 pisos por escaleras", "Tomar 500ml de agua fría", "Estiramiento de espalda 2min", "Caminar 5 min intensos"],
+            tasks: [], shops: [], notes: [], 
+            fitList: ["20 Sentadillas", "Plancha 1 min", "15 Flexiones", "Subir escaleras 3 veces", "Saltar soga 2 min", "Caminar 10 min", "10 Burpees"],
+            currentFit: "",
+            
             init() {
-                try {
-                    this.tasks = JSON.parse(localStorage.getItem('zu_tasks')) || [];
-                    this.checks = JSON.parse(localStorage.getItem('zu_checks')) || [];
-                    this.notes = localStorage.getItem('zu_notes_html') || "";
-                } catch(e) {}
-                this.render(); this.autoCap(); this.genFit();
-                setInterval(() => this.notify(), 30000);
+                this.tasks = JSON.parse(localStorage.getItem('z_tasks')) || [];
+                this.shops = JSON.parse(localStorage.getItem('z_shops')) || [];
+                this.notes = JSON.parse(localStorage.getItem('z_notes')) || [];
+                this.render();
+                this.genFit();
+                this.autoCap();
             },
-            render() {
-                this.renderCal(); this.renderTasks(); this.renderChecks();
-                document.getElementById('rich-editor').innerHTML = this.notes;
-                this.updateStats();
-                document.getElementById('quote-text').innerText = `"${this.quotes[Math.floor(Math.random() * this.quotes.length)]}"`;
-            },
+
             nav(id, btn) {
                 document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
                 document.querySelectorAll('.tab-icon').forEach(t => t.classList.remove('active'));
                 document.getElementById(`v-${id}`).classList.remove('hidden');
-                if(btn) btn.classList.add('active');
+                btn.classList.add('active');
             },
-            renderCal() {
-                const strip = document.getElementById('cal-strip');
-                const now = new Date(); let html = "";
-                for (let i = -7; i <= 14; i++) {
-                    const d = new Date(); d.setDate(now.getDate() + i);
-                    const dStr = d.toISOString().split('T')[0];
-                    const act = dStr === this.selDay;
-                    html += `<div class="cal-item ${act ? 'active' : ''}" id="cal-${dStr}" onclick="z.selDate('${dStr}')">
-                        <span class="d-name">${d.toLocaleDateString('es-ES',{weekday:'short'}).toUpperCase()}</span>
-                        <span class="d-num">${d.getDate()}</span>
-                    </div>`;
-                }
-                strip.innerHTML = html;
-                const activeEl = document.getElementById(`cal-${this.selDay}`);
-                if(activeEl) activeEl.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
-            },
-            selDate(d) { this.selDay = d; this.isGlobal = false; this.render(); },
-            setGlobalList(isG) { 
-                this.isGlobal = isG;
-                document.getElementById('tab-global').style.color = isG ? 'var(--p)' : 'var(--gray)';
-                document.getElementById('tab-today').style.color = isG ? 'var(--gray)' : 'var(--p)';
-                this.renderTasks();
-            },
-            toggleSearch() {
-                const search = document.getElementById('search-container');
-                search.style.display = search.style.display === 'block' ? 'none' : 'block';
-            },
-            genFit() {
-                document.getElementById('fit-challenge').innerText = this.fitness[Math.floor(Math.random() * this.fitness.length)];
-            },
-            saveTask() {
-                const n = document.getElementById('add-name').value;
-                const t = document.getElementById('add-time').value;
-                const id = document.getElementById('edit-id').value;
-                if(!n || !t) return alert("Completa los datos");
-                
-                if(id) {
-                    const idx = this.tasks.findIndex(x => x.id == id);
-                    this.tasks[idx] = { ...this.tasks[idx], name: n, time: t, cat: document.getElementById('add-cat').value };
-                } else {
-                    this.tasks.push({ id: Date.now(), name: n, time: t, cat: document.getElementById('add-cat').value, done: false });
-                }
-                this.save(); this.resetForm(); this.nav('inicio', document.querySelector('.tab-icon')); this.render();
-            },
-            editTask(id) {
-                const t = this.tasks.find(x => x.id == id);
-                if(!t) return;
-                document.getElementById('edit-id').value = t.id;
-                document.getElementById('add-name').value = t.name;
-                document.getElementById('add-time').value = t.time;
-                document.getElementById('add-cat').value = t.cat;
-                document.getElementById('form-title').innerText = "Editar Misión";
-                document.getElementById('btn-save').innerText = "Actualizar Misión";
-                document.getElementById('btn-cancel').style.display = "block";
-                this.nav('programar', document.querySelectorAll('.tab-icon')[1]);
-            },
-            resetForm() {
-                document.getElementById('edit-id').value = "";
-                document.getElementById('add-name').value = "";
-                document.getElementById('add-time').value = "";
-                document.getElementById('form-title').innerText = "Programar Misión";
-                document.getElementById('btn-save').innerText = "Guardar en Agenda";
-                document.getElementById('btn-cancel').style.display = "none";
-            },
-            toggle(id) { const t = this.tasks.find(x => x.id === id); if(t) t.done = !t.done; this.save(); this.render(); },
-            delTask(id) { if(confirm("¿Eliminar?")) { this.tasks = this.tasks.filter(x => x.id !== id); this.save(); this.render(); } },
-            renderTasks() {
-                const query = document.getElementById('search-input').value.toLowerCase();
-                let list = this.isGlobal ? this.tasks : this.tasks.filter(t => t.time.startsWith(this.selDay));
-                if(query) list = list.filter(t => t.name.toLowerCase().includes(query));
 
-                document.getElementById('home-task-list').innerHTML = list.sort((a,b)=>new Date(a.time)-new Date(b.time)).map(t => `
-                    <div class="task-item ${t.done ? 'done' : ''}" onclick="z.toggle(${t.id})">
+            // --- AGENDA ---
+            saveTask() {
+                const name = document.getElementById('add-name').value;
+                const time = document.getElementById('add-time').value;
+                if(!name || !time) return alert("Faltan datos");
+                this.tasks.push({ id: Date.now(), name, time, cat: document.getElementById('add-cat').value, done: false });
+                this.save();
+                this.nav('inicio', document.querySelectorAll('.tab-icon')[0]);
+                this.render();
+            },
+
+            render() {
+                // Render Tareas
+                const taskContainer = document.getElementById('home-task-list');
+                taskContainer.innerHTML = this.tasks.map(t => `
+                    <div class="task-item ${t.done?'done':''}" onclick="z.toggleT(${t.id})">
                         <div class="task-check"></div>
-                        <div class="task-info">
-                            <p>${new Date(t.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} • ${t.cat}</p>
-                            <h4>${t.name}</h4>
+                        <div style="flex:1">
+                            <p style="font-size:0.7rem; color:var(--p)">${t.time.replace('T',' ')}</p>
+                            <h4 style="${t.done?'text-decoration:line-through':''}">${t.name}</h4>
                         </div>
-                        <div style="margin-left:auto; display:flex; gap:15px;">
-                            <i class="fas fa-edit" style="color:#ccc" onclick="event.stopPropagation();z.editTask(${t.id})"></i>
-                            <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.delTask(${t.id})"></i>
-                        </div>
+                        <i class="fas fa-trash" style="color:#eee" onclick="z.delT(${t.id})"></i>
                     </div>
-                `).join('') || '<p style="text-align:center;color:#ccc;padding:40px">Sin tareas</p>';
+                `).join('') || '<p style="text-align:center; color:#ccc">No hay planes para hoy</p>';
+
+                this.renderShops();
+                this.renderNotes();
             },
-            addCheck() {
-                const v = document.getElementById('in-check').value; if(!v) return;
-                this.checks.push({ id: Date.now(), text: v, done: false });
-                this.save(); document.getElementById('in-check').value = ""; this.renderChecks();
+
+            toggleT(id) { 
+                const t = this.tasks.find(x => x.id === id);
+                if(t) t.done = !t.done;
+                this.save(); this.render();
             },
-            toggleCheck(id) { const c = this.checks.find(x => x.id === id); if(c) c.done = !c.done; this.save(); this.renderChecks(); },
-            renderChecks() {
-                document.getElementById('check-list').innerHTML = this.checks.map(c => `
-                    <div class="task-item ${c.done ? 'done' : ''}" onclick="z.toggleCheck(${c.id})">
-                        <div class="task-check"></div><div style="flex:1"><h4>${c.text}</h4></div>
-                        <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.checks = z.checks.filter(x=>x.id!==${c.id});z.save();z.renderChecks();"></i>
+
+            delT(id) { this.tasks = this.tasks.filter(x => x.id !== id); this.save(); this.render(); },
+
+            // --- COMPRAS ---
+            addShop() {
+                const item = document.getElementById('shop-item').value;
+                const qty = document.getElementById('shop-qty').value || 1;
+                const unit = document.getElementById('shop-unit').value;
+                const price = document.getElementById('shop-price').value || 0;
+                
+                if(!item) return;
+                this.shops.push({ id: Date.now(), item, qty, unit, price: parseFloat(price), done: false });
+                this.save();
+                this.renderShops();
+                document.getElementById('shop-item').value = "";
+            },
+
+            renderShops() {
+                let total = 0;
+                const container = document.getElementById('check-list');
+                container.innerHTML = this.shops.map(s => {
+                    if(s.done) total += (s.price);
+                    return `
+                    <div class="task-item ${s.done?'done':''}" onclick="z.toggleS(${s.id})">
+                        <div class="task-check"></div>
+                        <div style="flex:1">
+                            <h4>${s.item}</h4>
+                            <p style="font-size:0.8rem">${s.qty} ${s.unit} - ${s.price} Bs.</p>
+                        </div>
+                        <i class="fas fa-times" style="color:#eee" onclick="z.delS(${s.id})"></i>
+                    </div>
+                `}).join('');
+
+                document.getElementById('shop-report').innerHTML = `
+                    <div style="display:flex; justify-content:space-between; font-weight:800;">
+                        <span>TOTAL COMPRADO:</span>
+                        <span style="color:var(--p)">${total.toFixed(2)} Bs.</span>
+                    </div>
+                    <p style="font-size:0.7rem; margin-top:5px; color:var(--gray)">* Solo suma items marcados</p>
+                `;
+            },
+
+            toggleS(id) {
+                const s = this.shops.find(x => x.id === id);
+                if(s) s.done = !s.done;
+                this.save(); this.renderShops();
+            },
+            delS(id) { this.shops = this.shops.filter(x => x.id !== id); this.save(); this.renderShops(); },
+
+            // --- NOTAS ---
+            newNote() {
+                document.getElementById('note-editor').classList.remove('hidden');
+                document.getElementById('note-list').classList.add('hidden');
+            },
+            saveNote() {
+                const title = document.getElementById('note-title').value || "Nota sin título";
+                const body = document.getElementById('rich-editor').innerHTML;
+                this.notes.push({ id: Date.now(), title, body });
+                this.save();
+                this.closeNote();
+                this.renderNotes();
+            },
+            renderNotes() {
+                document.getElementById('note-list').innerHTML = this.notes.map(n => `
+                    <div class="note-card">
+                        <h4 style="margin-bottom:5px;">${n.title}</h4>
+                        <div style="font-size:0.9rem; color:#555; max-height:60px; overflow:hidden;">${n.body}</div>
+                        <button onclick="z.delNote(${n.id})" style="position:absolute; top:15px; right:15px; border:none; background:none; color:#eee;"><i class="fas fa-trash"></i></button>
                     </div>
                 `).join('');
             },
-            save() { localStorage.setItem('zu_tasks', JSON.stringify(this.tasks)); localStorage.setItem('zu_checks', JSON.stringify(this.checks)); },
-            saveNotes() { localStorage.setItem('zu_notes_html', document.getElementById('rich-editor').innerHTML); },
-            updateStats() {
-                const today = new Date().toISOString().split('T')[0];
-                const tTasks = this.tasks.filter(t => t.time.startsWith(today));
-                const pct = tTasks.length ? (tTasks.filter(t => t.done).length / tTasks.length) * 100 : 0;
-                document.getElementById('main-pct').innerText = Math.round(pct) + "%";
-                for(let i=0; i<7; i++) {
-                    const d = new Date(); d.setDate(d.getDate() - d.getDay() + 1 + i);
-                    const ds = d.toISOString().split('T')[0];
-                    const dt = this.tasks.filter(x => x.time.startsWith(ds));
-                    const dp = dt.length ? (dt.filter(x => x.done).length / dt.length) * 100 : 0;
-                    const bar = document.getElementById(`bar-${i}`); if(bar) bar.style.height = Math.max(dp, 5) + "%";
-                }
+            delNote(id) { this.notes = this.notes.filter(x => x.id !== id); this.save(); this.renderNotes(); },
+            closeNote() {
+                document.getElementById('note-editor').classList.add('hidden');
+                document.getElementById('note-list').classList.remove('hidden');
+                document.getElementById('note-title').value = "";
+                document.getElementById('rich-editor').innerHTML = "";
+            },
+
+            // --- FIT & OTROS ---
+            genFit() {
+                this.currentFit = this.fitList[Math.floor(Math.random() * this.fitList.length)];
+                document.getElementById('fit-challenge').innerText = this.currentFit;
+            },
+            completeFit(win) {
+                if(win) alert("¡Excelente Maycol! +10 puntos de disciplina.");
+                this.genFit();
             },
             autoCap() {
                 document.addEventListener('input', (e) => {
                     const el = e.target;
-                    if(el.tagName === 'INPUT' || el.id === 'rich-editor') {
+                    if((el.tagName === 'INPUT' && el.type === 'text') || el.id === 'rich-editor') {
                         let v = el.value || el.innerText;
-                        if(v && v.length === 1) {
+                        if(v.length === 1) {
                             if(el.value !== undefined) el.value = v.toUpperCase();
-                            else { el.innerText = v.toUpperCase(); }
+                            else { 
+                                const selection = window.getSelection();
+                                const range = selection.getRangeAt(0);
+                                el.innerText = v.toUpperCase();
+                                range.setStart(el.childNodes[0], 1);
+                                range.collapse(true);
+                                selection.removeAllRanges();
+                                selection.addRange(range);
+                            }
                         }
                     }
                 });
             },
-            exec(c) { document.execCommand(c, false, null); this.saveNotes(); },
-            askPerms() { if('Notification' in window) Notification.requestPermission(); },
-            notify() {
-                const now = new Date();
-                this.tasks.forEach(t => {
-                    const d = (new Date(t.time) - now) / 60000;
-                    if(!t.done && d > 0 && d <= 5) new Notification("Z-Core", { body: "Misión próxima: " + t.name });
-                });
+            save() {
+                localStorage.setItem('z_tasks', JSON.stringify(this.tasks));
+                localStorage.setItem('z_shops', JSON.stringify(this.shops));
+                localStorage.setItem('z_notes', JSON.stringify(this.notes));
             },
-            export() { 
-                const b = new Blob([JSON.stringify({t:this.tasks, c:this.checks, n:this.notes})], {type:'application/json'});
-                const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'backup.json'; a.click();
+            export() {
+                const data = { tasks: this.tasks, shops: this.shops, notes: this.notes };
+                const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'zcore_backup.json'; a.click();
             },
-            import(e) {
-                const r = new FileReader(); r.onload = (ev) => {
-                    const d = JSON.parse(ev.target.result);
-                    localStorage.setItem('zu_tasks', JSON.stringify(d.t));
-                    localStorage.setItem('zu_checks', JSON.stringify(d.c));
-                    localStorage.setItem('zu_notes_html', d.n); location.reload();
-                }; r.readAsText(e.target.files[0]);
-            },
-            wipe() { if(confirm("¿RESET?")) { localStorage.clear(); location.reload(); } }
+            wipe() { if(confirm("¿Borrar todo permanentemente?")) { localStorage.clear(); location.reload(); } }
         };
+
         z.init();
     </script>
 </body>

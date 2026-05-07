@@ -3,213 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Core: Life Optimizer - GOD MODE</title>
+    <title>Life Optimizer</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#8a2be2">
+    <meta name="theme-color" content="#f85b7f">
     <link rel="icon" type="image/png" href="android-assets/icon-192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="theme-standard">
-    <div id="ki-container"></div>
-    
-    <!-- Epic Completion Overlay -->
-    <div id="completion-overlay" class="hidden">
-        <div class="goku-god-container">
-            <img src="assets/goku-god.png" alt="Goku God" id="goku-god-img">
-            <div class="energy-burst"></div>
+<body>
+    <header>
+        <div class="user-info">
+            <p id="greeting-text">Buenos Días,</p>
+            <h1 id="user-name">Maycol</h1>
         </div>
-        <div class="completion-text">¡DESAFÍO SUPERADO!</div>
-    </div>
-
-    <header class="glass">
-        <div class="user-profile">
-            <img src="android-assets/icon-192.png" alt="Z-Core" class="profile-pic">
-            <div class="greeting">
-                <span class="capsule-corp">CAPSULE CORP</span>
-                <h1 id="user-greeting">HOLA, GUERRERO Z</h1>
-            </div>
-        </div>
-        <div class="scouter-stats">
-            <div class="stat-item">
-                <i class="fas fa-bolt"></i>
-                <span id="power-value">9000</span>
-            </div>
-            <div class="power-bar-wrapper">
-                <div id="power-bar" class="power-bar"></div>
-            </div>
+        <div class="profile-circle">
+            <img src="android-assets/icon-192.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
     </header>
 
     <main>
-        <!-- Horizontal Strip Calendar (Visible in Missions Tab) -->
-        <div id="calendar-section" class="tab-content hidden">
-            <section id="horizontal-calendar" class="glass">
-                <div class="calendar-nav">
-                    <button onclick="zCore.changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-                    <div class="month-label" id="current-month">MAYO 2026</div>
-                    <button onclick="zCore.changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                <div class="days-strip" id="days-strip"></div>
-            </section>
+        <!-- Page 1: Dashboard -->
+        <div id="page-dashboard" class="tab-content">
+            <div class="date-strip" id="days-strip"></div>
+            
+            <h3 class="section-title">Schedule Today</h3>
+            <div id="today-tasks-container">
+                <!-- Tasks for today will go here -->
+            </div>
+
+            <h3 class="section-title">Reminders</h3>
+            <div id="reminders-container">
+                <!-- Reminders/Water will go here -->
+            </div>
         </div>
 
-        <div id="pages-container">
-            <!-- PAGE 1: DASHBOARD -->
-            <div id="page-dashboard" class="tab-content">
-                <div class="card glass scouter-analytics">
-                    <div class="card-header">
-                        <h2><i class="fas fa-chart-line"></i> ESTADO DE COMBATE</h2>
-                    </div>
-                    <div class="graph-container">
-                        <div class="graph-bar-y">
-                            <div class="bar-fill" id="bar-energy" style="height: 70%;"></div>
-                            <span class="bar-label">ENERGÍA</span>
-                        </div>
-                        <div class="graph-bar-y">
-                            <div class="bar-fill" id="bar-focus" style="height: 45%;"></div>
-                            <span class="bar-label">FOCO</span>
-                        </div>
-                        <div class="graph-bar-y">
-                            <div class="bar-fill" id="bar-power" style="height: 90%;"></div>
-                            <span class="bar-label">PODER</span>
-                        </div>
-                    </div>
-                    <div class="stat-summary">
-                        <div>MISIONES COMPLETADAS: <span id="completed-total">0</span></div>
-                        <div>NIVEL ACTUAL: <span id="current-rank">HUMANO</span></div>
-                    </div>
+        <!-- Page 2: Add Task -->
+        <div id="page-missions" class="tab-content hidden">
+            <h2 class="section-title">Set Schedule</h2>
+            <div class="card-form">
+                <div class="input-group">
+                    <label>Task Name</label>
+                    <input type="text" id="mission-input" placeholder="What needs to be done?">
                 </div>
-
-                <div class="card glass mini-summary">
-                    <h3>PRÓXIMA MISIÓN</h3>
-                    <div id="next-mission-preview">No hay misiones pendientes</div>
+                <div class="input-group">
+                    <label>Select Date & Time</label>
+                    <input type="datetime-local" id="mission-time">
                 </div>
+                <div class="input-group">
+                    <label>Category</label>
+                    <select id="mission-priority">
+                        <option value="S">Urgent (Pink)</option>
+                        <option value="A">Important (Purple)</option>
+                        <option value="B">Normal (Cyan)</option>
+                    </select>
+                </div>
+                <button id="add-mission" class="btn-main">Save Schedule</button>
             </div>
+            
+            <h3 class="section-title" style="margin-top: 30px;">All Tasks</h3>
+            <ul id="missions-list" class="task-list-modern"></ul>
+        </div>
 
-            <!-- PAGE 2: MISSIONS -->
-            <div id="page-missions" class="tab-content hidden">
-                <div class="card glass missions-z full-height">
-                    <div class="card-header">
-                        <h2><i class="fas fa-bullseye"></i> MISIONES Z</h2>
-                        <span class="count-badge" id="mission-count">0</span>
-                    </div>
-                    <div class="mission-creator">
-                        <input type="text" id="mission-input" placeholder="Nombre del desafío...">
-                        <div class="input-row">
-                            <input type="datetime-local" id="mission-time">
-                            <select id="mission-priority">
-                                <option value="S">RANGO S</option>
-                                <option value="A">RANGO A</option>
-                                <option value="B">RANGO B</option>
-                            </select>
-                        </div>
-                        <button id="add-mission" class="btn-glow">ASIGNAR MISIÓN</button>
-                    </div>
-                    <ul id="missions-list" class="task-list"></ul>
-                </div>
+        <!-- Page 3: Training/Hydration -->
+        <div id="page-training" class="tab-content hidden">
+            <h2 class="section-title">Wellness</h2>
+            <div class="card glass">
+                <h3>Hydration Tracker</h3>
+                <div id="water-bottles" style="display:flex; gap:10px; margin: 15px 0; justify-content: center;"></div>
             </div>
-
-            <!-- PAGE 3: TRAINING (Office + Gravity) -->
-            <div id="page-training" class="tab-content hidden">
-                <div class="card glass office-training">
-                    <div class="card-header">
-                        <h2><i class="fas fa-running"></i> RETOS DE OFICINA</h2>
-                    </div>
-                    <div class="challenges-grid">
-                        <button class="challenge-btn" onclick="zCore.triggerOfficeChallenge('stairs', 'Subir Escaleras')">
-                            <i class="fas fa-stairs"></i> ESCALERAS
-                        </button>
-                        <button class="challenge-btn" onclick="zCore.triggerOfficeChallenge('water', 'Beber 1 Litro')">
-                            <i class="fas fa-faucet-drip"></i> HIDRATAR
-                        </button>
-                        <button class="challenge-btn" onclick="zCore.triggerOfficeChallenge('stretch', 'Estiramiento Z')">
-                            <i class="fas fa-child"></i> ESTIRAR
-                        </button>
-                        <button class="challenge-btn" onclick="zCore.triggerOfficeChallenge('eat', 'Comida Saludable')">
-                            <i class="fas fa-apple-whole"></i> SALUDABLE
-                        </button>
-                    </div>
-                    <div class="water-tracker">
-                        <div class="tracker-header">HIDRATACIÓN Z</div>
-                        <div class="bottles" id="water-bottles"></div>
-                    </div>
-                </div>
-
-                <div class="card glass gravity-room">
-                    <div class="card-header">
-                        <h2><i class="fas fa-dumbbell"></i> CÁMARA DE GRAVEDAD</h2>
-                    </div>
-                    <div class="timer-display" id="timer">25:00</div>
-                    <div class="gravity-controls">
-                        <button id="start-timer" class="btn-glow"><i class="fas fa-play"></i> ENTRENAR</button>
-                        <button id="reset-timer"><i class="fas fa-undo"></i></button>
-                    </div>
-                </div>
+            
+            <h3 class="section-title">Quick Challenges</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn-main" onclick="zCore.triggerOfficeChallenge('stairs', 'Stairs')">Stairs</button>
+                <button class="btn-main" onclick="zCore.triggerOfficeChallenge('stretch', 'Stretch')">Stretch</button>
             </div>
+        </div>
 
-            <!-- PAGE 4: NOTES -->
-            <div id="page-notes" class="tab-content hidden">
-                <div class="card glass notes-z full-height">
-                    <div class="card-header">
-                        <h2><i class="fas fa-file-alt"></i> NOTAS Z</h2>
-                        <button class="btn-icon" onclick="zCore.clearNotes()"><i class="fas fa-eraser"></i></button>
-                    </div>
-                    <div class="notes-editor">
-                        <div class="notes-toolbar">
-                            <button onclick="zCore.addNoteBullet('number')"><i class="fas fa-list-ol"></i></button>
-                            <button onclick="zCore.addNoteBullet('bullet')"><i class="fas fa-list-ul"></i></button>
-                        </div>
-                        <textarea id="notes-area" placeholder="Tomar nota de la reunión..."></textarea>
-                    </div>
-                </div>
+        <!-- Page 4: Notes -->
+        <div id="page-notes" class="tab-content hidden">
+            <h2 class="section-title">Notes</h2>
+            <textarea id="notes-area" style="height: 400px; border-radius: 25px;" placeholder="Write your thoughts..."></textarea>
+        </div>
+
+        <!-- Page 5: Supplies -->
+        <div id="page-supplies" class="tab-content hidden">
+            <h2 class="section-title">Supplies</h2>
+            <div class="input-group" style="display:flex; gap:10px;">
+                <input type="text" id="supply-input" placeholder="Add item...">
+                <button id="add-supply" class="btn-main" style="width: 60px;">+</button>
             </div>
+            <ul id="supplies-list"></ul>
+        </div>
 
-            <!-- PAGE 5: SUPPLIES -->
-            <div id="page-supplies" class="tab-content hidden">
-                <div class="card glass supplies-z full-height">
-                    <div class="card-header">
-                        <h2><i class="fas fa-shopping-cart"></i> SUMINISTROS</h2>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="supply-input" placeholder="Agregar insumo...">
-                        <button id="add-supply" class="btn-glow"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <ul id="supplies-list" class="task-list scrollable"></ul>
+        <!-- Page 6: Settings & Backup -->
+        <div id="page-settings" class="tab-content hidden">
+            <h2 class="section-title">Database & Backup</h2>
+            <div class="card glass" style="padding: 20px; text-align: center;">
+                <p style="margin-bottom: 20px; color: var(--text-light);">Guarda una copia de seguridad de todos tus datos para no perderlos nunca.</p>
+                
+                <button class="btn-main" onclick="zCore.exportData()" style="background: #00b894; margin-bottom: 15px;">
+                    <i class="fas fa-download"></i> Exportar Datos (Backup)
+                </button>
+                
+                <div style="margin-top: 10px;">
+                    <label for="import-file" class="btn-main" style="background: #0984e3; cursor:pointer; display: inline-block;">
+                        <i class="fas fa-upload"></i> Importar Datos (Restore)
+                    </label>
+                    <input type="file" id="import-file" style="display:none" onchange="zCore.importData(event)">
                 </div>
+                
+                <button class="btn-main" onclick="zCore.clearAllData()" style="background: #d63031; margin-top: 30px; font-size: 0.8rem; padding: 10px;">
+                    BORRAR TODO EL SISTEMA
+                </button>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="zCore.switchPage('dashboard', this)">
-            <i class="fas fa-th-large"></i>
-            <span>Estado</span>
+            <i class="fas fa-home"></i>
+            <span>Home</span>
         </button>
         <button class="nav-item" onclick="zCore.switchPage('missions', this)">
-            <i class="fas fa-list-check"></i>
-            <span>Misiones</span>
-        </button>
-        <button class="nav-item" onclick="zCore.switchPage('training', this)">
-            <i class="fas fa-bolt"></i>
-            <span>Entrenar</span>
+            <i class="fas fa-calendar-plus"></i>
+            <span>Add</span>
         </button>
         <button class="nav-item" onclick="zCore.switchPage('notes', this)">
-            <i class="fas fa-pen-to-square"></i>
-            <span>Notas</span>
+            <i class="fas fa-sticky-note"></i>
+            <span>Notes</span>
         </button>
         <button class="nav-item" onclick="zCore.switchPage('supplies', this)">
-            <i class="fas fa-cart-shopping"></i>
-            <span>Tienda</span>
+            <i class="fas fa-shopping-bag"></i>
+            <span>Items</span>
+        </button>
+        <button class="nav-item" onclick="zCore.switchPage('settings', this)">
+            <i class="fas fa-database"></i>
+            <span>Backup</span>
         </button>
     </nav>
-
-    <div id="ui-overlay" class="hidden">
-        <div class="ui-aura"></div>
-        <div class="ui-text">ULTRA INSTINCT ACTIVATED</div>
-    </div>
 
     <script src="js/app.js"></script>
     <script>

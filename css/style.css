@@ -1,6 +1,7 @@
 :root {
     --primary-gradient: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
     --secondary-gradient: linear-gradient(135deg, #0070f3 0%, #00dfd8 100%);
+    --success: #55efc4; /* Verde clarito requested */
     --dark-card: #111111;
     --light-card: #ffffff;
     --bg-page: #fef1e8;
@@ -13,35 +14,55 @@
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+/* Rich Text Editor */
+.editor-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    background: #f0f0f0;
+    padding: 8px;
+    border-radius: 12px;
 }
 
-body {
-    background-color: var(--bg-page);
-    color: var(--text-black);
-    font-family: var(--font-main);
-    min-height: 100vh;
-    overflow-x: hidden;
+.editor-toolbar button {
+    background: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
-/* Layout */
-main {
+.editor-toolbar button:hover {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+#notes-editor {
+    min-height: 400px;
     padding: 20px;
-    padding-bottom: 110px;
-    max-width: 450px;
-    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    outline: none;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
-.hidden { display: none !important; }
+/* Success Elements */
+.bg-success { background: var(--success); }
+.text-success { color: var(--success); }
 
-/* Typography */
-h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
-h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; }
-h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-gray); margin-bottom: 10px; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content { animation: fadeIn 0.4s ease-out; }
+
+/* Scrollbar */
+::-webkit-scrollbar { display: none; }
 
 /* Top Navigation / Calendar */
 .header-top {
@@ -239,12 +260,88 @@ h3 { font-size: 1.1rem; font-weight: 600; color: var(--text-gray); margin-bottom
 }
 
 /* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Productivity Chart */
+.stats-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 120px;
+    padding-top: 10px;
 }
 
-.tab-content { animation: fadeIn 0.4s ease-out; }
+.chart-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
 
-/* Scrollbar */
-::-webkit-scrollbar { display: none; }
+.chart-bar {
+    width: 25px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    height: 0;
+    transition: height 1s ease;
+}
+
+.chart-bar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 8px;
+}
+
+.chart-bar-container span {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-gray);
+}
+
+/* Checklist Styling */
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.check-circle {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.checklist-item.done .check-circle {
+    background: var(--primary-gradient);
+    border-color: transparent;
+}
+
+.checklist-item.done .check-circle::after {
+    content: '✓';
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.checklist-item.done span {
+    text-decoration: line-through;
+    color: var(--text-gray);
+}

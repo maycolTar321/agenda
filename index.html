@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Life Optimizer</title>
+    <title>Z-Core Pro</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff0080">
@@ -17,113 +17,111 @@
         <div id="page-home" class="tab-content">
             <div class="header-top">
                 <div class="month-selector">
-                    <span id="display-month">Jun</span>
+                    <span id="display-month">May</span>
                     <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
                 </div>
                 <div class="header-icons">
                     <i class="fas fa-search"></i>
-                    <i class="fas fa-bell"></i>
-                    <div class="avatar" style="width: 32px; height: 32px;"></div>
+                    <i class="fas fa-bell" onclick="zCore.requestNotificationPermission()" style="cursor:pointer;"></i>
+                    <div class="avatar" style="width: 32px; height: 32px; background: #eee; border-radius: 50%;"></div>
                 </div>
             </div>
 
-            <div class="calendar-strip" id="calendar-strip">
-                <!-- Days will be injected -->
-            </div>
+            <div class="calendar-strip" id="calendar-strip"></div>
 
             <div class="tips-bar">
-                <p>Aquí están tus consejos basados en IA para optimizar tu tiempo, Maycol!</p>
+                <p>¡Optimiza tu día! Completa tus misiones para aumentar tu productividad.</p>
                 <i class="fas fa-chevron-right"></i>
             </div>
 
             <div class="tab-switcher">
                 <button class="tab-btn active" onclick="zCore.toggleHomeFilter('all', this)">Todos</button>
-                <button class="tab-btn" onclick="zCore.toggleHomeFilter('new', this)">Nuevos (3)</button>
+                <button class="tab-btn" onclick="zCore.toggleHomeFilter('pending', this)">Pendientes</button>
             </div>
 
-            <h3>Hoy</h3>
-            <div class="task-list" id="home-task-list">
-                <!-- Example Card -->
-                <div class="card card-white">
-                    <div class="task-card-header">
-                        <span class="task-time">12:00 - 13:30</span>
-                        <div class="avatars">
-                            <div class="avatar"></div>
-                            <div class="avatar" style="margin-left: -8px;"></div>
-                        </div>
-                    </div>
-                    <h2 class="task-title">Product Design Demo</h2>
-                    <p style="color: #888; font-size: 0.9rem;">35+ participantes</p>
+            <!-- Productivity Stats -->
+            <div class="card card-white" style="margin-bottom: 25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <h4 style="font-size: 0.8rem; font-weight: 700;">PRODUCTIVIDAD</h4>
+                    <span class="text-success" id="productivity-pct" style="font-size: 0.8rem; font-weight: 700;">0%</span>
+                </div>
+                <div class="stats-chart">
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-0"></div><span>L</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-1"></div><span>M</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-2"></div><span>M</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-3"></div><span>J</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-4"></div><span>V</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-5"></div><span>S</span></div>
+                    <div class="chart-bar-container"><div class="chart-bar" id="bar-6"></div><span>D</span></div>
                 </div>
             </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                <h3 style="margin:0;">Horario</h3>
+                <span id="task-progress" style="font-size: 0.7rem; font-weight: 800; color: var(--primary-gradient);">0/0</span>
+            </div>
+            
+            <div class="task-list" id="home-task-list"></div>
         </div>
 
         <!-- PAGE 2: ADD TASK -->
         <div id="page-add" class="tab-content hidden">
             <div class="form-page">
-                <h2>Programar Tarea</h2>
-                <div class="input-group">
-                    <label>Nombre de la Tarea</label>
-                    <input type="text" id="task-name" class="input-field" placeholder="Ej. Diseño de Producto">
-                </div>
-                <div class="input-group">
-                    <label>Fecha y Hora</label>
-                    <input type="datetime-local" id="task-datetime" class="input-field">
-                </div>
-                <div class="input-group">
-                    <label>Categoría</label>
-                    <select id="task-category" class="input-field">
-                        <option value="work">Trabajo (Rosa)</option>
-                        <option value="personal">Personal (Morado)</option>
-                        <option value="other">Otro (Cian)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Notas</label>
-                    <textarea id="task-note" class="input-field" style="height: 100px;" placeholder="Detalles adicionales..."></textarea>
-                </div>
-                <button class="btn-action" onclick="zCore.addTask()">Guardar Tarea</button>
+                <h2>Nueva Misión</h2>
+                <input type="text" id="task-name" class="input-field" placeholder="Título de la misión" spellcheck="true">
+                <input type="datetime-local" id="task-datetime" class="input-field">
+                <select id="task-category" class="input-field">
+                    <option value="work">Trabajo</option>
+                    <option value="personal">Personal</option>
+                    <option value="wellness">Salud</option>
+                </select>
+                <textarea id="task-note" class="input-field" style="height: 80px;" placeholder="Detalles..." spellcheck="true"></textarea>
+                <button class="btn-action" onclick="zCore.addTask()">Guardar en Agenda</button>
             </div>
         </div>
 
-        <!-- PAGE 3: NOTES -->
+        <!-- PAGE 3: NOTES (WORD STYLE) -->
         <div id="page-notes" class="tab-content hidden">
             <div class="form-page">
-                <h2>Mis Notas</h2>
-                <textarea id="notes-area" class="input-field" style="height: 500px; border: none; background: #fff;" placeholder="Empieza a escribir..."></textarea>
+                <h2>Notas Z</h2>
+                <div class="editor-toolbar">
+                    <button onclick="zCore.format('bold')">B</button>
+                    <button onclick="zCore.format('italic')">I</button>
+                    <button onclick="zCore.format('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+                    <button onclick="zCore.format('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+                </div>
+                <div id="notes-editor" contenteditable="true" oninput="zCore.saveNotes()" spellcheck="true"></div>
             </div>
         </div>
 
-        <!-- PAGE 4: ITEMS -->
-        <div id="page-items" class="tab-content hidden">
+        <!-- PAGE 4: CHECKLIST -->
+        <div id="page-checklist" class="tab-content hidden">
             <div class="form-page">
-                <h2>Suministros</h2>
+                <h2>Checklist Diario</h2>
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="item-input" class="input-field" style="margin: 0;" placeholder="Nuevo item...">
-                    <button onclick="zCore.addItem()" class="btn-action" style="width: 70px; padding: 0;">+</button>
+                    <input type="text" id="check-input" class="input-field" style="margin: 0;" placeholder="Nuevo hábito..." spellcheck="true">
+                    <button onclick="zCore.addCheck()" class="btn-action" style="width: 60px; padding: 0;"><i class="fas fa-plus"></i></button>
                 </div>
-                <div id="items-list" class="task-list"></div>
+                <div id="checklist-container" class="task-list"></div>
             </div>
         </div>
 
-        <!-- PAGE 5: BACKUP -->
-        <div id="page-backup" class="tab-content hidden">
+        <!-- PAGE 5: SETTINGS -->
+        <div id="page-settings" class="tab-content hidden">
             <div class="form-page" style="text-align: center;">
-                <h2>Base de Datos</h2>
-                <div class="card card-black" style="margin-top: 20px;">
-                    <p style="margin-bottom: 20px;">Mantén tus datos seguros exportando una copia de seguridad local.</p>
-                    <button class="btn-action" style="background: var(--secondary-gradient);" onclick="zCore.exportDB()">
-                        <i class="fas fa-download"></i> Exportar JSON
+                <h2>Configuración</h2>
+                <div class="card card-white" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 15px;">Base de Datos</h4>
+                    <button class="btn-action" style="background: var(--secondary-gradient); margin-bottom: 10px;" onclick="zCore.exportDB()">
+                        <i class="fas fa-file-export"></i> Respaldar Datos
                     </button>
-                    <div style="margin-top: 20px;">
-                        <input type="file" id="import-file" style="display: none;" onchange="zCore.importDB(event)">
-                        <button class="btn-action" style="background: #333;" onclick="document.getElementById('import-file').click()">
-                            <i class="fas fa-upload"></i> Importar JSON
-                        </button>
-                    </div>
+                    <input type="file" id="import-file" style="display: none;" onchange="zCore.importDB(event)">
+                    <button class="btn-action" style="background: #333;" onclick="document.getElementById('import-file').click()">
+                        <i class="fas fa-file-import"></i> Restaurar Datos
+                    </button>
                 </div>
-                <button class="btn-action" style="background: #ff3b30; margin-top: 50px;" onclick="zCore.wipeDB()">
-                    RESET TOTAL
+                <button class="btn-action" style="background: #ff4757; margin-top: 40px; font-size: 0.8rem;" onclick="zCore.wipeDB()">
+                    RESET TOTAL DEL SISTEMA
                 </button>
             </div>
         </div>
@@ -137,16 +135,21 @@
             <i class="fas fa-calendar-plus"></i>
         </button>
         <button class="nav-item" onclick="zCore.switchTab('notes', this)">
-            <i class="fas fa-pen-nib"></i>
+            <i class="fas fa-edit"></i>
         </button>
-        <button class="nav-item" onclick="zCore.switchTab('items', this)">
-            <i class="fas fa-shopping-bag"></i>
+        <button class="nav-item" onclick="zCore.switchTab('checklist', this)">
+            <i class="fas fa-check-double"></i>
         </button>
-        <button class="nav-item" onclick="zCore.switchTab('backup', this)">
-            <i class="fas fa-database"></i>
+        <button class="nav-item" onclick="zCore.switchTab('settings', this)">
+            <i class="fas fa-cog"></i>
         </button>
     </nav>
 
     <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
 </body>
 </html>

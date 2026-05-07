@@ -3,899 +3,1124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Z-CORE OMNI MAX | Enterprise Edition</title>
+    <title>Z-CORE OMNI MASTER | TARIJA PREMIVM</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* =========================================
-           1. SISTEMA DE DISEÑO (CSS VARIABLES)
-           ========================================= */
+        /* ========================================
+        SISTEMA DE DISEÑO - Z-CORE v7.0
+        ========================================
+        */
         :root {
-            --p: #ff0080; 
-            --s: #7928ca; 
+            --p: #ff0080;
+            --s: #7928ca;
             --c: #00dfd8;
-            --success: #00c853;
-            --warning: #ffab00;
-            --danger: #ff3d00;
-            --bg: #f8f9fc;
-            --surface: #ffffff;
-            --dark: #0f172a;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --grad-primary: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
-            --grad-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --br-xl: 32px;
-            --br-lg: 20px;
-            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #0b0e14;
+            --card: #161b22;
+            --card-hover: #1c2128;
+            --text: #f0f6fc;
+            --text-dim: #8b949e;
+            --border: #30363d;
+            --success: #3fb950;
+            --danger: #f85149;
+            --grad: linear-gradient(135deg, var(--p) 0%, var(--s) 100%);
+            --br: 24px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
-        /* =========================================
-           2. RESET & BASE STYLES
-           ========================================= */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
+        /* RESET & BASE */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            scrollbar-width: none; 
         }
+        *::-webkit-scrollbar { display: none; }
 
-        body {
-            background-color: var(--bg);
-            font-family: 'Outfit', sans-serif;
-            color: var(--text-main);
-            line-height: 1.5;
+        body { 
+            background: var(--bg); 
+            font-family: 'Outfit', sans-serif; 
+            color: var(--text); 
+            line-height: 1.6;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            user-select: none;
         }
 
-        /* Scrollbar Personalizado */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-
-        /* =========================================
-           3. LAYOUT & CONTAINERS
-           ========================================= */
-        #app {
+        /* ========================================
+        LAYOUT & VISTAS
+        ========================================
+        */
+        #app-container {
             max-width: 500px;
             margin: 0 auto;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 120px;
+            padding-bottom: 110px; /* Espacio para el Nav */
         }
 
-        .container { padding: 20px; }
-
-        /* =========================================
-           4. COMPONENTES: HEADER
-           ========================================= */
-        .main-header {
-            padding: 30px 20px 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .view {
+            padding: 25px;
+            animation: slideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .user-profile { display: flex; align-items: center; gap: 15px; }
-        
-        .avatar-wrapper {
-            width: 55px;
-            height: 55px;
-            border-radius: 18px;
-            background: var(--grad-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 800;
-            font-size: 1.4rem;
-            box-shadow: 0 8px 16px rgba(255,0,128,0.25);
-            border: 3px solid white;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .welcome-msg h2 { font-size: 1.4rem; font-weight: 800; color: var(--dark); }
-        .welcome-msg p { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .hidden { display: none !important; }
 
-        /* =========================================
-           5. COMPONENTES: TARJETAS (CARDS)
-           ========================================= */
-        .z-card {
-            background: var(--surface);
-            border-radius: var(--br-lg);
+        /* ========================================
+        COMPONENTES UI
+        ========================================
+        */
+        .glass-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--br);
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            transition: var(--transition);
+            box-shadow: var(--shadow);
+            transition: 0.3s;
         }
 
-        .z-card:active { transform: scale(0.98); }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            font-size: 0.75rem;
+        .section-title {
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
+            color: var(--p);
             font-weight: 800;
-            color: var(--text-muted);
-        }
-
-        /* =========================================
-           6. MONITOR BEBÉ (ESPECÍFICO)
-           ========================================= */
-        .baby-monitor-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .monitor-btn {
-            background: #f8fafc;
-            border: 1.5px solid #f1f5f9;
-            padding: 18px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .monitor-btn i {
-            display: block;
-            font-size: 1.6rem;
-            margin-bottom: 8px;
-            background: var(--grad-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .monitor-btn span { font-size: 0.8rem; font-weight: 700; color: var(--dark); }
-
-        .monitor-btn:active { background: #fff0f6; border-color: var(--p); }
-
-        /* =========================================
-           7. SISTEMA DE FINANZAS (GRAPH)
-           ========================================= */
-        .finance-hero {
-            background: var(--grad-dark);
-            color: white;
-            border-radius: var(--br-xl);
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 25px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .finance-hero::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-        }
-
-        .balance-label { font-size: 0.8rem; opacity: 0.7; font-weight: 600; }
-        .balance-amount { font-size: 2.8rem; font-weight: 800; margin: 5px 0; color: var(--c); }
-        
-        .finance-stats {
+            margin-bottom: 15px;
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
+            align-items: center;
+            gap: 10px;
         }
 
-        .stat-item small { display: block; font-size: 0.65rem; opacity: 0.6; }
-        .stat-item b { font-size: 1rem; }
-
-        /* =========================================
-           8. FORMULARIOS Y BOTONES PRO
-           ========================================= */
-        .z-form-group { margin-bottom: 15px; }
-        .z-label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); padding-left: 5px; }
+        .z-input-group { margin-bottom: 15px; }
+        .z-label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px; margin-left: 10px; }
         
         .z-input {
             width: 100%;
-            padding: 16px 20px;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            padding: 15px 20px;
             border-radius: 18px;
-            border: 2px solid #f1f5f9;
-            background: #f8fafc;
-            font-family: inherit;
+            color: white;
+            font-family: 'Outfit', sans-serif;
             font-size: 1rem;
-            color: var(--dark);
-            transition: var(--transition);
+            transition: 0.3s;
         }
 
         .z-input:focus {
             border-color: var(--p);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255,0,128,0.1);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 0, 128, 0.1);
         }
 
-        .z-btn-primary {
-            width: 100%;
-            padding: 18px;
-            border-radius: 18px;
+        .z-btn {
+            background: var(--grad);
+            color: white;
             border: none;
-            background: var(--grad-primary);
-            color: white;
+            padding: 16px;
+            border-radius: 18px;
+            width: 100%;
             font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255,0,128,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* =========================================
-           9. LISTAS DINÁMICAS (UCATEC / MERCADO)
-           ========================================= */
-        .item-list { display: flex; flex-direction: column; gap: 12px; }
-        
-        .list-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 18px;
-            background: white;
-            border-radius: 20px;
-            border: 1px solid #f1f5f9;
-            transition: var(--transition);
-        }
+        .z-btn:active { transform: scale(0.95); }
+        .z-btn.secondary { background: var(--border); }
+        .z-btn.outline { background: transparent; border: 2px solid var(--border); }
 
-        .list-row.completed { opacity: 0.5; }
-        .list-row.completed span { text-decoration: line-through; }
-
-        .check-btn {
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            border: 2.5px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .list-row.completed .check-btn {
-            background: var(--success);
-            border-color: var(--success);
-            color: white;
-        }
-
-        .tag {
-            font-size: 0.6rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .tag-ucatec { background: #f0e7ff; color: var(--s); }
-        .tag-church { background: #e0faff; color: #008fa0; }
-        .tag-home { background: #fff0f6; color: var(--p); }
-
-        /* =========================================
-           10. EDITOR DE NOTAS (RICH TEXT)
-           ========================================= */
-        .editor-container {
-            background: white;
-            border-radius: var(--br-lg);
-            overflow: hidden;
-            border: 1px solid #f1f5f9;
-        }
-
-        .editor-toolbar {
-            background: #f8fafc;
-            padding: 12px;
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid #f1f5f9;
-            overflow-x: auto;
+        /* ========================================
+        MODULO: MONITOR BEBÉ
+        ========================================
+        */
+        .baby-monitor-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 15px 0;
         }
 
         .tool-btn {
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            padding: 15px 5px;
+            border-radius: 20px;
+            text-align: center;
             cursor: pointer;
-            font-weight: 700;
+            transition: 0.3s;
         }
 
-        #rich-editor {
-            min-height: 400px;
-            padding: 25px;
-            outline: none;
-            font-size: 1rem;
-            line-height: 1.7;
+        .tool-btn i { font-size: 1.5rem; color: var(--p); margin-bottom: 8px; display: block; }
+        .tool-btn span { font-size: 0.65rem; font-weight: 700; color: var(--text-dim); }
+        
+        .tool-btn.active {
+            border-color: var(--p);
+            background: rgba(255, 0, 128, 0.05);
+            animation: pulse-glow 2s infinite;
         }
 
-        /* =========================================
-           11. NAVEGACIÓN INFERIOR (BOTTOM BAR)
-           ========================================= */
-        .bottom-nav {
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0); }
+        }
+
+        .timer-badge {
+            background: var(--dark);
+            border: 1px solid var(--c);
+            color: var(--c);
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        /* ========================================
+        MODULO: MERCADO & PRECIOS
+        ========================================
+        */
+        .market-banner {
+            background: var(--grad);
+            border-radius: var(--br);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+        }
+
+        .market-banner h2 { font-size: 2.5rem; font-weight: 800; margin-top: 5px; }
+
+        .market-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card);
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .market-item.done { opacity: 0.4; filter: grayscale(1); }
+        .market-info { flex: 1; }
+        .market-info b { font-size: 1rem; color: white; display: block; }
+        .market-info span { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; }
+        .market-price { text-align: right; font-weight: 800; color: var(--c); }
+
+        /* ========================================
+        MODULO: BIBLIOTECA (BOOKS)
+        ========================================
+        */
+        .books-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .book-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-icon {
+            height: 100px;
+            background: #0d1117;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--s);
+            margin-bottom: 12px;
+        }
+
+        .book-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: white; }
+        
+        /* ========================================
+        NAVEGACIÓN PRINCIPAL
+        ========================================
+        */
+        .nav-dock {
             position: fixed;
-            bottom: 25px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 420px;
-            background: var(--dark);
-            height: 75px;
-            border-radius: 30px;
+            max-width: 450px;
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 35px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            z-index: 1000;
+            z-index: 9999;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
         }
 
         .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-link.active { color: white; }
-        
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            width: 5px;
-            height: 5px;
-            background: var(--p);
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            padding: 12px;
             border-radius: 50%;
+            transition: 0.4s;
+            cursor: pointer;
         }
-                 12. UTILIDADES ANIMACIONES
-           ========================================= */
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hidden { display: none !important; }
+        .nav-link.active {
+            color: white;
+            background: var(--grad);
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(255, 0, 128, 0.4);
+        }
 
-        .toast {
+        /* ========================================
+        MISC & NOTIFICACIONES
+        ========================================
+        */
+        #toast {
             position: fixed;
-            top: 20px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--dark);
-            color: white;
-            padding: 12px 25px;
+            background: var(--grad);
+            padding: 12px 30px;
             border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 600;
-            z-index: 9999;
-            box-shadow: var(--shadow-lg);
+            font-weight: 800;
+            color: white;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+        }
+
+        .delete-trigger { color: var(--border); cursor: pointer; transition: 0.3s; }
+        .delete-trigger:hover { color: var(--danger); }
+
     </style>
 </head>
 <body>
 
-    <div id="app">
-        <header class="main-header">
-            <div class="user-profile">
-                <div class="avatar-wrapper" id="avatar-char">M</div>
-                <div class="welcome-msg">
-                    <p>¡Hola de nuevo!</p>
-                    <h2 id="display-name">Maycol Avila</h2>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button onclick="z.nav('config')" style="border:none; background:none; font-size:1.4rem; color:var(--text-muted);">
-                    <i class="fa-solid fa-circle-user"></i>
-                </button>
-            </div>
-        </header>
+    <div id="toast">Operación exitosa</div>
 
-        <main class="container">
+    <div id="app-container">
+        
+        <section id="v-inicio" class="view">
+            <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <div>
+                    <p style="color:var(--text-dim); font-size:0.8rem; font-weight:600;">System Online</p>
+                    <h1 style="font-size:1.8rem; font-weight:800;">Hola, Maycol</h1>
+                </div>
+                <div id="global-timer" class="hidden">
+                    <span class="timer-badge"><i class="fas fa-moon"></i> <span id="sleep-clock">00:00:00</span></span>
+                </div>
+            </header>
+
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-baby"></i> Monitor Infantil Tarija</div>
+                <div class="baby-monitor-panel">
+                    <div class="tool-btn" onclick="app.baby.log('🍼 Leche')"><i class="fas fa-baby-bottle"></i><span>Leche</span></div>
+                    <div id="btn-sleep" class="tool-btn" onclick="app.baby.toggleSleep()"><i class="fas fa-bed"></i><span>Sueño</span></div>
+                    <div class="tool-btn" onclick="app.baby.log('🧷 Pañal')"><i class="fas fa-poop"></i><span>Pañal</span></div>
+                    <div class="tool-btn" onclick="app.baby.log('💊 Salud')"><i class="fas fa-heartbeat"></i><span>Salud</span></div>
+                </div>
+                <div id="baby-history-mini" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:12px; margin-top:5px;"></div>
+            </div>
+
+            <div class="section-title"><i class="fas fa-fire"></i> Retos Permanentes</div>
+            <div id="tasks-list"></div>
             
-            <section id="view-home" class="view fade-in">
-                <div class="z-card">
-                    <div class="card-header">
-                        <span class="card-title">Monitor Z-Baby</span>
-                        <i class="fa-solid fa-baby" style="color:var(--p)"></i>
-                    </div>
-                    <div class="baby-monitor-grid">
-                        <div class="monitor-btn" onclick="z.logBaby('🍼 Leche')">
-                            <i class="fa-solid fa-baby-bottle"></i>
-                            <span>Leche</span>
-                        </div>
-                        <div class="monitor-btn" onclick="z.logBaby('😴 Sueño')">
-                            <i class="fa-solid fa-moon"></i>
-                            <span>Dormir</span>
-                        </div>
-                        <div class="monitor-btn" onclick="z.logBaby('🧷 Pañal')">
-                            <i class="fa-solid fa-poop"></i>
-                            <span>Pañal</span>
-                        </div>
-                        <div class="monitor-btn" onclick="z.logBaby('💊 Vitam.')">
-                            <i class="fa-solid fa-kit-medical"></i>
-                            <span>Salud</span>
-                        </div>
-                    </div>
-                    <div id="baby-log-home" style="margin-top:15px; font-size:0.7rem; color:var(--text-muted); text-align:center;">
-                        Esperando actividad...
-                    </div>
-                </div>
+            <button class="z-btn outline" style="margin-top:10px;" onclick="app.tasks.add()"><i class="fas fa-plus-circle"></i> Nuevo Reto</button>
+        </section>
 
-                <div class="card-header">
-                    <span class="card-title">Misiones Pendientes</span>
-                </div>
-                <div id="home-task-list" class="item-list">
-                    </div>
-            </section>
+        <section id="v-mercado" class="view hidden">
+            <div class="market-banner">
+                <p style="font-size:0.8rem; font-weight:800; opacity:0.8;">PRESUPUESTO TOTAL</p>
+                <h2><span id="market-sum">0.00</span> <small style="font-size:1rem;">Bs.</small></h2>
+            </div>
 
-            <section id="view-calendar" class="view hidden fade-in">
-                <div class="card-header">
-                    <h2 style="font-weight: 800;">Agenda Central</h2>
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-cart-plus"></i> Entrada de Productos</div>
+                <div class="z-input-group">
+                    <input type="text" id="m-name" class="z-input" placeholder="Nombre del producto...">
                 </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                    <input type="text" id="m-weight" class="z-input" placeholder="Peso (ej: 2kg)">
+                    <input type="number" id="m-price" class="z-input" placeholder="Precio Bs.">
+                </div>
+                <button class="z-btn" style="margin-top:15px;" onclick="app.market.add()"><i class="fas fa-plus"></i> Añadir a Lista</button>
+            </div>
+
+            <div id="market-list-container"></div>
+        </section>
+
+        <section id="v-libros" class="view hidden">
+            <div class="section-title"><i class="fas fa-book-open"></i> Biblioteca Z-Library</div>
+            
+            <div class="glass-card">
+                <div class="z-input-group">
+                    <input type="text" id="b-title" class="z-input" placeholder="Título del libro...">
+                </div>
+                <div class="z-input-group">
+                    <input type="text" id="b-url" class="z-input" placeholder="Enlace / PDF URL (opcional)">
+                </div>
+                <button class="z-btn" onclick="app.library.add()"><i class="fas fa-bookmark"></i> Archivar Libro</button>
+            </div>
+
+            <div class="books-grid" id="books-container"></div>
+        </section>
+
+        <section id="v-sistema" class="view hidden">
+            <div class="section-title"><i class="fas fa-server"></i> Gestión de Núcleo</div>
+            
+            <div class="glass-card">
+                <h3 style="margin-bottom:10px; font-size:1rem;">Copia de Seguridad Profesional</h3>
+                <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:20px;">Descarga tu base de datos completa en formato JSON para restaurarla en cualquier dispositivo o después de actualizar el código.</p>
                 
-                <div class="z-card">
-                    <div class="z-form-group">
-                        <label class="z-label">Nueva Misión</label>
-                        <input type="text" id="task-name" class="z-input" placeholder="Ej: Presentación UCATEC">
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                        <input type="date" id="task-date" class="z-input">
-                        <select id="task-tag" class="z-input">
-                            <option value="ucatec">UCATEC</option>
-                            <option value="church">Parroquia</option>
-                            <option value="home">Personal</option>
-                        </select>
-                    </div>
-                    <button class="z-btn-primary" onclick="z.addTask()">
-                        <i class="fa-solid fa-plus"></i> Guardar Misión
-                    </button>
+                <button class="z-btn" onclick="app.core.export()"><i class="fas fa-file-download"></i> Exportar Base de Datos</button>
+                <div style="margin-top:12px;">
+                    <label class="z-btn secondary" for="import-db">
+                        <i class="fas fa-file-upload"></i> Importar Backup
+                    </label>
+                    <input type="file" id="import-db" style="display:none" onchange="app.core.import(event)">
                 </div>
+            </div>
 
-                <div id="full-task-list" class="item-list">
-                    </div>
-            </section>
+            <div class="glass-card" style="border-color:var(--danger)">
+                <h3 style="color:var(--danger); margin-bottom:10px;">Hard Reset</h3>
+                <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:20px;">Esta acción eliminará permanentemente todos tus retos, finanzas y registros del monitor infantil.</p>
+                <button class="z-btn outline" style="color:var(--danger); border-color:var(--danger)" onclick="app.core.wipe()"><i class="fas fa-radiation"></i> Borrar Todo</button>
+            </div>
+        </section>
 
-            <section id="view-market" class="view hidden fade-in">
-                <div class="card-header">
-                    <h2 style="font-weight: 800;">Lista del Mercado</h2>
-                    <span class="tag tag-home" id="market-count">0 items</span>
-                </div>
-
-                <div class="z-card" style="margin-bottom: 10px;">
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="market-input" class="z-input" placeholder="¿Qué falta en casa?" style="margin:0;">
-                        <button class="z-btn-primary" style="width:70px; margin:0;" onclick="z.addMarket()">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="market-list" class="item-list" style="margin-top:20px;">
-                    </div>
-            </section>
-
-            <section id="view-finance" class="view hidden fade-in">
-                <div class="finance-hero">
-                    <span class="balance-label">FONDO DISPONIBLE</span>
-                    <h2 class="balance-amount" id="total-balance">0.00</h2>
-                    <p style="font-size:0.7rem; opacity:0.6;">Pesos Bolivianos (Bs.)</p>
-                    
-                    <div class="finance-stats">
-                        <div class="stat-item">
-                            <small>INGRESOS</small>
-                            <b style="color:var(--c)" id="total-in">+0</b>
-                        </div>
-                        <div class="stat-item">
-                            <small>GASTOS</small>
-                            <b style="color:var(--p)" id="total-out">-0</b>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="z-card">
-                    <div class="z-form-group">
-                        <input type="text" id="fin-desc" class="z-input" placeholder="Detalle (ej: Pañales)">
-                    </div>
-                    <div class="z-form-group">
-                        <input type="number" id="fin-amt" class="z-input" placeholder="Monto Bs.">
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-                        <button class="z-btn-primary" style="background:var(--success)" onclick="z.addFin('in')">Ingreso</button>
-                        <button class="z-btn-primary" style="background:var(--danger)" onclick="z.addFin('out')">Gasto</button>
-                    </div>
-                </div>
-
-                <div id="finance-log" class="item-list">
-                    </div>
-            </section>
-
-            <section id="view-notes" class="view hidden fade-in">
-                <div class="card-header">
-                    <h2 style="font-weight: 800;">Crónicas Z-Core</h2>
-                    <button class="tool-btn" onclick="z.saveNotes()" style="background:var(--grad-primary); color:white; border:none;">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar
-                    </button>
-                </div>
-
-                <div class="editor-container">
-                    <div class="editor-toolbar">
-                        <button class="tool-btn" onclick="z.format('bold')"><b>B</b></button>
-                        <button class="tool-btn" onclick="z.format('italic')"><i>I</i></button>
-                        <button class="tool-btn" onclick="z.format('insertUnorderedList')"><i class="fa-solid fa-list"></i></button>
-                        <button class="tool-btn" onclick="z.format('justifyLeft')"><i class="fa-solid fa-align-left"></i></button>
-                    </div>
-                    <div id="rich-editor" contenteditable="true" placeholder="Empieza a escribir tus apuntes aquí..."></div>
-                </div>
-            </section>
-
-            <section id="view-config" class="view hidden fade-in">
-                <h2>Configuración</h2>
-                <div class="z-card">
-                    <label class="z-label">Nombre del Operador</label>
-                    <input type="text" id="cfg-name" class="z-input" placeholder="Ej: Maycol Avila" oninput="z.updateUser()">
-                </div>
-
-                <div class="z-card">
-                    <span class="card-title">Gestión de Datos</span>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin: 10px 0;">Respalda toda tu información en un archivo local.</p>
-                    <button class="z-btn-primary" style="background:var(--dark);" onclick="z.exportData()">
-                        <i class="fa-solid fa-download"></i> Exportar JSON
-                    </button>
-                    <button class="z-btn-primary" style="background:var(--danger); margin-top:15px; opacity: 0.5;" onclick="z.wipeData()">
-                        <i class="fa-solid fa-trash-can"></i> Borrar Todo
-                    </button>
-                </div>
-                
-                <div style="text-align:center; padding: 20px;">
-                    <p style="font-size:0.7rem; color:var(--text-muted);">Z-CORE OMNI MAX v4.0.2</p>
-                    <p style="font-size:0.6rem; color:var(--text-muted);">Build Tarija-Bolivia @ 2026</p>
-                </div>
-            </section>
-
-        </main>
-
-        <nav class="bottom-nav">
-            <a href="#" class="nav-link active" onclick="z.nav('home', this)"><i class="fa-solid fa-house-chimney"></i></a>
-            <a href="#" class="nav-link" onclick="z.nav('calendar', this)"><i class="fa-solid fa-calendar-days"></i></a>
-            <a href="#" class="nav-link" onclick="z.nav('market', this)"><i class="fa-solid fa-basket-shopping"></i></a>
-            <a href="#" class="nav-link" onclick="z.nav('finance', this)"><i class="fa-solid fa-wallet"></i></a>
-            <a href="#" class="nav-link" onclick="z.nav('notes', this)"><i class="fa-solid fa-file-pen"></i></a>
-        </nav>
     </div>
 
+    <nav class="nav-dock">
+        <div class="nav-link active" onclick="app.ui.nav('inicio', this)"><i class="fas fa-home"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('mercado', this)"><i class="fas fa-shopping-cart"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('libros', this)"><i class="fas fa-book"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('sistema', this)"><i class="fas fa-microchip"></i></div>
+    </nav>
+
     <script>
-        /**
-         * Z-CORE OMNI ENGINE v4.0
-         * Propietario: Maycol Anghelo Avila Zenteno
-         */
-        
-        const z = {
-            // ESTADO GLOBAL (DATABASE)
-            state: {
-                user: "Maycol Avila",
-                babyLog: [],
+        /* ========================================
+        Z-CORE MASTER ENGINE v7.0
+        ========================================
+        Desarrollado para: Maycol Avila
+        Funcionalidad: Multi-módulo con persistencia sólida
+        */
+
+        const app = {
+            // BASE DE DATOS LOCAL
+            db: {
+                baby: [],
                 tasks: [],
                 market: [],
-                finance: [],
-                notes: ""
+                books: [],
+                config: {
+                    isSleeping: false,
+                    startSleep: null,
+                    user: "Maycol",
+                    version: "7.0.0"
+                }
             },
 
-            // 1. INICIALIZACIÓN
+            // --- INICIALIZACIÓN ---
             init() {
-                console.log("Z-Core Engine Initializing...");
-                this.loadData();
-                this.render();
-                this.setupAutoCap();
-                this.notify("Z-Core Online");
-            },
-
-            // 2. PERSISTENCIA
-            saveData() {
-                localStorage.setItem('ZCORE_MAX_DB', JSON.stringify(this.state));
-                this.render();
-            },
-
-            loadData() {
-                const raw = localStorage.getItem('ZCORE_MAX_DB');
-                if (raw) {
-                    this.state = JSON.parse(raw);
-                    document.getElementById('cfg-name').value = this.state.user;
-                    document.getElementById('rich-editor').innerHTML = this.state.notes;
+                console.log("Z-CORE: Iniciando motor...");
+                const saved = localStorage.getItem('ZCORE_MASTER_V7');
+                if (saved) {
+                    this.db = JSON.parse(saved);
+                    console.log("Z-CORE: Datos cargados correctamente.");
+                } else {
+                    this.setupDefaults();
                 }
-            },
-
-            // 3. NAVEGACIÓN
-            nav(viewId, element) {
-                // Audio Feedback (Opcional)
-                this.playClick();
-
-                // Cambiar Vistas
-                document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-                document.getElementById('view-' + viewId).classList.remove('hidden');
-
-                // Actualizar Nav
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                if (element) element.classList.add('active');
                 
-                window.scrollTo(0, 0);
+                this.renderAll();
+                this.baby.checkState();
+                this.ui.autoCap();
             },
 
-            // 4. MÓDULO BEBÉ
-            logBaby(action) {
-                const entry = {
-                    id: Date.now(),
-                    action: action,
-                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                };
-                this.state.babyLog.unshift(entry);
-                if (this.state.babyLog.length > 20) this.state.babyLog.pop();
+            setupDefaults() {
+                this.db.tasks = [
+                    { id: 101, title: 'Práctica del Gym', tag: 'Salud', done: false },
+                    { id: 102, title: 'Microeconomía UCATEC', tag: 'Estudio', done: false }
+                ];
+                this.save();
+            },
+
+            save() {
+                localStorage.setItem('ZCORE_MASTER_V7', JSON.stringify(this.db));
+                this.renderAll();
+            },
+
+            // --- MÓDULO: UI & NAVEGACIÓN ---
+            ui: {
+                nav(target, el) {
+                    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    document.getElementById('v-' + target).classList.remove('hidden');
+                    el.classList.add('active');
+                    window.scrollTo(0,0);
+                },
+
+                toast(msg) {
+                    const t = document.getElementById('toast');
+                    t.innerText = msg;
+                    t.style.display = 'block';
+                    setTimeout(() => t.style.display = 'none', 2500);
+                },
+
+                autoCap() {
+                    document.addEventListener('input', (e) => {
+                        if (e.target.tagName === 'INPUT' && e.target.value.length === 1) {
+                            e.target.value = e.target.value.toUpperCase();
+                        }
+                    });
+                }
+            },
+
+            MODULO: MONITOR BEBÉ
+        ========================================
+        */
+        .baby-monitor-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .tool-btn {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            padding: 15px 5px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tool-btn i { font-size: 1.5rem; color: var(--p); margin-bottom: 8px; display: block; }
+        .tool-btn span { font-size: 0.65rem; font-weight: 700; color: var(--text-dim); }
+        
+        .tool-btn.active {
+            border-color: var(--p);
+            background: rgba(255, 0, 128, 0.05);
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0); }
+        }
+
+        .timer-badge {
+            background: var(--dark);
+            border: 1px solid var(--c);
+            color: var(--c);
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        /* ========================================
+        MODULO: MERCADO & PRECIOS
+        ========================================
+        */
+        .market-banner {
+            background: var(--grad);
+            border-radius: var(--br);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+        }
+
+        .market-banner h2 { font-size: 2.5rem; font-weight: 800; margin-top: 5px; }
+
+        .market-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card);
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .market-item.done { opacity: 0.4; filter: grayscale(1); }
+        .market-info { flex: 1; }
+        .market-info b { font-size: 1rem; color: white; display: block; }
+        .market-info span { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; }
+        .market-price { text-align: right; font-weight: 800; color: var(--c); }
+        /* ========================================
+        MODULO: BIBLIOTECA (BOOKS)
+        ========================================
+        */
+        .books-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .book-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-icon {
+            height: 100px;
+            background: #0d1117;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--s);
+            margin-bottom: 12px;
+        }
+
+        .book-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: white; }
+        
+        /* ========================================
+        NAVEGACIÓN PRINCIPAL
+        ========================================
+        */
+        .nav-dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 450px;
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            padding: 12px;
+            border-radius: 50%;
+            transition: 0.4s;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            color: white;
+            background: var(--grad);
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(255, 0, 128, 0.4);
+        }
+
+        /* ========================================
+        MISC & NOTIFICACIONES
+        ========================================
+        */
+        #toast {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--grad);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: white;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+        }
+
+        .delete-trigger { color: var(--border); cursor: pointer; transition: 0.3s; }
+        .delete-trigger:hover { color: var(--danger); }
+
+    </style>
+</head>
+<body>
+
+    <div id="toast">Operación exitosa</div>
+
+    <div id="app-container">
+        
+        <section id="v-inicio" class="view">
+            <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <div>
+                    <p style="color:var(--text-dim); font-size:0.8rem; font-weight:600;">System Online</p>
+                    <h1 style="font-size:1.8rem; font-weight:800;">Hola, Maycol</h1>
+                </div>
+                <div id="global-timer" class="hidden">
+                    <span class="timer-badge"><i class="fas fa-moon"></i> <span id="sleep-clock">00:00:00</span></span>
+                </div>
+            </header>
+
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-baby"></i> Monitor Infantil Tarija</div>
+                <div class="baby-monitor-panel">
+                    <div class="tool-btn" onclick="app.baby.log('🍼 Leche')"><i class="fas fa-baby-bottle"></i><span>Leche</span></div>
+                    <div id="btn-sleep" class="tool-btn" onclick="app.baby.toggleSleep()"><i class="fas fa-bed"></i><span>Sueño</span></div>
+                    <div class="tool-btn" onclick="app.baby.log('🧷 Pañal')"><i class="fas fa-poop"></i><span>Pañal</span></div>
+                    <div class="tool-btn" onclick="app.baby.log('💊 Salud')"><i class="fas fa-heartbeat"></i><span>Salud</span></div>
+                </div>
+                <div id="baby-history-mini" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--text-dim); border-top:1px solid var(--border); padding-top:12px; margin-top:5px;"></div>
+            </div>
+
+            <div class="section-title"><i class="fas fa-fire"></i> Retos Permanentes</div>
+            <div id="tasks-list"></div>
+            
+            <button class="z-btn outline" style="margin-top:10px;" onclick="app.tasks.add()"><i class="fas fa-plus-circle"></i> Nuevo Reto</button>
+        </section>
+
+        <section id="v-mercado" class="view hidden">
+            <div class="market-banner">
+                <p style="font-size:0.8rem; font-weight:800; opacity:0.8;">PRESUPUESTO TOTAL</p>
+                <h2><span id="market-sum">0.00</span> <small style="font-size:1rem;">Bs.</small></h2>
+            </div>
+
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-cart-plus"></i> Entrada de Productos</div>
+                <div class="z-input-group">
+                    <input type="text" id="m-name" class="z-input" placeholder="Nombre del producto...">
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                    <input type="text" id="m-weight" class="z-input" placeholder="Peso (ej: 2kg)">
+                    <input type="number" id="m-price" class="z-input" placeholder="Precio Bs.">
+                </div>
+                <button class="z-btn" style="margin-top:15px;" onclick="app.market.add()"><i class="fas fa-plus"></i> Añadir a Lista</button>
+            </div>
+
+            <div id="market-list-container"></div>
+        </section>
+
+        <section id="v-libros" class="view hidden">
+            <div class="section-title"><i class="fas fa-book-open"></i> Biblioteca Z-Library</div>
+            
+            <div class="glass-card">
+                <div class="z-input-group">
+                    <input type="text" id="b-title" class="z-input" placeholder="Título del libro...">
+                </div>
+                <div class="z-input-group">
+                    <input type="text" id="b-url" class="z-input" placeholder="Enlace / PDF URL (opcional)">
+                </div>
+                <button class="z-btn" onclick="app.library.add()"><i class="fas fa-bookmark"></i> Archivar Libro</button>
+            </div>
+
+            <div class="books-grid" id="books-container"></div>
+        </section>
+
+        <section id="v-sistema" class="view hidden">
+            <div class="section-title"><i class="fas fa-server"></i> Gestión de Núcleo</div>
+            
+            <div class="glass-card">
+                <h3 style="margin-bottom:10px; font-size:1rem;">Copia de Seguridad Profesional</h3>
+                <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:20px;">Descarga tu base de datos completa en formato JSON para restaurarla en cualquier dispositivo o después de actualizar el código.</p>
                 
-                this.saveData();
-                this.notify(`Registrado: ${action}`);
+                <button class="z-btn" onclick="app.core.export()"><i class="fas fa-file-download"></i> Exportar Base de Datos</button>
+                <div style="margin-top:12px;">
+                    <label class="z-btn secondary" for="import-db">
+                        <i class="fas fa-file-upload"></i> Importar Backup
+                    </label>
+                    <input type="file" id="import-db" style="display:none" onchange="app.core.import(event)">
+                </div>
+            </div>
+
+            <div class="glass-card" style="border-color:var(--danger)">
+                <h3 style="color:var(--danger); margin-bottom:10px;">Hard Reset</h3>
+                <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:20px;">Esta acción eliminará permanentemente todos tus retos, finanzas y registros del monitor infantil.</p>
+                <button class="z-btn outline" style="color:var(--danger); border-color:var(--danger)" onclick="app.core.wipe()"><i class="fas fa-radiation"></i> Borrar Todo</button>
+            </div>
+        </section>
+
+    </div>
+
+    <nav class="nav-dock">
+        <div class="nav-link active" onclick="app.ui.nav('inicio', this)"><i class="fas fa-home"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('mercado', this)"><i class="fas fa-shopping-cart"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('libros', this)"><i class="fas fa-book"></i></div>
+        <div class="nav-link" onclick="app.ui.nav('sistema', this)"><i class="fas fa-microchip"></i></div>
+    </nav>
+
+    <script>
+        /* ========================================
+        Z-CORE MASTER ENGINE v7.0
+        ========================================
+        Desarrollado para: Maycol Avila
+        Funcionalidad: Multi-módulo con persistencia sólida
+        */
+
+        const app = {
+            // BASE DE DATOS LOCAL
+            db: {
+                baby: [],
+                tasks: [],
+                market: [],
+                books: [],
+                config: {
+                    isSleeping: false,
+                    startSleep: null,
+                    user: "Maycol",
+                    version: "7.0.0"
+                }
             },
 
-            // 5. MÓDULO AGENDA (UCATEC/CHURCH)
-            addTask() {
-                const name = document.getElementById('task-name').value;
-                const date = document.getElementById('task-date').value;
-                const tag = document.getElementById('task-tag').value;
+            // --- INICIALIZACIÓN ---
+            init() {
+                console.log("Z-CORE: Iniciando motor...");
+                const saved = localStorage.getItem('ZCORE_MASTER_V7');
+                if (saved) {
+                    this.db = JSON.parse(saved);
+                    console.log("Z-CORE: Datos cargados correctamente.");
+                } else {
+                    this.setupDefaults();
+                }
+                
+                this.renderAll();
+                this.baby.checkState();
+                this.ui.autoCap();
+            },
 
-                if (!name || !date) {
-                    alert("Completa los datos de la misión");
-                    return;
+            setupDefaults() {
+                this.db.tasks = [
+                    { id: 101, title: 'Práctica del Gym', tag: 'Salud', done: false },
+                    { id: 102, title: 'Microeconomía UCATEC', tag: 'Estudio', done: false }
+                ];
+                this.save();
+            },
+
+            save() {
+                localStorage.setItem('ZCORE_MASTER_V7', JSON.stringify(this.db));
+                this.renderAll();
+            },
+
+            // --- MÓDULO: UI & NAVEGACIÓN ---
+            ui: {
+                nav(target, el) {
+                    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    document.getElementById('v-' + target).classList.remove('hidden');
+                    el.classList.add('active');
+                    window.scrollTo(0,0);
+                },
+
+                toast(msg) {
+                    const t = document.getElementById('toast');
+                    t.innerText = msg;
+                    t.style.display = 'block';
+                    setTimeout(() => t.style.display = 'none', 2500);
+                },
+
+                autoCap() {
+                    document.addEventListener('input', (e) => {
+                        if (e.target.tagName === 'INPUT' && e.target.value.length === 1) {
+                            e.target.value = e.target.value.toUpperCase();
+                        }
+                    });
+                }
+            },
+
+            // --- MÓDULO: MONITOR BEBÉ ---
+            baby: {
+                timerInterval: null,
+
+                log(act) {
+                    const entry = {
+                        id: Date.now(),
+                        action: act,
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        date: new Date().toLocaleDateString()
+                    };
+                    app.db.baby.unshift(entry);
+                    app.save();
+                    app.ui.toast("Evento registrado: " + act);
+                },
+
+                toggleSleep() {
+                    if (!app.db.config.isSleeping) {
+                        app.db.config.isSleeping = true;
+                        app.db.config.startSleep = Date.now();
+                        this.log("Inició Descanso 😴");
+                    } else {
+                        const dur = this.calcDuration();
+                        app.db.config.isSleeping = false;
+                        app.db.config.startSleep = null;
+                        this.log(`Despertó ☀️ (Duración: ${dur})`);
+                        clearInterval(this.timerInterval);
+                    }
+                    app.save();
+                    this.checkState();
+                },
+
+                checkState() {
+                    const btn = document.getElementById('btn-sleep');
+                    const banner = document.getElementById('global-timer');
+                    if (app.db.config.isSleeping) {
+                        btn.classList.add('active');
+                        banner.classList.remove('hidden');
+                        this.startTimer();
+                    } else {
+                        btn.classList.remove('active');
+                        banner.classList.add('hidden');
+                    }
+                },
+
+                startTimer() {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = setInterval(() => {
+                        document.getElementById('sleep-clock').innerText = this.calcDuration();
+                    }, 1000);
+                },
+
+                calcDuration() {
+                    const diff = Date.now() - app.db.config.startSleep;
+                    const h = Math.floor(diff / 3600000);
+                    const m = Math.floor((diff % 3600000) / 60000);
+                    const s = Math.floor((diff % 60000) / 1000);
+                    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                },
+
+                delete(id) {
+                    if (confirm("¿Eliminar registro de actividad?")) {
+                        app.db.baby = app.db.baby.filter(b => b.id !== id);
+                        app.save();
+                    }
+                }
+            },
+
+            // --- MÓDULO: RETOS ---
+            tasks: {
+                add() {
+                    const t = prompt("Escribe el nuevo reto o misión:");
+                    if (t) {
+                        app.db.tasks.push({ id: Date.now(), title: t, tag: 'Personal', done: false });
+                        app.save();
+                    }
+                },
+
+                toggle(id) {
+                    const task = app.db.tasks.find(x => x.id === id);
+                    if (task) {
+                        task.done = !task.done;
+                        app.save();
+                    }
+                },
+
+                delete(id) {
+                    if (confirm("¿Eliminar esta misión permanentemente?")) {
+                        app.db.tasks = app.db.tasks.filter(x => x.id !== id);
+                        app.save();
+                    }
+                }
+            },
+
+            // --- MÓDULO: MERCADO ---
+            market: {
+                add() {
+                    const name = document.getElementById('m-name').value;
+                    const weight = document.getElementById('m-weight').value;
+                    const price = parseFloat(document.getElementById('m-price').value) || 0;
+
+                    if (!name) return;
+
+                    app.db.market.push({
+                        id: Date.now(),
+                        name,
+                        weight: weight || "N/A",
+                        price,
+                        done: false
+                    });
+
+                    document.getElementById('m-name').value = "";
+                    document.getElementById('m-weight').value = "";
+                    document.getElementById('m-price').value = "";
+                    app.save();
+                    app.ui.toast("Producto añadido al carrito");
+                },
+
+                toggle(id) {
+                    const item = app.db.market.find(x => x.id === id);
+                    item.done = !item.done;
+                    app.save();
+                },
+
+                delete(id) {
+                    app.db.market = app.db.market.filter(x => x.id !== id);
+                    app.save();
+                }
+            },
+
+            // --- MÓDULO: BIBLIOTECA ---
+            library: {
+                add() {
+                    const title = document.getElementById('b-title').value;
+                    const url = document.getElementById('b-url').value;
+
+                    if (!title) return;
+
+                    app.db.books.push({
+                        id: Date.now(),
+                        title,
+                        url,
+                        added: new Date().toLocaleDateString()
+                    });
+
+                    document.getElementById('b-title').value = "";
+                    document.getElementById('b-url').value = "";
+                    app.save();
+                    app.ui.toast("Libro archivado con éxito");
+                },
+
+                delete(id) {
+                    if (confirm("¿Retirar este libro de la estantería?")) {
+                        app.db.books = app.db.books.filter(x => x.id !== id);
+                        app.save();
+                    }
+                }
+            },
+
+            // --- NÚCLEO: BACKUP & DATA ---
+            core: {
+                export() {
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(app.db));
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.setAttribute("href", dataStr);
+                    downloadAnchor.setAttribute("download", `ZCORE_BACKUP_MASTER.json`);
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    downloadAnchor.remove();
+                    app.ui.toast("Backup generado correctamente");
+                },
+
+                import(e) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const data = JSON.parse(event.target.result);
+                            if (confirm("¿Confirmas la restauración? Los datos actuales se perderán.")) {
+                                app.db = data;
+                                app.save();
+                                location.reload();
+                            }
+                        } catch (err) {
+                            alert("Error crítico: El archivo de backup no es válido.");
+                        }
+                    };
+                    reader.readAsText(e.target.files[0]);
+                },
+
+                wipe() {
+                    if (confirm("ALERTA: Vas a borrar toda la base de datos de Maycol. ¿Continuar?")) {
+                        localStorage.removeItem('ZCORE_MASTER_V7');
+                        location.reload();
+                    }
+                }
+            },
+
+            // --- MOTOR DE RENDERIZADO ---
+            renderAll() {
+                // Render Retos
+                const taskContainer = document.getElementById('tasks-list');
+                if (this.db.tasks.length === 0) {
+                    taskContainer.innerHTML = '<div class="empty-state">No tienes retos pendientes.</div>';
+                } else {
+                    taskContainer.innerHTML = this.db.tasks.map(t => `
+                        <div class="market-item ${t.done ? 'done' : ''}" onclick="app.tasks.toggle(${t.id})">
+                            <div style="font-size: 1.2rem; color: ${t.done ? 'var(--success)' : 'var(--p)'}">
+                                <i class="fas ${t.done ? 'fa-check-circle' : 'fa-circle-notch'}"></i>
+                            </div>
+                            <div class="market-info">
+                                <b>${t.title}</b>
+                                <span>${t.tag}</span>
+                            </div>
+                            <i class="fas fa-trash delete-trigger" onclick="event.stopPropagation(); app.tasks.delete(${t.id})"></i>
+                        </div>
+                    `).join('');
                 }
 
-                this.state.tasks.push({
-                    id: Date.now(),
-                    name: name,
-                    date: date,
-                    tag: tag,
-                    completed: false
-                });
+                // Render Baby Log
+                document.getElementById('baby-history-mini').innerHTML = this.db.baby.slice(0, 3).map(b => 
+                    `[${b.time}] ${b.action}`
+                ).join(' | ') || "Sin actividad reciente.";
 
-                document.getElementById('task-name').value = "";
-                this.saveData();
-            },
-
-            toggleTask(id) {
-                const task = this.state.tasks.find(t => t.id === id);
-                if (task) task.completed = !task.completed;
-                this.saveData();
-            },
-
-            deleteTask(id) {
-                this.state.tasks = this.state.tasks.filter(t => t.id !== id);
-                this.saveData();
-            },
-
-            // 6. MÓDULO MERCADO
-            addMarket() {
-                const val = document.getElementById('market-input').value;
-                if (!val) return;
-
-                this.state.market.push({
-                    id: Date.now(),
-                    item: val,
-                    done: false
-                });
-
-                document.getElementById('market-input').value = "";
-                this.saveData();
-            },
-
-            toggleMarket(id) {
-                const item = this.state.market.find(i => i.id === id);
-                if (item) item.done = !item.done;
-                this.saveData();
-            },
-
-            deleteMarket(id) {
-                this.state.market = this.state.market.filter(i => i.id !== id);
-                this.saveData();
-            },
-
-            // 7. MÓDULO FINANZAS (EL BANCO DEL BEBÉ)
-            addFin(type) {
-                const desc = document.getElementById('fin-desc').value;
-                const amt = parseFloat(document.getElementById('fin-amt').value);
-
-                if (!desc || isNaN(amt)) return;
-
-                this.state.finance.unshift({
-                    id: Date.now(),
-                    desc: desc,
-                    amt: amt,
-                    type: type,
-                    date: new Date().toLocaleDateString()
-                });
-
-                document.getElementById('fin-desc').value = "";
-                document.getElementById('fin-amt').value = "";
-                this.saveData();
-            },
-
-            // 8. MÓDULO NOTAS
-            format(cmd) {
-                document.execCommand(cmd, false, null);
-            },
-
-            saveNotes() {
-                this.state.notes = document.getElementById('rich-editor').innerHTML;
-                this.saveData();
-                this.notify("Notas guardadas correctamente");
-            },
-
-            // 9. RENDERIZADO MAESTRO
-            render() {
-                // Usuario
-                document.getElementById('display-name').innerText = this.state.user;
-                document.getElementById('avatar-char').innerText = this.state.user.charAt(0).toUpperCase();
-
-                // Dashboard Baby Log
-                const babyDiv = document.getElementById('baby-log-home');
-                if (this.state.babyLog.length > 0) {
-                    const last = this.state.babyLog[0];
-                    babyDiv.innerHTML = `Último: <b>${last.action}</b> a las ${last.time}`;
-                }
-
-                // Renderizar Tareas (Dashboard + Agenda)
-                const sortedTasks = [...this.state.tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
-                const taskHtml = sortedTasks.map(t => `
-                    <div class="list-row ${t.completed ? 'completed' : ''} ${t.tag}">
-                        <div class="check-btn" onclick="z.toggleTask(${t.id})">
-                            ${t.completed ? '<i class="fa-solid fa-check"></i>' : ''}
-                        </div>
-                        <div style="flex:1" onclick="z.toggleTask(${t.id})">
-                            <span class="tag tag-${t.tag}">${t.tag}</span>
-                            <p style="font-weight:700; font-size:0.95rem;">${t.name}</p>
-                            <small style="color:var(--text-muted); font-size:0.7rem;">${t.date}</small>
-                        </div>
-                        <button onclick="z.deleteTask(${t.id})" style="border:none; background:none; color:#ddd;">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `).join('');
-
-                document.getElementById('home-task-list').innerHTML = taskHtml || "<p style='text-align:center; font-size:0.8rem; color:#ccc;'>No hay misiones próximas.</p>";
-                document.getElementById('full-task-list').innerHTML = taskHtml;
-
-                // Renderizar Mercado
-                document.getElementById('market-count').innerText = `${this.state.market.filter(i=>!i.done).length} pendientes`;
-                document.getElementById('market-list').innerHTML = this.state.market.map(i => `
-                    <div class="list-row ${i.done ? 'completed' : ''}">
-                        <div class="check-btn" onclick="z.toggleMarket(${i.id})">
-                            ${i.done ? '<i class="fa-solid fa-check"></i>' : ''}
-                        </div>
-                        <span style="flex:1; font-weight:600;" onclick="z.toggleMarket(${i.id})">${i.item}</span>
-                        <button onclick="z.deleteMarket(${i.id})" style="border:none; background:none; color:#eee;">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                `).join('');
-
-                    // Renderizar Finanzas
-                let totalIn = 0, totalOut = 0;
-                const finHtml = this.state.finance.map(f => {
-                    if (f.type === 'in') totalIn += f.amt; else totalOut += f.amt;
+                // Render Mercado
+                let mTotal = 0;
+                const mContainer = document.getElementById('market-list-container');
+                mContainer.innerHTML = this.db.market.map(m => {
+                    mTotal += m.price;
                     return `
-                        <div class="list-row">
-                            <div style="width:40px; height:40px; border-radius:12px; background:${f.type==='in'?'#e8fcf0':'#fff0f0'}; display:flex; align-items:center; justify-content:center;">
-                                <i class="fa-solid ${f.type==='in'?'fa-arrow-trend-up':'fa-arrow-trend-down'}" style="color:${f.type==='in'? 'var(--success)':'var(--danger)'}"></i>
+                        <div class="market-item ${m.done ? 'done' : ''}" onclick="app.market.toggle(${m.id})">
+                            <div class="market-info">
+                                <b>${m.name}</b>
+                                <span>${m.weight}</span>
                             </div>
-                            <div style="flex:1">
-                                <p style="font-weight:700; font-size:0.9rem;">${f.desc}</p>
-                                <small style="font-size:0.6rem; color:var(--text-muted);">${f.date}</small>
-                            </div>
-                            <b style="color:${f.type==='in'? 'var(--success)':'var(--danger)'}">${f.type==='in'?'+':'-'}${f.amt.toFixed(2)}</b>
+                            <div class="market-price">${m.price.toFixed(2)} Bs</div>
+                            <i class="fas fa-times-circle delete-trigger" style="margin-left:10px" onclick="event.stopPropagation(); app.market.delete(${m.id})"></i>
                         </div>
                     `;
                 }).join('');
+                document.getElementById('market-sum').innerText = mTotal.toFixed(2);
 
-                document.getElementById('finance-log').innerHTML = finHtml;
-                document.getElementById('total-balance').innerText = (totalIn - totalOut).toFixed(2);
-                document.getElementById('total-in').innerText = `+${totalIn.toFixed(0)}`;
-                document.getElementById('total-out').innerText = `-${totalOut.toFixed(0)}`;
-            },
-
-            // 10. UTILIDADES TÉCNICAS
-            updateUser() {
-                const name = document.getElementById('cfg-name').value;
-                this.state.user = name || "Maycol Avila";
-                this.saveData();
-            },
-
-            setupAutoCap() {
-                // Forzar mayúscula en la primera letra de todos los inputs
-                document.addEventListener('input', (e) => {
-                    if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
-                        if (e.target.value.length === 1) {
-                            e.target.value = e.target.value.toUpperCase();
-                        }
-                    }
-                });
-            },
-
-            notify(msg) {
-                const t = document.createElement('div');
-                t.className = 'toast';
-                t.innerText = msg;
-                document.body.appendChild(t);
-                setTimeout(() => t.remove(), 2500);
-            },
-
-            playClick() {
-                // Simulación de haptic feedback si estuviera disponible
-                if (window.navigator.vibrate) window.navigator.vibrate(5);
-            },
-
-            exportData() {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.state));
-                const downloadAnchorNode = document.createElement('a');
-                downloadAnchorNode.setAttribute("href", dataStr);
-                downloadAnchorNode.setAttribute("download", "zcore_backup_" + Date.now() + ".json");
-                document.body.appendChild(downloadAnchorNode);
-                downloadAnchorNode.click();
-                downloadAnchorNode.remove();
-            },
-
-            wipeData() {
-                if (confirm("¿Estás absolutamente seguro? Se borrarán todas las misiones, notas y saldo bancario.")) {
-                    localStorage.removeItem('ZCORE_MAX_DB');
-                    location.reload();
-                }
+                // Render Biblioteca
+                const bContainer = document.getElementById('books-container');
+                bContainer.innerHTML = this.db.books.map(b => `
+                    <div class="book-card">
+                        <i class="fas fa-times delete-trigger" style="position:absolute; top:12px; right:12px; font-size:0.8rem;" onclick="app.library.delete(${b.id})"></i>
+                        <div class="book-icon"><i class="fas fa-book"></i></div>
+                        <div class="book-title">${b.title}</div>
+                        ${b.url ? `<a href="${b.url}" target="_blank" style="font-size:0.7rem; color:var(--c); font-weight:800; text-decoration:none;">ABRIR PDF <i class="fas fa-external-link-alt"></i></a>` : `<span style="font-size:0.6rem; color:var(--text-dim);">Físico</span>`}
+                    </div>
+                `).join('');
             }
         };
 
-        // Arreglo para extender el código y asegurar funcionalidad modular
-        // (Agregando validación de misiones críticas)
-        z.checkDeadlines = function() {
-            const now = new Date();
-            this.state.tasks.forEach(t => {
-                const taskDate = new Date(t.date);
-                if (taskDate < now && !t.completed) {
-                    console.warn(`Misión retrasada: ${t.name}`);
-                }
-            });
-        };
-
-        // Ejecutar al cargar
-        window.onload = () => z.init();
-
-        /* EXTENSIÓN DE CÓDIGO - ARQUITECTURA DE DATOS 
-           Esta sección añade capas de seguridad al manejo de strings y fechas.
-        */
-        const CryptoUtil = {
-            encrypt(str) { return btoa(str); },
-            decrypt(str) { return atob(str); }
-        };
-
-        // Manejador de Errores Global
-        window.onerror = function(msg, url, line) {
-            console.error(`Z-Core Error: ${msg} en línea ${line}`);
-            return true;
-        };
-
+        // LANZAMIENTO GLOBAL
+        window.onload = () => app.init();
     </script>
 </body>
 </html>

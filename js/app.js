@@ -1,9 +1,8 @@
-class ModernLifeOptimizer {
+class LifeOptimizerPro {
     constructor() {
-        this.missions = JSON.parse(localStorage.getItem('z_missions')) || [];
-        this.supplies = JSON.parse(localStorage.getItem('z_supplies')) || [];
-        this.notes = localStorage.getItem('z_notes') || "";
-        this.waterIntake = parseInt(localStorage.getItem('z_water')) || 0;
+        this.tasks = JSON.parse(localStorage.getItem('optimizer_tasks')) || [];
+        this.items = JSON.parse(localStorage.getItem('optimizer_items')) || [];
+        this.notes = localStorage.getItem('optimizer_notes') || "";
         
         this.init();
     }
@@ -11,135 +10,51 @@ class ModernLifeOptimizer {
     init() {
         this.cacheDOM();
         this.bindEvents();
-        this.renderDashboard();
-        this.renderHorizontalCalendar();
-        this.renderWaterBottles();
+        this.renderCalendar();
+        this.renderHomeTasks();
+        this.renderItems();
         this.loadNotes();
-        this.startNotificationEngine();
+        this.checkPermissions();
     }
 
     cacheDOM() {
-        this.missionInput = document.getElementById('mission-input');
-        this.missionTime = document.getElementById('mission-time');
-        this.missionPriority = document.getElementById('mission-priority');
-        this.missionsList = document.getElementById('missions-list');
-        this.todayTasks = document.getElementById('today-tasks-container');
+        this.homeTaskList = document.getElementById('home-task-list');
+        this.itemsList = document.getElementById('items-list');
         this.notesArea = document.getElementById('notes-area');
-        this.waterContainer = document.getElementById('water-bottles');
+        this.taskName = document.getElementById('task-name');
+        this.taskDateTime = document.getElementById('task-datetime');
+        this.taskCategory = document.getElementById('task-category');
+        this.taskNote = document.getElementById('task-note');
+        this.itemInput = document.getElementById('item-input');
     }
 
     bindEvents() {
-        document.getElementById('add-mission').addEventListener('click', () => this.addMission());
-        document.getElementById('add-supply').addEventListener('click', () => this.addSupply());
-        this.notesArea.addEventListener('input', () => this.saveNotes());
+        this.notesArea.addEventListener('input', () => {
+            this.notes = this.notesArea.value;
+            localStorage.setItem('optimizer_notes', this.notes);
+        });
     }
 
-    switchPage(pageId, btn) {
+    // --- NAVIGATION ---
+    switchTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(`page-${pageId}`).classList.remove('hidden');
-        btn.classList.add('active');
-        if (pageId === 'dashboard') this.renderDashboard();
-    }
-
-    // --- DASHBOARD ---
-    renderDashboard() {
-        const hour = new Date().getHours();
-        const greeting = hour < 12 ? "Buenos Días," : hour < 19 ? "Buenas Tardes," : "Buenas Noches,";
-        document.getElementById('greeting-text').innerText = greeting;
-
-        const today = new Date().toISOString().split('T')[0];
-        const todayMissions = this.missions.filter(m => m.time.startsWith(today));
         
-        if (todayMissions.length === 0) {
-            this.todayTasks.innerHTML = `<p style="text-align:center; padding: 20px; color:#999;">No hay tareas para hoy.</p>`;
-        } else {
-            this.todayTasks.innerHTML = todayMissions.map(m => `
-                <div class="task-card ${m.priority === 'S' ? 'pink' : m.priority === 'A' ? 'purple' : 'cyan'}">
-                    <div class="task-details">
-                        <h4>${m.text}</h4>
-                        <p>${new Date(m.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                    </div>
-                    <input type="checkbox" ${m.completed ? 'checked' : ''} onclick="zCore.toggleMission(${m.id})" style="width:25px; height:25px; margin-left:auto;">
-                </div>
-            `).join('');
-        }
+        document.getElementById(`page-${tabId}`).classList.remove('hidden');
+        btn.classList.add('active');
+
+        if (tabId === 'home') this.renderHomeTasks();
     }
 
-    // --- MISSIONS ---
-    addMission() {
-        const text = this.missionInput.value.trim();
-        const time = this.missionTime.value;
-        const priority = this.missionPriority.value;
-        if (!text || !time) return;
-
-        const mission = { id: Date.now(), text, time, priority, completed: false };
-        this.missions.push(mission);
-        this.saveMissions();
-        this.renderDashboard();
-        this.renderAllTasks();
-        this.missionInput.value = '';
+    toggleHomeFilter(type, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.renderHomeTasks(type);
     }
-
-    toggleMission(id) {
-        const mission = this.missions.find(m => m.id === id);
-        if (mission) {
-            mission.completed = !mission.completed;
-            this.saveMissions();
-            this.renderDashboard();
-            this.renderAllTasks();
-        }
-    }
-
-    deleteMission(id) {
-        this.missions = this.missions.filter(m => m.id !== id);
-        this.saveMissions();
-        this.renderAllTasks();
-    }
-
-    renderAllTasks() {
-        const sorted = [...this.missions].sort((a, b) => new Date(a.time) - new Date(b.time));
-        this.missionsList.innerHTML = sorted.map(m => `
-            <div class="task-card" style="padding: 10px 20px;">
-                <div class="task-details">
-                    <h4>${m.text}</h4>
-                    <p>${new Date(m.time).toLocaleString()}</p>
-                </div>
-                <button onclick="zCore.deleteMission(${m.id})" style="margin-left:auto; border:none; background:none; color:red;"><i class="fas fa-trash"></i></button>
-            </div>
-        `).join('');
-    }
-
-    saveMissions() { localStorage.setItem('z_missions', JSON.stringify(this.missions)); }
-
-    // --- WELLNESS ---
-    renderWaterBottles() {
-        let html = '';
-        for (let i = 1; i <= 8; i++) {
-            html += `<i class="fas fa-wine-bottle ${i <= this.waterIntake ? 'filled' : ''}" 
-                        onclick="zCore.toggleWater(${i})" 
-                        style="font-size: 2rem; color: ${i <= this.waterIntake ? 'var(--accent)' : '#eee'}; cursor:pointer;"></i>`;
-        }
-        this.waterContainer.innerHTML = html;
-    }
-
-    toggleWater(num) {
-        this.waterIntake = this.waterIntake === num ? num - 1 : num;
-        localStorage.setItem('z_water', this.waterIntake);
-        this.renderWaterBottles();
-    }
-
-    triggerOfficeChallenge(type, name) {
-        alert(`Reto Completado: ${name}`);
-    }
-
-    // --- NOTES ---
-    loadNotes() { this.notesArea.value = this.notes; }
-    saveNotes() { this.notes = this.notesArea.value; localStorage.setItem('z_notes', this.notes); }
 
     // --- CALENDAR ---
-    renderHorizontalCalendar() {
-        const daysContainer = document.getElementById('days-strip');
+    renderCalendar() {
+        const strip = document.getElementById('calendar-strip');
         const now = new Date();
         const days = [];
         for (let i = -2; i <= 4; i++) {
@@ -147,81 +62,155 @@ class ModernLifeOptimizer {
             d.setDate(now.getDate() + i);
             days.push(d);
         }
-        daysContainer.innerHTML = days.map(d => `
-            <div class="date-item ${d.getDate() === now.getDate() ? 'active' : ''}" onclick="zCore.selectDate(${d.getTime()})">
-                <span class="day-name">${d.toLocaleDateString('es-ES', { weekday: 'short' }).toUpperCase()}</span>
-                <span class="day-num">${d.getDate()}</span>
+
+        strip.innerHTML = days.map(d => `
+            <div class="cal-day ${d.getDate() === now.getDate() ? 'active' : ''}" onclick="zCore.selectDate(${d.getTime()})">
+                <span style="font-size: 0.7rem; color: #888;">${d.toLocaleDateString('es-ES', { weekday: 'short' }).toUpperCase()}</span>
+                <span style="font-size: 1rem; font-weight: 700;">${d.getDate()}</span>
+                <div class="dot"></div>
             </div>
         `).join('');
+
+        const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+        document.getElementById('display-month').innerText = months[now.getMonth()];
     }
 
     selectDate(ts) {
         const d = new Date(ts);
-        this.missionTime.value = d.toISOString().split('T')[0] + "T09:00";
-        this.switchPage('missions', document.querySelectorAll('.nav-item')[1]);
+        this.taskDateTime.value = d.toISOString().split('T')[0] + "T09:00";
+        this.switchTab('add', document.querySelectorAll('.nav-item')[1]);
     }
 
-    // --- NOTIFICATIONS ---
-    startNotificationEngine() {
-        setInterval(() => {
-            const now = new Date();
-            this.missions.forEach(m => {
-                const mDate = new Date(m.time);
-                const diff = (mDate - now) / 1000 / 60;
-                if (!m.completed && diff > 0 && diff <= 1) {
-                    if (Notification.permission === 'granted') {
-                        new Notification("Recordatorio", { body: `Es hora de: ${m.text}` });
-                    }
-                }
-            });
-        }, 60000);
+    // --- TASK LOGIC ---
+    addTask() {
+        const name = this.taskName.value.trim();
+        const time = this.taskDateTime.value;
+        if (!name || !time) return alert("Por favor completa el nombre y la fecha.");
+
+        const task = {
+            id: Date.now(),
+            name,
+            time,
+            category: this.taskCategory.value,
+            note: this.taskNote.value,
+            completed: false,
+            created: new Date().toISOString()
+        };
+
+        this.tasks.push(task);
+        this.saveTasks();
+        this.taskName.value = "";
+        this.taskNote.value = "";
+        this.switchTab('home', document.querySelectorAll('.nav-item')[0]);
     }
 
-    // --- DATABASE BACKUP / RESTORE ---
-    exportData() {
+    toggleTask(id) {
+        const task = this.tasks.find(t => t.id === id);
+        if (task) {
+            task.completed = !task.completed;
+            this.saveTasks();
+            this.renderHomeTasks();
+        }
+    }
+
+    saveTasks() { localStorage.setItem('optimizer_tasks', JSON.stringify(this.tasks)); }
+
+    renderHomeTasks(filter = 'all') {
+        let filtered = this.tasks;
+        if (filter === 'new') {
+            const oneHourAgo = Date.now() - (60 * 60 * 1000);
+            filtered = this.tasks.filter(t => new Date(t.created).getTime() > oneHourAgo);
+        }
+
+        this.homeTaskList.innerHTML = filtered.sort((a,b) => new Date(a.time) - new Date(b.time)).map(t => `
+            <div class="card ${t.completed ? 'card-white' : 'card-black'}" onclick="zCore.toggleTask(${t.id})" style="opacity: ${t.completed ? 0.6 : 1}">
+                <div class="task-card-header">
+                    <span class="task-time">${new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <i class="fas ${t.completed ? 'fa-check-circle' : 'fa-circle'}" style="color: ${t.completed ? '#4cd137' : '#ff0080'}"></i>
+                </div>
+                <h2 class="task-title">${t.name}</h2>
+                <p style="font-size: 0.8rem; opacity: 0.7;">${t.category.toUpperCase()}</p>
+            </div>
+        `).join('') || '<p style="text-align:center; color:#888;">No hay tareas programadas.</p>';
+    }
+
+    // --- ITEMS LOGIC ---
+    addItem() {
+        const text = this.itemInput.value.trim();
+        if (!text) return;
+        this.items.push({ id: Date.now(), text, done: false });
+        this.saveItems();
+        this.itemInput.value = "";
+        this.renderItems();
+    }
+
+    toggleItem(id) {
+        const item = this.items.find(i => i.id === id);
+        if (item) { item.done = !item.done; this.saveItems(); this.renderItems(); }
+    }
+
+    deleteItem(id) {
+        this.items = this.items.filter(i => i.id !== id);
+        this.saveItems();
+        this.renderItems();
+    }
+
+    renderItems() {
+        this.itemsList.innerHTML = this.items.map(i => `
+            <div class="card card-white" style="padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span onclick="zCore.toggleItem(${i.id})" style="text-decoration: ${i.done ? 'line-through' : 'none'}; cursor: pointer;">
+                    ${i.text}
+                </span>
+                <i class="fas fa-trash" onclick="zCore.deleteItem(${i.id})" style="color: #ff3b30; cursor: pointer;"></i>
+            </div>
+        `).join('');
+    }
+
+    saveItems() { localStorage.setItem('optimizer_items', JSON.stringify(this.items)); }
+
+    loadNotes() { this.notesArea.value = this.notes; }
+
+    // --- BACKUP LOGIC ---
+    exportDB() {
         const data = {
-            z_missions: localStorage.getItem('z_missions'),
-            z_supplies: localStorage.getItem('z_supplies'),
-            z_notes: localStorage.getItem('z_notes'),
-            z_water: localStorage.getItem('z_water')
+            tasks: this.tasks,
+            items: this.items,
+            notes: this.notes
         };
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `backup_life_optimizer_${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `backup_optimizer_${new Date().toISOString().split('T')[0]}.json`;
         a.click();
     }
 
-    importData(event) {
+    importDB(event) {
         const file = event.target.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
                 const data = JSON.parse(e.target.result);
-                if (data.z_missions) localStorage.setItem('z_missions', data.z_missions);
-                if (data.z_supplies) localStorage.setItem('z_supplies', data.z_supplies);
-                if (data.z_notes) localStorage.setItem('z_notes', data.z_notes);
-                if (data.z_water) localStorage.setItem('z_water', data.z_water);
-                
-                alert("¡Datos restaurados con éxito! La página se recargará.");
+                if (data.tasks) localStorage.setItem('optimizer_tasks', JSON.stringify(data.tasks));
+                if (data.items) localStorage.setItem('optimizer_items', JSON.stringify(data.items));
+                if (data.notes) localStorage.setItem('optimizer_notes', data.notes);
+                alert("¡Restauración exitosa!");
                 location.reload();
-            } catch (err) {
-                alert("Error al importar el archivo. Asegúrate de que sea un backup válido.");
-            }
+            } catch (err) { alert("Archivo de backup no válido."); }
         };
         reader.readAsText(file);
     }
 
-    clearAllData() {
-        if (confirm("¿ESTÁS SEGURO? Esto borrará todas tus misiones, notas y suministros permanentemente.")) {
+    wipeDB() {
+        if (confirm("¿Seguro que quieres borrar TODO? Esta acción no se puede deshacer.")) {
             localStorage.clear();
             location.reload();
         }
     }
+
+    checkPermissions() { if ('Notification' in window) Notification.requestPermission(); }
 }
 
-const zCore = new ModernLifeOptimizer();
+const zCore = new LifeOptimizerPro();
 window.zCore = zCore;

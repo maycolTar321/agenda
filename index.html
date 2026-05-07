@@ -3,151 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Optimizer</title>
+    <title>Ultimate Life Optimizer</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f85b7f">
-    <link rel="icon" type="image/png" href="android-assets/icon-192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#ff0080">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="user-info">
-            <p id="greeting-text">Buenos Días,</p>
-            <h1 id="user-name">Maycol</h1>
-        </div>
-        <div class="profile-circle">
-            <img src="android-assets/icon-192.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-    </header>
 
     <main>
-        <!-- Page 1: Dashboard -->
-        <div id="page-dashboard" class="tab-content">
-            <div class="date-strip" id="days-strip"></div>
-            
-            <h3 class="section-title">Schedule Today</h3>
-            <div id="today-tasks-container">
-                <!-- Tasks for today will go here -->
+        <!-- PAGE 1: HOME -->
+        <div id="page-home" class="tab-content">
+            <div class="header-top">
+                <div class="month-selector">
+                    <span id="display-month">Jun</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                </div>
+                <div class="header-icons">
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-bell"></i>
+                    <div class="avatar" style="width: 32px; height: 32px;"></div>
+                </div>
             </div>
 
-            <h3 class="section-title">Reminders</h3>
-            <div id="reminders-container">
-                <!-- Reminders/Water will go here -->
+            <div class="calendar-strip" id="calendar-strip">
+                <!-- Days will be injected -->
+            </div>
+
+            <div class="tips-bar">
+                <p>Aquí están tus consejos basados en IA para optimizar tu tiempo, Maycol!</p>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+
+            <div class="tab-switcher">
+                <button class="tab-btn active" onclick="zCore.toggleHomeFilter('all', this)">Todos</button>
+                <button class="tab-btn" onclick="zCore.toggleHomeFilter('new', this)">Nuevos (3)</button>
+            </div>
+
+            <h3>Hoy</h3>
+            <div class="task-list" id="home-task-list">
+                <!-- Example Card -->
+                <div class="card card-white">
+                    <div class="task-card-header">
+                        <span class="task-time">12:00 - 13:30</span>
+                        <div class="avatars">
+                            <div class="avatar"></div>
+                            <div class="avatar" style="margin-left: -8px;"></div>
+                        </div>
+                    </div>
+                    <h2 class="task-title">Product Design Demo</h2>
+                    <p style="color: #888; font-size: 0.9rem;">35+ participantes</p>
+                </div>
             </div>
         </div>
 
-        <!-- Page 2: Add Task -->
-        <div id="page-missions" class="tab-content hidden">
-            <h2 class="section-title">Set Schedule</h2>
-            <div class="card-form">
+        <!-- PAGE 2: ADD TASK -->
+        <div id="page-add" class="tab-content hidden">
+            <div class="form-page">
+                <h2>Programar Tarea</h2>
                 <div class="input-group">
-                    <label>Task Name</label>
-                    <input type="text" id="mission-input" placeholder="What needs to be done?">
+                    <label>Nombre de la Tarea</label>
+                    <input type="text" id="task-name" class="input-field" placeholder="Ej. Diseño de Producto">
                 </div>
                 <div class="input-group">
-                    <label>Select Date & Time</label>
-                    <input type="datetime-local" id="mission-time">
+                    <label>Fecha y Hora</label>
+                    <input type="datetime-local" id="task-datetime" class="input-field">
                 </div>
                 <div class="input-group">
-                    <label>Category</label>
-                    <select id="mission-priority">
-                        <option value="S">Urgent (Pink)</option>
-                        <option value="A">Important (Purple)</option>
-                        <option value="B">Normal (Cyan)</option>
+                    <label>Categoría</label>
+                    <select id="task-category" class="input-field">
+                        <option value="work">Trabajo (Rosa)</option>
+                        <option value="personal">Personal (Morado)</option>
+                        <option value="other">Otro (Cian)</option>
                     </select>
                 </div>
-                <button id="add-mission" class="btn-main">Save Schedule</button>
-            </div>
-            
-            <h3 class="section-title" style="margin-top: 30px;">All Tasks</h3>
-            <ul id="missions-list" class="task-list-modern"></ul>
-        </div>
-
-        <!-- Page 3: Training/Hydration -->
-        <div id="page-training" class="tab-content hidden">
-            <h2 class="section-title">Wellness</h2>
-            <div class="card glass">
-                <h3>Hydration Tracker</h3>
-                <div id="water-bottles" style="display:flex; gap:10px; margin: 15px 0; justify-content: center;"></div>
-            </div>
-            
-            <h3 class="section-title">Quick Challenges</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="btn-main" onclick="zCore.triggerOfficeChallenge('stairs', 'Stairs')">Stairs</button>
-                <button class="btn-main" onclick="zCore.triggerOfficeChallenge('stretch', 'Stretch')">Stretch</button>
-            </div>
-        </div>
-
-        <!-- Page 4: Notes -->
-        <div id="page-notes" class="tab-content hidden">
-            <h2 class="section-title">Notes</h2>
-            <textarea id="notes-area" style="height: 400px; border-radius: 25px;" placeholder="Write your thoughts..."></textarea>
-        </div>
-
-        <!-- Page 5: Supplies -->
-        <div id="page-supplies" class="tab-content hidden">
-            <h2 class="section-title">Supplies</h2>
-            <div class="input-group" style="display:flex; gap:10px;">
-                <input type="text" id="supply-input" placeholder="Add item...">
-                <button id="add-supply" class="btn-main" style="width: 60px;">+</button>
-            </div>
-            <ul id="supplies-list"></ul>
-        </div>
-
-        <!-- Page 6: Settings & Backup -->
-        <div id="page-settings" class="tab-content hidden">
-            <h2 class="section-title">Database & Backup</h2>
-            <div class="card glass" style="padding: 20px; text-align: center;">
-                <p style="margin-bottom: 20px; color: var(--text-light);">Guarda una copia de seguridad de todos tus datos para no perderlos nunca.</p>
-                
-                <button class="btn-main" onclick="zCore.exportData()" style="background: #00b894; margin-bottom: 15px;">
-                    <i class="fas fa-download"></i> Exportar Datos (Backup)
-                </button>
-                
-                <div style="margin-top: 10px;">
-                    <label for="import-file" class="btn-main" style="background: #0984e3; cursor:pointer; display: inline-block;">
-                        <i class="fas fa-upload"></i> Importar Datos (Restore)
-                    </label>
-                    <input type="file" id="import-file" style="display:none" onchange="zCore.importData(event)">
+                <div class="input-group">
+                    <label>Notas</label>
+                    <textarea id="task-note" class="input-field" style="height: 100px;" placeholder="Detalles adicionales..."></textarea>
                 </div>
-                
-                <button class="btn-main" onclick="zCore.clearAllData()" style="background: #d63031; margin-top: 30px; font-size: 0.8rem; padding: 10px;">
-                    BORRAR TODO EL SISTEMA
+                <button class="btn-action" onclick="zCore.addTask()">Guardar Tarea</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: NOTES -->
+        <div id="page-notes" class="tab-content hidden">
+            <div class="form-page">
+                <h2>Mis Notas</h2>
+                <textarea id="notes-area" class="input-field" style="height: 500px; border: none; background: #fff;" placeholder="Empieza a escribir..."></textarea>
+            </div>
+        </div>
+
+        <!-- PAGE 4: ITEMS -->
+        <div id="page-items" class="tab-content hidden">
+            <div class="form-page">
+                <h2>Suministros</h2>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <input type="text" id="item-input" class="input-field" style="margin: 0;" placeholder="Nuevo item...">
+                    <button onclick="zCore.addItem()" class="btn-action" style="width: 70px; padding: 0;">+</button>
+                </div>
+                <div id="items-list" class="task-list"></div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: BACKUP -->
+        <div id="page-backup" class="tab-content hidden">
+            <div class="form-page" style="text-align: center;">
+                <h2>Base de Datos</h2>
+                <div class="card card-black" style="margin-top: 20px;">
+                    <p style="margin-bottom: 20px;">Mantén tus datos seguros exportando una copia de seguridad local.</p>
+                    <button class="btn-action" style="background: var(--secondary-gradient);" onclick="zCore.exportDB()">
+                        <i class="fas fa-download"></i> Exportar JSON
+                    </button>
+                    <div style="margin-top: 20px;">
+                        <input type="file" id="import-file" style="display: none;" onchange="zCore.importDB(event)">
+                        <button class="btn-action" style="background: #333;" onclick="document.getElementById('import-file').click()">
+                            <i class="fas fa-upload"></i> Importar JSON
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-action" style="background: #ff3b30; margin-top: 50px;" onclick="zCore.wipeDB()">
+                    RESET TOTAL
                 </button>
             </div>
         </div>
     </main>
 
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="zCore.switchPage('dashboard', this)">
+        <button class="nav-item active" onclick="zCore.switchTab('home', this)">
             <i class="fas fa-home"></i>
-            <span>Home</span>
         </button>
-        <button class="nav-item" onclick="zCore.switchPage('missions', this)">
+        <button class="nav-item" onclick="zCore.switchTab('add', this)">
             <i class="fas fa-calendar-plus"></i>
-            <span>Add</span>
         </button>
-        <button class="nav-item" onclick="zCore.switchPage('notes', this)">
-            <i class="fas fa-sticky-note"></i>
-            <span>Notes</span>
+        <button class="nav-item" onclick="zCore.switchTab('notes', this)">
+            <i class="fas fa-pen-nib"></i>
         </button>
-        <button class="nav-item" onclick="zCore.switchPage('supplies', this)">
+        <button class="nav-item" onclick="zCore.switchTab('items', this)">
             <i class="fas fa-shopping-bag"></i>
-            <span>Items</span>
         </button>
-        <button class="nav-item" onclick="zCore.switchPage('settings', this)">
+        <button class="nav-item" onclick="zCore.switchTab('backup', this)">
             <i class="fas fa-database"></i>
-            <span>Backup</span>
         </button>
     </nav>
 
     <script src="js/app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Z-Core ULTIMATE</title>
+    <title>Z-Core ULTIMATE PRO</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="assets/icon.png">
     <meta name="theme-color" content="#ff0080">
@@ -24,66 +24,57 @@
         main { max-width: 480px; margin:0 auto; padding:20px; padding-bottom:140px; min-height: 100vh; }
         .hidden { display: none !important; }
 
-        /* Typography */
         h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
         h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; }
         h3 { font-size: 0.8rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
 
-        /* Header */
         .app-header { display:flex; justify-content:space-between; align-items:center; padding:15px 0 35px; }
         .user-pill { display:flex; align-items:center; gap:12px; }
-        .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); padding:2px; }
-        .avatar-img { width:100%; height:100%; background:white; border-radius:16px; display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--p); }
+        .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); padding:2px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
 
-        /* Calendar Strip - SUPER INTERACTIVO */
-        .cal-container { overflow-x: auto; display: flex; gap: 12px; padding: 10px 0 30px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        /* Search Bar */
+        #search-container { margin-bottom: 20px; display: none; animation: fadeIn 0.3s; }
+        .search-input { width: 100%; padding: 15px 20px; border-radius: 20px; border: 1px solid #eee; background: #fbfbfb; font-family: inherit; outline: none; }
+
+        .cal-container { overflow-x: auto; display: flex; gap: 12px; padding: 10px 0 30px; scroll-behavior: smooth; }
         .cal-container::-webkit-scrollbar { display: none; }
         .cal-item { flex: 0 0 65px; display:flex; flex-direction:column; align-items:center; padding:15px 5px; border-radius:24px; cursor:pointer; transition:0.3s; border:1.5px solid #f0f0f0; background: white; }
-        .cal-item.active { background: var(--dark); border-color: var(--dark); color:white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: scale(1.1); }
-        .cal-item .d-name { font-size: 0.65rem; font-weight: 700; opacity: 0.5; margin-bottom:8px; text-transform: uppercase; }
-        .cal-item .d-num { font-size: 1.2rem; font-weight: 800; }
-        .cal-item.active .d-name { opacity: 0.8; }
+        .cal-item.active { background: var(--dark); border-color: var(--dark); color:white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: scale(1.05); }
 
-        /* Motivation Card */
-        .motivation-card { background: var(--grad); border-radius: 30px; padding:25px; color:white; margin-bottom:30px; position:relative; overflow:hidden; box-shadow: 0 15px 35px rgba(255, 0, 128, 0.3); }
+        .motivation-card { background: var(--grad); border-radius: 30px; padding:25px; color:white; margin-bottom:30px; position:relative; overflow:hidden; }
         .motivation-card i { position: absolute; right: -10px; top: -10px; font-size: 5rem; opacity: 0.1; }
-        .quote-text { font-size: 1.05rem; font-weight: 700; line-height: 1.5; font-style: italic; z-index: 2; position: relative; }
-        .quote-author { font-size: 0.75rem; opacity:0.8; margin-top:10px; display:block; z-index: 2; position: relative; }
+        .quote-text { font-size: 1rem; font-weight: 700; font-style: italic; position: relative; z-index: 2; }
 
-        /* Progress Card */
+        /* Fitness Card */
+        .fitness-card { background: #000; color: #fff; border-radius: 30px; padding: 25px; margin-bottom: 30px; border: 1px solid #333; position: relative; overflow: hidden; }
+        .fitness-card::after { content:''; position:absolute; top:-50%; right:-20%; width:100px; height:100px; background:var(--c); filter:blur(50px); opacity:0.3; }
+
         .glass-card { background: white; border-radius: var(--br); padding:25px; box-shadow: var(--shadow); border: 1px solid #f0f0f0; margin-bottom:30px; }
-        .stats-grid { display:flex; justify-content:space-between; align-items:flex-end; height:100px; margin-top:20px; }
-        .stat-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; }
-        .stat-bar-outer { width:22px; height:100px; background:#f4f4f4; border-radius:10px; position:relative; overflow:hidden; }
-        .stat-bar-inner { position:absolute; bottom:0; width:100%; background:var(--grad); border-radius:10px; transition: height 0.8s ease; height: 10%; }
-        .stat-label { font-size: 0.65rem; font-weight: 800; color:var(--gray); }
+        .stats-grid { display:flex; justify-content:space-between; align-items:flex-end; height:100px; margin-top:15px; }
+        .stat-bar-outer { width:20px; height:100px; background:#f4f4f4; border-radius:10px; position:relative; overflow:hidden; }
+        .stat-bar-inner { position:absolute; bottom:0; width:100%; background:var(--grad); transition: height 0.8s; height: 10%; }
 
         /* Task Item */
-        .task-item { display:flex; align-items:center; gap:20px; padding:22px; background:white; border-radius:24px; margin-bottom:15px; box-shadow: 0 8px 20px rgba(0,0,0,0.02); border:1px solid #f9f9f9; transition:0.3s; cursor:pointer; }
-        .task-check { width:28px; height:28px; border:2.5px solid #eee; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+        .task-item { display:flex; align-items:center; gap:15px; padding:20px; background:white; border-radius:24px; margin-bottom:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border:1px solid #f9f9f9; cursor:pointer; }
+        .task-check { width:26px; height:26px; border:2.5px solid #eee; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:0.3s; }
         .task-item.done { opacity:0.6; }
         .task-item.done .task-check { background:var(--p); border-color:transparent; }
-        .task-item.done .task-check::after { content:'\f00c'; font-family:'Font Awesome 6 Free'; font-weight:900; color:white; font-size:0.8rem; }
-        .task-info h4 { font-size: 1.1rem; font-weight: 700; }
-        .task-info p { font-size: 0.75rem; font-weight: 800; color:var(--p); text-transform: uppercase; }
+        .task-item.done .task-check::after { content:'\f00c'; font-family:'Font Awesome 6 Free'; font-weight:900; color:white; font-size:0.75rem; }
+        .task-info h4 { font-size: 1rem; font-weight: 700; }
+        .task-info p { font-size: 0.7rem; font-weight: 800; color:var(--p); text-transform: uppercase; }
 
-        /* Nav */
-        .bottom-tabs { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); width:92%; max-width:420px; background:rgba(17,17,17,0.98); backdrop-filter:blur(15px); padding:12px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        .tab-icon { color:#444; font-size:1.5rem; width:55px; height:55px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition: 0.3s; }
+        .bottom-tabs { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:92%; max-width:400px; background:rgba(17,17,17,0.98); padding:10px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; }
+        .tab-icon { color:#555; font-size:1.4rem; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
         .tab-icon.active { color:white; background:rgba(255,255,255,0.1); }
 
-        /* Forms */
-        .z-input { width:100%; padding:20px; border-radius:22px; border:1px solid #eee; background:#fbfbfb; margin-bottom:18px; font-size:1rem; font-family:inherit; outline:none; }
-        .z-btn { background:var(--grad); color:white; border:none; padding:22px; border-radius:22px; width:100%; font-size:1.1rem; font-weight:800; cursor:pointer; }
+        .z-input { width:100%; padding:18px; border-radius:20px; border:1px solid #eee; background:#fbfbfb; margin-bottom:15px; font-size:1rem; font-family:inherit; outline:none; }
+        .z-btn { background:var(--grad); color:white; border:none; padding:18px; border-radius:20px; width:100%; font-size:1.1rem; font-weight:800; cursor:pointer; }
         
-        /* Editor */
-        .editor-wrap { background:white; border-radius:var(--br); padding:25px; min-height:80vh; }
-        .toolbar { display:flex; gap:12px; margin-bottom:20px; background:#f0f0f0; padding:12px; border-radius:18px; overflow-x:auto; }
-        .toolbar button { flex-shrink:0; width:40px; height:40px; border:none; background:white; border-radius:12px; font-weight:800; }
-        #rich-editor { min-height:400px; outline:none; font-size:1.1rem; line-height:1.7; background: white; border-radius: 20px; padding: 10px; }
+        .toolbar { display:flex; gap:10px; margin-bottom:15px; background:#f0f0f0; padding:10px; border-radius:18px; overflow-x:auto; }
+        .toolbar button { flex-shrink:0; width:35px; height:35px; border:none; background:white; border-radius:10px; font-weight:800; }
+        #rich-editor { min-height:350px; outline:none; font-size:1.1rem; line-height:1.6; }
 
-        .view { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     </style>
 </head>
 <body>
@@ -93,22 +84,34 @@
         <div id="v-inicio" class="view">
             <header class="app-header">
                 <div class="user-pill">
-                    <div class="avatar"><div class="avatar-img">M</div></div>
+                    <div class="avatar">M</div>
                     <div>
-                        <p style="font-size: 0.8rem; font-weight: 700; color:var(--gray);">Bienvenido,</p>
+                        <p style="font-size: 0.7rem; font-weight: 700; color:var(--gray);">Bienvenido,</p>
                         <h1 id="user-display">Maycol</h1>
                     </div>
                 </div>
-                <div style="display:flex; gap:20px; font-size: 1.3rem;">
-                    <i class="fas fa-search"></i>
+                <div style="display:flex; gap:15px; font-size: 1.2rem;">
+                    <i class="fas fa-search" onclick="z.toggleSearch()"></i>
                     <i class="fas fa-bell" onclick="z.askPerms()" style="color:var(--p);"></i>
                 </div>
             </header>
 
+            <div id="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Buscar misiones..." oninput="z.renderTasks()">
+            </div>
+
             <div class="motivation-card">
                 <i class="fas fa-bolt"></i>
                 <p class="quote-text" id="quote-text">"La persistencia es la clave del éxito."</p>
-                <span class="quote-author" id="quote-author">Mentalidad Z</span>
+            </div>
+
+            <div class="fitness-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="color:#fff; margin:0;">RETO FITNESS</h3>
+                    <i class="fas fa-dumbbell" style="color:var(--c);"></i>
+                </div>
+                <p id="fit-challenge" style="font-size:1.1rem; font-weight:800;">Subir 3 pisos por las escaleras</p>
+                <button onclick="z.genFit()" style="background:transparent; border:none; color:var(--c); font-size:0.7rem; font-weight:800; margin-top:10px; cursor:pointer;">CAMBIAR RETO <i class="fas fa-sync"></i></button>
             </div>
 
             <div class="cal-container" id="cal-strip"></div>
@@ -116,7 +119,7 @@
             <div class="glass-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h3>Productividad</h3>
-                    <span id="main-pct" style="font-size: 0.9rem; font-weight: 800; color:var(--p);">0%</span>
+                    <span id="main-pct" style="font-size: 0.8rem; font-weight: 800; color:var(--p);">0%</span>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-0"></div></div><span class="stat-label">L</span></div>
@@ -129,29 +132,31 @@
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:15px;">
                 <h2>Mi Agenda</h2>
-                <span style="color:var(--p); font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="z.nav('programar', document.querySelectorAll('.tab-icon')[1])">NUEVA +</span>
+                <div style="display:flex; gap:10px;">
+                    <span id="tab-today" class="active" style="font-size:0.7rem; font-weight:800; color:var(--p); cursor:pointer;" onclick="z.setGlobalList(false)">DÍA</span>
+                    <span id="tab-global" style="font-size:0.7rem; font-weight:800; color:var(--gray); cursor:pointer;" onclick="z.setGlobalList(true)">TODO</span>
+                </div>
             </div>
             <div id="home-task-list"></div>
         </div>
 
-        <!-- PROGRAMAR -->
+        <!-- PROGRAMAR / EDITAR -->
         <div id="v-programar" class="view hidden">
             <div class="editor-wrap">
-                <h2>Programar Tarea</h2>
-                <label style="font-size:0.8rem; font-weight:700; color:var(--gray); margin-bottom:8px; display:block;">NOMBRE</label>
-                <input type="text" id="add-name" class="z-input" placeholder="Ej: Comprar Mercado" spellcheck="true">
-                <label style="font-size:0.8rem; font-weight:700; color:var(--gray); margin-bottom:8px; display:block;">FECHA Y HORA</label>
+                <h2 id="form-title">Programar Misión</h2>
+                <input type="hidden" id="edit-id">
+                <input type="text" id="add-name" class="z-input" placeholder="Nombre de la misión" spellcheck="true">
                 <input type="datetime-local" id="add-time" class="z-input">
-                <label style="font-size:0.8rem; font-weight:700; color:var(--gray); margin-bottom:8px; display:block;">CATEGORÍA</label>
                 <select id="add-cat" class="z-input">
                     <option value="Trabajo">Trabajo</option>
                     <option value="Mercado">Mercado</option>
                     <option value="Personal">Personal</option>
-                    <option value="Salud">Salud / Ejercicio</option>
+                    <option value="Ejercicio">Salud / Fit</option>
                 </select>
-                <button class="z-btn" onclick="z.saveTask()">Guardar en Agenda</button>
+                <button class="z-btn" id="btn-save" onclick="z.saveTask()">Guardar en Agenda</button>
+                <button class="z-btn" id="btn-cancel" style="background:#eee; color:#666; margin-top:10px; display:none;" onclick="z.resetForm()">Cancelar</button>
             </div>
         </div>
 
@@ -162,12 +167,9 @@
                 <div class="toolbar">
                     <button onclick="z.exec('bold')">B</button>
                     <button onclick="z.exec('italic')">I</button>
-                    <button onclick="z.exec('underline')">U</button>
-                    <button onclick="z.exec('insertUnorderedList')"><i class="fas fa-list"></i></button>
-                    <button onclick="z.exec('justifyLeft')"><i class="fas fa-align-left"></i></button>
-                    <button onclick="z.exec('justifyCenter')"><i class="fas fa-align-center"></i></button>
+                    <button onclick="z.exec('insertUnorderedList')">Bullet</button>
                 </div>
-                <div id="rich-editor" contenteditable="true" spellcheck="true" oninput="z.saveNotes()"></div>
+                <div id="rich-editor" contenteditable="true" oninput="z.saveNotes()"></div>
             </div>
         </div>
 
@@ -175,9 +177,9 @@
         <div id="v-mercado" class="view hidden">
             <div class="editor-wrap">
                 <h2>Lista de Compras</h2>
-                <div style="display:flex; gap:10px; margin-bottom:25px;">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
                     <input type="text" id="in-check" class="z-input" style="margin:0;" placeholder="Nuevo item...">
-                    <button onclick="z.addCheck()" class="z-btn" style="width:65px; padding:0;"><i class="fas fa-plus"></i></button>
+                    <button onclick="z.addCheck()" class="z-btn" style="width:60px; padding:0;">+</button>
                 </div>
                 <div id="check-list"></div>
             </div>
@@ -186,13 +188,11 @@
         <!-- AJUSTES -->
         <div id="v-ajustes" class="view hidden">
             <div class="editor-wrap" style="text-align:center;">
-                <h2>Backup y Ajustes</h2>
-                <div class="glass-card">
-                    <button class="z-btn" style="background:var(--dark); margin-bottom:15px;" onclick="z.export()">Exportar Backup</button>
-                    <input type="file" id="f-in" style="display:none" onchange="z.import(event)">
-                    <button class="z-btn" style="background:#444;" onclick="document.getElementById('f-in').click()">Importar Backup</button>
-                </div>
-                <button class="z-btn" style="background:#ff4757; margin-top:50px; font-size:0.8rem;" onclick="z.wipe()">RESET TOTAL</button>
+                <h2>Ajustes</h2>
+                <button class="z-btn" style="background:#333; margin-bottom:10px;" onclick="z.export()">Backup</button>
+                <input type="file" id="f-in" style="display:none" onchange="z.import(event)">
+                <button class="z-btn" style="background:#444;" onclick="document.getElementById('f-in').click()">Importar</button>
+                <button class="z-btn" style="background:#ff4757; margin-top:50px;" onclick="z.wipe()">RESET</button>
             </div>
         </div>
     </main>
@@ -207,32 +207,23 @@
 
     <script>
         const z = {
-            tasks: [], checks: [], notes: "", selDay: new Date().toISOString().split('T')[0],
-            quotes: [
-                { t: "La disciplina es el puente entre metas y logros.", a: "Jim Rohn" },
-                { t: "Haz de cada día tu obra maestra.", a: "John Wooden" },
-                { t: "No cuentes los días, haz que los días cuenten.", a: "Muhammad Ali" },
-                { t: "Cree en ti mismo y serás imparable.", a: "Mentalidad Z" }
-            ],
+            tasks: [], checks: [], notes: "", selDay: new Date().toISOString().split('T')[0], isGlobal: false,
+            quotes: ["Haz de cada día tu obra maestra.", "Cree en ti mismo y serás imparable.", "La disciplina vence al talento.", "Tu tiempo es hoy."],
+            fitness: ["10 Sentadillas rápidas", "Subir 3 pisos por escaleras", "Tomar 500ml de agua fría", "Estiramiento de espalda 2min", "Caminar 5 min intensos"],
             init() {
                 try {
                     this.tasks = JSON.parse(localStorage.getItem('zu_tasks')) || [];
                     this.checks = JSON.parse(localStorage.getItem('zu_checks')) || [];
                     this.notes = localStorage.getItem('zu_notes_html') || "";
                 } catch(e) {}
-                this.render();
-                this.autoCap();
+                this.render(); this.autoCap(); this.genFit();
                 setInterval(() => this.notify(), 30000);
             },
             render() {
-                this.renderCal();
-                this.renderTasks();
-                this.renderChecks();
+                this.renderCal(); this.renderTasks(); this.renderChecks();
                 document.getElementById('rich-editor').innerHTML = this.notes;
                 this.updateStats();
-                const q = this.quotes[Math.floor(Math.random() * this.quotes.length)];
-                document.getElementById('quote-text').innerText = `"${q.t}"`;
-                document.getElementById('quote-author').innerText = q.a;
+                document.getElementById('quote-text').innerText = `"${this.quotes[Math.floor(Math.random() * this.quotes.length)]}"`;
             },
             nav(id, btn) {
                 document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
@@ -242,8 +233,7 @@
             },
             renderCal() {
                 const strip = document.getElementById('cal-strip');
-                const now = new Date();
-                let html = "";
+                const now = new Date(); let html = "";
                 for (let i = -7; i <= 14; i++) {
                     const d = new Date(); d.setDate(now.getDate() + i);
                     const dStr = d.toISOString().split('T')[0];
@@ -254,33 +244,77 @@
                     </div>`;
                 }
                 strip.innerHTML = html;
-                if(document.getElementById(`cal-${this.selDay}`)) {
-                    document.getElementById(`cal-${this.selDay}`).scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
-                }
+                const activeEl = document.getElementById(`cal-${this.selDay}`);
+                if(activeEl) activeEl.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
             },
-            selDate(d) { this.selDay = d; this.renderCal(); this.renderTasks(); },
+            selDate(d) { this.selDay = d; this.isGlobal = false; this.render(); },
+            setGlobalList(isG) { 
+                this.isGlobal = isG;
+                document.getElementById('tab-global').style.color = isG ? 'var(--p)' : 'var(--gray)';
+                document.getElementById('tab-today').style.color = isG ? 'var(--gray)' : 'var(--p)';
+                this.renderTasks();
+            },
+            toggleSearch() {
+                const search = document.getElementById('search-container');
+                search.style.display = search.style.display === 'block' ? 'none' : 'block';
+            },
+            genFit() {
+                document.getElementById('fit-challenge').innerText = this.fitness[Math.floor(Math.random() * this.fitness.length)];
+            },
             saveTask() {
                 const n = document.getElementById('add-name').value;
                 const t = document.getElementById('add-time').value;
+                const id = document.getElementById('edit-id').value;
                 if(!n || !t) return alert("Completa los datos");
-                this.tasks.push({ id: Date.now(), name: n, time: t, cat: document.getElementById('add-cat').value, done: false });
-                this.save(); document.getElementById('add-name').value = "";
-                this.selDay = t.split('T')[0]; this.nav('inicio', document.querySelector('.tab-icon')); this.render();
+                
+                if(id) {
+                    const idx = this.tasks.findIndex(x => x.id == id);
+                    this.tasks[idx] = { ...this.tasks[idx], name: n, time: t, cat: document.getElementById('add-cat').value };
+                } else {
+                    this.tasks.push({ id: Date.now(), name: n, time: t, cat: document.getElementById('add-cat').value, done: false });
+                }
+                this.save(); this.resetForm(); this.nav('inicio', document.querySelector('.tab-icon')); this.render();
+            },
+            editTask(id) {
+                const t = this.tasks.find(x => x.id == id);
+                if(!t) return;
+                document.getElementById('edit-id').value = t.id;
+                document.getElementById('add-name').value = t.name;
+                document.getElementById('add-time').value = t.time;
+                document.getElementById('add-cat').value = t.cat;
+                document.getElementById('form-title').innerText = "Editar Misión";
+                document.getElementById('btn-save').innerText = "Actualizar Misión";
+                document.getElementById('btn-cancel').style.display = "block";
+                this.nav('programar', document.querySelectorAll('.tab-icon')[1]);
+            },
+            resetForm() {
+                document.getElementById('edit-id').value = "";
+                document.getElementById('add-name').value = "";
+                document.getElementById('add-time').value = "";
+                document.getElementById('form-title').innerText = "Programar Misión";
+                document.getElementById('btn-save').innerText = "Guardar en Agenda";
+                document.getElementById('btn-cancel').style.display = "none";
             },
             toggle(id) { const t = this.tasks.find(x => x.id === id); if(t) t.done = !t.done; this.save(); this.render(); },
             delTask(id) { if(confirm("¿Eliminar?")) { this.tasks = this.tasks.filter(x => x.id !== id); this.save(); this.render(); } },
             renderTasks() {
-                const daily = this.tasks.filter(t => t.time.startsWith(this.selDay));
-                document.getElementById('home-task-list').innerHTML = daily.sort((a,b)=>new Date(a.time)-new Date(b.time)).map(t => `
+                const query = document.getElementById('search-input').value.toLowerCase();
+                let list = this.isGlobal ? this.tasks : this.tasks.filter(t => t.time.startsWith(this.selDay));
+                if(query) list = list.filter(t => t.name.toLowerCase().includes(query));
+
+                document.getElementById('home-task-list').innerHTML = list.sort((a,b)=>new Date(a.time)-new Date(b.time)).map(t => `
                     <div class="task-item ${t.done ? 'done' : ''}" onclick="z.toggle(${t.id})">
                         <div class="task-check"></div>
                         <div class="task-info">
                             <p>${new Date(t.time).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} • ${t.cat}</p>
                             <h4>${t.name}</h4>
                         </div>
-                        <i class="fas fa-trash" style="margin-left:auto;color:#eee" onclick="event.stopPropagation();z.delTask(${t.id})"></i>
+                        <div style="margin-left:auto; display:flex; gap:15px;">
+                            <i class="fas fa-edit" style="color:#ccc" onclick="event.stopPropagation();z.editTask(${t.id})"></i>
+                            <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.delTask(${t.id})"></i>
+                        </div>
                     </div>
-                `).join('') || '<p style="text-align:center;color:#ccc;padding:50px">Tu agenda está libre hoy.</p>';
+                `).join('') || '<p style="text-align:center;color:#ccc;padding:40px">Sin tareas</p>';
             },
             addCheck() {
                 const v = document.getElementById('in-check').value; if(!v) return;
@@ -292,11 +326,10 @@
                 document.getElementById('check-list').innerHTML = this.checks.map(c => `
                     <div class="task-item ${c.done ? 'done' : ''}" onclick="z.toggleCheck(${c.id})">
                         <div class="task-check"></div><div style="flex:1"><h4>${c.text}</h4></div>
-                        <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.delCheck(${c.id})"></i>
+                        <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.checks = z.checks.filter(x=>x.id!==${c.id});z.save();z.renderChecks();"></i>
                     </div>
                 `).join('');
             },
-            delCheck(id) { this.checks = this.checks.filter(x => x.id !== id); this.save(); this.renderChecks(); },
             save() { localStorage.setItem('zu_tasks', JSON.stringify(this.tasks)); localStorage.setItem('zu_checks', JSON.stringify(this.checks)); },
             saveNotes() { localStorage.setItem('zu_notes_html', document.getElementById('rich-editor').innerHTML); },
             updateStats() {
@@ -319,18 +352,7 @@
                         let v = el.value || el.innerText;
                         if(v && v.length === 1) {
                             if(el.value !== undefined) el.value = v.toUpperCase();
-                            else {
-                                // For contenteditable, special care
-                                const sel = window.getSelection();
-                                const off = sel.focusOffset;
-                                el.innerText = v.toUpperCase();
-                                // Try to restore cursor (simple version)
-                                const range = document.createRange();
-                                range.setStart(el.childNodes[0], off);
-                                range.collapse(true);
-                                sel.removeAllRanges();
-                                sel.addRange(range);
-                            }
+                            else { el.innerText = v.toUpperCase(); }
                         }
                     }
                 });
@@ -345,16 +367,15 @@
                 });
             },
             export() { 
-                const blob = new Blob([JSON.stringify({t:this.tasks, c:this.checks, n:this.notes})], {type:'application/json'});
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.json'; a.click();
+                const b = new Blob([JSON.stringify({t:this.tasks, c:this.checks, n:this.notes})], {type:'application/json'});
+                const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'backup.json'; a.click();
             },
             import(e) {
                 const r = new FileReader(); r.onload = (ev) => {
                     const d = JSON.parse(ev.target.result);
                     localStorage.setItem('zu_tasks', JSON.stringify(d.t));
                     localStorage.setItem('zu_checks', JSON.stringify(d.c));
-                    localStorage.setItem('zu_notes_html', d.n);
-                    location.reload();
+                    localStorage.setItem('zu_notes_html', d.n); location.reload();
                 }; r.readAsText(e.target.files[0]);
             },
             wipe() { if(confirm("¿RESET?")) { localStorage.clear(); location.reload(); } }

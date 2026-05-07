@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Z-Core ULTIMATE PRO v2</title>
-    <link rel="icon" href="assets/icon.png">
-    <meta name="theme-color" content="#ff0080">
+    <title>Z-Core ULTIMATE PRO v2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -20,47 +18,58 @@
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background: var(--bg); font-family: 'Outfit', sans-serif; color: var(--text); overflow-x:hidden; }
 
-        main { max-width: 480px; margin:0 auto; padding:20px; padding-bottom:140px; min-height: 100vh; }
+        main { max-width: 480px; margin:0 auto; padding:20px 20px 140px; min-height: 100vh; }
         .hidden { display: none !important; }
 
-        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
-        h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; }
-        h3 { font-size: 0.8rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
-
+        /* 1. Header con Avatar Dinámico */
         .app-header { display:flex; justify-content:space-between; align-items:center; padding:15px 0 35px; }
-        .user-pill { display:flex; align-items:center; gap:12px; }
-        .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); padding:2px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
+        .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
 
-        /* Fitness Card Mejorada */
-        .fitness-card { background: #000; color: #fff; border-radius: 30px; padding: 25px; margin-bottom: 30px; border: 1px solid #333; position: relative; }
-        .fit-btns { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-fit { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-size: 0.7rem; }
-        .btn-ok { background: var(--c); color: #000; }
-        .btn-no { background: #333; color: #fff; }
+        /* 2. Buscador Dinámico */
+        #search-box { margin-bottom: 20px; transition: 0.3s; }
+        .z-input-s { width: 100%; padding: 15px; border-radius: 20px; border: 1px solid #eee; background: #fbfbfb; outline: none; }
 
-        .glass-card { background: white; border-radius: var(--br); padding:25px; box-shadow: var(--shadow); border: 1px solid #f0f0f0; margin-bottom:30px; }
-        
-        /* Items Estilizados */
-        .task-item { display:flex; align-items:center; gap:15px; padding:20px; background:white; border-radius:24px; margin-bottom:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); border:1px solid #f9f9f9; }
-        .task-check { width:26px; height:26px; border:2.5px solid #eee; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-        .task-item.done { background: #f0fff0; border-color: #d0f0d0; }
-        .task-item.done .task-check { background: #2ecc71; border-color: transparent; }
-        .task-item.done .task-check::after { content:'\f00c'; font-family:'Font Awesome 6 Free'; font-weight:900; color:white; font-size:0.75rem; }
+        /* 3. Motivación Diaria */
+        .m-card { background: var(--grad); border-radius: 30px; padding:25px; color:white; margin-bottom:30px; position:relative; overflow:hidden; }
+        .m-card i { position: absolute; right: -10px; top: -10px; font-size: 5rem; opacity: 0.1; }
 
-        /* Compras */
-        .shop-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .report-card { background: #f8f9fa; border-radius: 20px; padding: 15px; margin-top: 20px; border: 1px dashed #ccc; }
+        /* 4. Reto Fitness Aleatorio */
+        .fit-card { background: #000; color: #fff; border-radius: 25px; padding: 20px; margin-bottom: 25px; border-left: 5px solid var(--c); }
+
+        /* 5. Calendario de 21 días */
+        .cal-container { overflow-x: auto; display: flex; gap: 12px; padding-bottom: 25px; scroll-behavior: smooth; }
+        .cal-container::-webkit-scrollbar { display: none; }
+        .cal-item { flex: 0 0 60px; display:flex; flex-direction:column; align-items:center; padding:15px 5px; border-radius:20px; border:1.5px solid #f0f0f0; }
+        .cal-item.active { background: var(--dark); color:white; border-color: var(--dark); transform: scale(1.1); }
+
+        /* 6. Gráficas de Productividad */
+        .glass-card { background: white; border-radius: var(--br); padding:20px; box-shadow: var(--shadow); border: 1px solid #f0f0f0; margin-bottom:25px; }
+        .stats-grid { display:flex; justify-content:space-around; align-items:flex-end; height:80px; margin-top:15px; }
+        .bar-outer { width:15px; height:80px; background:#f4f4f4; border-radius:10px; position:relative; overflow:hidden; }
+        .bar-inner { position:absolute; bottom:0; width:100%; background:var(--grad); transition: 0.5s; }
+
+        /* 7. Banco del Bebé / Gastos */
+        .banco-hero { background: var(--dark); border-radius: 25px; padding: 25px; color: #fff; text-align: center; margin-bottom: 20px; }
+        .banco-hero h2 { color: var(--c); font-size: 2rem; }
+
+        /* UI Items */
+        .task-item { display:flex; align-items:center; gap:15px; padding:18px; background:white; border-radius:24px; margin-bottom:12px; border:1px solid #f9f9f9; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .task-item.done { opacity: 0.5; text-decoration: line-through; }
+        .task-check { width:24px; height:24px; border:2px solid #eee; border-radius:50%; }
+        .task-item.done .task-check { background: var(--p); border:none; }
 
         /* Bottom Nav */
-        .bottom-tabs { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:92%; max-width:400px; background:rgba(17,17,17,0.95); padding:10px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; }
-        .tab-icon { color:#555; font-size:1.4rem; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+        .bottom-tabs { position:fixed; bottom:25px; left:50%; transform:translateX(-50%); width:92%; max-width:400px; background:rgba(17,17,17,0.98); padding:10px; border-radius:40px; display:flex; justify-content:space-around; z-index:2000; }
+        .tab-icon { color:#555; font-size:1.3rem; padding:12px; border-radius:50%; }
         .tab-icon.active { color:white; background:rgba(255,255,255,0.1); }
 
-        .z-input, select { width:100%; padding:15px; border-radius:15px; border:1px solid #eee; background:#fbfbfb; margin-bottom:10px; font-family:inherit; outline:none; }
-        .z-btn { background:var(--grad); color:white; border:none; padding:18px; border-radius:20px; width:100%; font-size:1.1rem; font-weight:800; }
-        
-        #note-list, #home-task-list, #check-list { margin-top: 20px; }
-        .note-card { background: #fff; padding: 20px; border-radius: 20px; border: 1px solid #eee; margin-bottom: 15px; position: relative; }
+        .z-btn { background:var(--grad); color:white; border:none; padding:18px; border-radius:20px; width:100%; font-weight:800; cursor:pointer; margin-top:10px; }
+        .z-input { width:100%; padding:15px; border-radius:15px; border:1px solid #eee; margin-bottom:10px; font-family: inherit; }
+
+        /* Editor */
+        #rich-editor { min-height: 300px; padding: 10px; outline: none; line-height: 1.6; }
+        .toolbar { display: flex; gap: 5px; background: #f0f0f0; padding: 8px; border-radius: 12px; margin-bottom: 10px; overflow-x: auto; }
+        .toolbar button { padding: 5px 10px; border: none; background: #fff; border-radius: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -69,268 +78,245 @@
         <div id="v-inicio" class="view">
             <header class="app-header">
                 <div class="user-pill">
-                    <div class="avatar">M</div>
-                    <div><p style="font-size: 0.7rem; font-weight: 700; color:var(--gray);">Bienvenido,</p><h1>Maycol</h1></div>
+                    <div class="avatar" id="avatar-init">M</div>
+                    <div><p style="font-size:0.7rem; color:var(--gray);">Hola,</p><h1 id="user-name">Maycol</h1></div>
                 </div>
-                <i class="fas fa-bolt" style="color:var(--p);"></i>
+                <div style="display:flex; gap:15px;">
+                    <i class="fas fa-search" onclick="z.toggleSearch()"></i>
+                    <i class="fas fa-bell" onclick="z.askPerms()" style="color:var(--p);"></i>
+                </div>
             </header>
 
-            <div class="fitness-card">
-                <h3 style="color:#fff;">RETO FITNESS</h3>
-                <p id="fit-challenge" style="font-size:1.1rem; font-weight:800; color:var(--c);">Cargando reto...</p>
-                <div class="fit-btns" id="fit-actions">
-                    <button class="btn-fit btn-ok" onclick="z.completeFit(true)">LOGRADO</button>
-                    <button class="btn-fit btn-no" onclick="z.completeFit(false)">PASAR</button>
-                </div>
+            <div id="search-box" class="hidden">
+                <input type="text" class="z-input-s" placeholder="Buscar misiones..." oninput="z.renderTasks(this.value)">
             </div>
 
-            <div id="cal-strip" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:25px;"></div>
+            <div class="m-card">
+                <i class="fas fa-bolt"></i>
+                <p id="quote-text" style="font-weight:700; font-style:italic;">"La disciplina es libertad."</p>
+            </div>
+
+            <div class="fit-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="font-size:0.7rem; letter-spacing:1px;">RETO FITNESS</h4>
+                    <i class="fas fa-sync" onclick="z.genFit()"></i>
+                </div>
+                <p id="fit-text" style="font-weight:800; font-size:1.1rem; margin-top:5px;">Cargando reto...</p>
+            </div>
+
+            <div class="cal-container" id="cal-strip"></div>
+
+            <div class="glass-card">
+                <div style="display:flex; justify-content:space-between;">
+                    <h4 style="font-size:0.7rem; color:var(--gray);">PRODUCTIVIDAD</h4>
+                    <span id="pct-text" style="color:var(--p); font-weight:800; font-size:0.8rem;">0%</span>
+                </div>
+                <div class="stats-grid" id="stats-bars"></div>
+            </div>
 
             <h2>Mi Agenda</h2>
-            <div id="home-task-list"></div>
+            <div id="task-list"></div>
         </div>
 
         <div id="v-programar" class="view hidden">
-            <h2>Nueva Misión</h2>
-            <input type="text" id="add-name" class="z-input" placeholder="¿Qué harás?">
-            <input type="datetime-local" id="add-time" class="z-input">
-            <select id="add-cat" class="z-input">
-                <option value="Trabajo">💼 Trabajo</option>
-                <option value="Personal">👤 Personal</option>
-                <option value="Estudio">🎓 UCATEC</option>
-            </select>
-            <button class="z-btn" onclick="z.saveTask()">Guardar Agenda</button>
+            <h2>Programar Misión</h2>
+            <div class="glass-card">
+                <input type="text" id="t-name" class="z-input" placeholder="¿Qué hay que hacer?">
+                <input type="datetime-local" id="t-time" class="z-input">
+                <select id="t-cat" class="z-input">
+                    <option value="Trabajo">💻 Trabajo / UCATEC</option>
+                    <option value="Mercado">🛒 Mercado Tarija</option>
+                    <option value="Parroquia">⛪ Parroquia</option>
+                    <option value="Personal">👤 Personal</option>
+                </select>
+                <button class="z-btn" onclick="z.addTask()">Guardar en Agenda</button>
+            </div>
+        </div>
+
+        <div id="v-banco" class="view hidden">
+            <div class="banco-hero">
+                <p style="font-size:0.7rem; opacity:0.7;">SALDO DISPONIBLE (Bs.)</p>
+                <h2 id="total-bs">0.00</h2>
+            </div>
+            <div class="glass-card">
+                <input type="text" id="g-desc" class="z-input" placeholder="Descripción">
+                <input type="number" id="g-amt" class="z-input" placeholder="Monto Bs.">
+                <div style="display:flex; gap:10px;">
+                    <button class="z-btn" style="background:#00c853;" onclick="z.addCash('in')">Ingreso</button>
+                    <button class="z-btn" style="background:#ff3d00;" onclick="z.addCash('out')">Gasto</button>
+                </div>
+            </div>
+            <div id="cash-list"></div>
         </div>
 
         <div id="v-notas" class="view hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Mis Notas</h2>
-                <button class="z-btn" style="width:50px; height:50px; padding:0; border-radius:50%;" onclick="z.newNote()">+</button>
+            <h2>Notas Z-Core</h2>
+            <div class="toolbar">
+                <button onclick="z.exec('bold')">B</button>
+                <button onclick="z.exec('italic')">I</button>
+                <button onclick="z.exec('insertUnorderedList')">Bullet</button>
+                <button onclick="z.saveNote()" style="background:var(--p); color:white;">Guardar</button>
             </div>
-            <div id="note-editor" class="hidden">
-                <input type="text" id="note-title" class="z-input" placeholder="Título">
-                <div id="rich-editor" contenteditable="true" class="z-input" style="min-height:200px; background:white;"></div>
-                <button class="z-btn" onclick="z.saveNote()">Guardar Nota</button>
-                <button class="z-btn" style="background:#eee; color:#666; margin-top:10px;" onclick="z.closeNote()">Cancelar</button>
+            <div class="glass-card">
+                <div id="rich-editor" contenteditable="true" placeholder="Escribe aquí tus apuntes de UCATEC..."></div>
             </div>
-            <div id="note-list"></div>
-        </div>
-
-        <div id="v-mercado" class="view hidden">
-            <h2>Lista de Compras</h2>
-            <div class="shop-form">
-                <input type="text" id="shop-item" class="z-input" placeholder="Producto (ej: Papas)">
-                <div class="shop-grid">
-                    <input type="number" id="shop-qty" class="z-input" placeholder="Cant.">
-                    <select id="shop-unit" class="z-input">
-                        <option value="Kilo">Kilo</option>
-                        <option value="Arroba">@</option>
-                        <option value="Cuartilla">Cuartilla</option>
-                        <option value="Media @">1/2 @</option>
-                        <option value="Unidad">Und.</option>
-                    </select>
-                    <input type="number" id="shop-price" class="z-input" placeholder="Bs.">
-                </div>
-                <button class="z-btn" onclick="z.addShop()">Añadir a la lista</button>
-            </div>
-            <div id="check-list"></div>
-            <div id="shop-report" class="report-card"></div>
+            <div id="notes-archive"></div>
         </div>
 
         <div id="v-ajustes" class="view hidden">
-            <div style="text-align:center; padding-top:40px;">
-                <h2>Configuración</h2>
-                <button class="z-btn" style="background:#333; margin-bottom:10px;" onclick="z.export()">Backup JSON</button>
-                <button class="z-btn" style="background:#ff4757;" onclick="z.wipe()">Borrar Todo</button>
+            <h2>Configuración</h2>
+            <div class="glass-card">
+                <p style="font-weight:800; font-size:0.8rem; margin-bottom:10px;">NOMBRE DE USUARIO</p>
+                <input type="text" id="user-set" class="z-input" placeholder="Escribe tu nombre..." oninput="z.setU()">
+            </div>
+            <div class="glass-card" style="text-align:center;">
+                <button class="z-btn" style="background:#333;" onclick="z.export()">Descargar Backup</button>
+                <button class="z-btn" style="background:#ff4757; margin-top:20px;" onclick="z.wipe()">BORRAR TODO</button>
             </div>
         </div>
+
     </main>
 
     <nav class="bottom-tabs">
         <div class="tab-icon active" onclick="z.nav('inicio', this)"><i class="fas fa-home"></i></div>
         <div class="tab-icon" onclick="z.nav('programar', this)"><i class="fas fa-calendar-plus"></i></div>
-        <div class="tab-icon" onclick="z.nav('notas', this)"><i class="fas fa-sticky-note"></i></div>
-        <div class="tab-icon" onclick="z.nav('mercado', this)"><i class="fas fa-shopping-cart"></i></div>
+        <div class="tab-icon" onclick="z.nav('banco', this)"><i class="fas fa-wallet"></i></div>
+        <div class="tab-icon" onclick="z.nav('notas', this)"><i class="fas fa-edit"></i></div>
         <div class="tab-icon" onclick="z.nav('ajustes', this)"><i class="fas fa-cog"></i></div>
     </nav>
 
     <script>
         const z = {
-            tasks: [], shops: [], notes: [], 
-            fitList: ["20 Sentadillas", "Plancha 1 min", "15 Flexiones", "Subir escaleras 3 veces", "Saltar soga 2 min", "Caminar 10 min", "10 Burpees"],
-            currentFit: "",
+            db: { user: "Maycol", tasks: [], cash: [], notes: [], selD: new Date().toISOString().split('T')[0] },
+            quotes: ["Haz de cada día tu obra maestra.", "La disciplina vence al talento.", "Cree en ti mismo.", "El éxito es la suma de pequeños esfuerzos."],
+            fitness: ["10 Sentadillas rápidas", "Subir 3 pisos por escaleras", "Tomar 500ml de agua", "Estiramiento de 2 min", "Caminar 5 min intensos"],
             
             init() {
-                this.tasks = JSON.parse(localStorage.getItem('z_tasks')) || [];
-                this.shops = JSON.parse(localStorage.getItem('z_shops')) || [];
-                this.notes = JSON.parse(localStorage.getItem('z_notes')) || [];
-                this.render();
-                this.genFit();
-                this.autoCap();
+                const saved = localStorage.getItem('z_core_pro_v2');
+                if(saved) this.db = JSON.parse(saved);
+                this.render(); this.genFit(); this.autoCap();
+                setInterval(() => this.checkNotify(), 60000);
             },
-
-            nav(id, btn) {
+            save() { localStorage.setItem('z_core_pro_v2', JSON.stringify(this.db)); this.render(); },
+            nav(id, el) {
                 document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
                 document.querySelectorAll('.tab-icon').forEach(t => t.classList.remove('active'));
-                document.getElementById(`v-${id}`).classList.remove('hidden');
-                btn.classList.add('active');
+                document.getElementById('v-'+id).classList.remove('hidden');
+                el.classList.add('active');
             },
-
-            // --- AGENDA ---
-            saveTask() {
-                const name = document.getElementById('add-name').value;
-                const time = document.getElementById('add-time').value;
-                if(!name || !time) return alert("Faltan datos");
-                this.tasks.push({ id: Date.now(), name, time, cat: document.getElementById('add-cat').value, done: false });
+            // 1. TAREAS
+            addTask() {
+                const n = document.getElementById('t-name').value;
+                const t = document.getElementById('t-time').value;
+                if(!n || !t) return;
+                this.db.tasks.push({ id: Date.now(), name: n, time: t, cat: document.getElementById('t-cat').value, done: false });
+                document.getElementById('t-name').value = "";
+                this.save(); this.nav('inicio', document.querySelector('.tab-icon'));
+            },
+            toggleT(id) { const t = this.db.tasks.find(x => x.id === id); t.done = !t.done; this.save(); },
+            delT(id) { if(confirm("¿Eliminar?")) { this.db.tasks = this.db.tasks.filter(x => x.id !== id); this.save(); } },
+            
+            // 2. BANCO
+            addCash(type) {
+                const d = document.getElementById('g-desc').value;
+                const a = parseFloat(document.getElementById('g-amt').value);
+                if(!d || !a) return;
+                this.db.cash.unshift({ d, a, type, date: new Date().toLocaleString() });
+                document.getElementById('g-desc').value = ""; document.getElementById('g-amt').value = "";
                 this.save();
-                this.nav('inicio', document.querySelectorAll('.tab-icon')[0]);
-                this.render();
             },
 
+            // 3. RENDERIZADO COMPLETO
             render() {
-                // Render Tareas
-                const taskContainer = document.getElementById('home-task-list');
-                taskContainer.innerHTML = this.tasks.map(t => `
+                // Nombre y Avatar
+                document.getElementById('user-name').innerText = this.db.user;
+                document.getElementById('avatar-init').innerText = this.db.user.charAt(0).toUpperCase();
+                
+                // Calendario de 21 días (Punto 5)
+                const strip = document.getElementById('cal-strip'); strip.innerHTML = "";
+                for(let i=-7; i<=14; i++){
+                    const d = new Date(); d.setDate(d.getDate()+i);
+                    const ds = d.toISOString().split('T')[0];
+                    strip.innerHTML += `<div class="cal-item ${ds===this.db.selD?'active':''}" onclick="z.db.selD='${ds}';z.save()">
+                        <span style="font-size:0.6rem;">${d.toLocaleDateString('es',{weekday:'short'}).toUpperCase()}</span>
+                        <b style="font-size:1.1rem;">${d.getDate()}</b>
+                    </div>`;
+                }
+
+                // Agenda filtrada
+                const list = this.db.tasks.filter(t => t.time.startsWith(this.db.selD));
+                document.getElementById('task-list').innerHTML = list.map(t => `
                     <div class="task-item ${t.done?'done':''}" onclick="z.toggleT(${t.id})">
                         <div class="task-check"></div>
                         <div style="flex:1">
-                            <p style="font-size:0.7rem; color:var(--p)">${t.time.replace('T',' ')}</p>
-                            <h4 style="${t.done?'text-decoration:line-through':''}">${t.name}</h4>
+                            <p style="font-size:0.6rem; color:var(--p); font-weight:800;">${t.time.split('T')[1]} • ${t.cat}</p>
+                            <h4 style="font-size:0.9rem;">${t.name}</h4>
                         </div>
-                        <i class="fas fa-trash" style="color:#eee" onclick="z.delT(${t.id})"></i>
+                        <i class="fas fa-trash" style="color:#eee" onclick="event.stopPropagation();z.delT(${t.id})"></i>
                     </div>
-                `).join('') || '<p style="text-align:center; color:#ccc">No hay planes para hoy</p>';
+                `).join('') || '<p style="text-align:center; color:#ccc; padding:20px;">No hay misiones hoy</p>';
 
-                this.renderShops();
-                this.renderNotes();
-            },
-
-            toggleT(id) { 
-                const t = this.tasks.find(x => x.id === id);
-                if(t) t.done = !t.done;
-                this.save(); this.render();
-            },
-
-            delT(id) { this.tasks = this.tasks.filter(x => x.id !== id); this.save(); this.render(); },
-
-            // --- COMPRAS ---
-            addShop() {
-                const item = document.getElementById('shop-item').value;
-                const qty = document.getElementById('shop-qty').value || 1;
-                const unit = document.getElementById('shop-unit').value;
-                const price = document.getElementById('shop-price').value || 0;
-                
-                if(!item) return;
-                this.shops.push({ id: Date.now(), item, qty, unit, price: parseFloat(price), done: false });
-                this.save();
-                this.renderShops();
-                document.getElementById('shop-item').value = "";
-            },
-
-            renderShops() {
+                // Banco y Saldo
                 let total = 0;
-                const container = document.getElementById('check-list');
-                container.innerHTML = this.shops.map(s => {
-                    if(s.done) total += (s.price);
-                    return `
-                    <div class="task-item ${s.done?'done':''}" onclick="z.toggleS(${s.id})">
-                        <div class="task-check"></div>
-                        <div style="flex:1">
-                            <h4>${s.item}</h4>
-                            <p style="font-size:0.8rem">${s.qty} ${s.unit} - ${s.price} Bs.</p>
-                        </div>
-                        <i class="fas fa-times" style="color:#eee" onclick="z.delS(${s.id})"></i>
-                    </div>
-                `}).join('');
+                document.getElementById('cash-list').innerHTML = this.db.cash.map(c => {
+                    total += (c.type === 'in' ? c.a : -c.a);
+                    return `<div class="task-item"><span>${c.d}</span><b style="margin-left:auto; color:${c.type==='in'?'#00c853':'#ff3d00'}">${c.a} Bs.</b></div>`;
+                }).join('');
+                document.getElementById('total-bs').innerText = total.toFixed(2);
 
-                document.getElementById('shop-report').innerHTML = `
-                    <div style="display:flex; justify-content:space-between; font-weight:800;">
-                        <span>TOTAL COMPRADO:</span>
-                        <span style="color:var(--p)">${total.toFixed(2)} Bs.</span>
-                    </div>
-                    <p style="font-size:0.7rem; margin-top:5px; color:var(--gray)">* Solo suma items marcados</p>
-                `;
-            },
-
-            toggleS(id) {
-                const s = this.shops.find(x => x.id === id);
-                if(s) s.done = !s.done;
-                this.save(); this.renderShops();
-            },
-            delS(id) { this.shops = this.shops.filter(x => x.id !== id); this.save(); this.renderShops(); },
-
-            // --- NOTAS ---
-            newNote() {
-                document.getElementById('note-editor').classList.remove('hidden');
-                document.getElementById('note-list').classList.add('hidden');
-            },
-            saveNote() {
-                const title = document.getElementById('note-title').value || "Nota sin título";
-                const body = document.getElementById('rich-editor').innerHTML;
-                this.notes.push({ id: Date.now(), title, body });
-                this.save();
-                this.closeNote();
-                this.renderNotes();
-            },
-            renderNotes() {
-                document.getElementById('note-list').innerHTML = this.notes.map(n => `
-                    <div class="note-card">
-                        <h4 style="margin-bottom:5px;">${n.title}</h4>
-                        <div style="font-size:0.9rem; color:#555; max-height:60px; overflow:hidden;">${n.body}</div>
-                        <button onclick="z.delNote(${n.id})" style="position:absolute; top:15px; right:15px; border:none; background:none; color:#eee;"><i class="fas fa-trash"></i></button>
-                    </div>
+                // Notas
+                document.getElementById('notes-archive').innerHTML = this.db.notes.map((n, i) => `
+                    <div class="glass-card"><small>${n.date}</small><div>${n.body}</div></div>
                 `).join('');
-            },
-            delNote(id) { this.notes = this.notes.filter(x => x.id !== id); this.save(); this.renderNotes(); },
-            closeNote() {
-                document.getElementById('note-editor').classList.add('hidden');
-                document.getElementById('note-list').classList.remove('hidden');
-                document.getElementById('note-title').value = "";
-                document.getElementById('rich-editor').innerHTML = "";
+
+                // Gráficas (Punto 6)
+                this.renderStats();
             },
 
-            // --- FIT & OTROS ---
-            genFit() {
-                this.currentFit = this.fitList[Math.floor(Math.random() * this.fitList.length)];
-                document.getElementById('fit-challenge').innerText = this.currentFit;
+            renderStats() {
+                const container = document.getElementById('stats-bars'); container.innerHTML = "";
+                const days = ['L','M','M','J','V','S','D'];
+                days.forEach((day, i) => {
+                    const h = Math.floor(Math.random() * 80) + 10; // Simulación por ahora
+                    container.innerHTML += `<div style="text-align:center">
+                        <div class="bar-outer"><div class="bar-inner" style="height:${h}%"></div></div>
+                        <span style="font-size:0.6rem; color:var(--gray);">${day}</span>
+                    </div>`;
+                });
             },
-            completeFit(win) {
-                if(win) alert("¡Excelente Maycol! +10 puntos de disciplina.");
-                this.genFit();
+
+            // UTILIDADES
+            genFit() { document.getElementById('fit-text').innerText = this.fitness[Math.floor(Math.random()*this.fitness.length)]; },
+            toggleSearch() { document.getElementById('search-box').classList.toggle('hidden'); },
+            setU() { this.db.user = document.getElementById('user-set').value || "Maycol"; this.save(); },
+            exec(c) { document.execCommand(c); },
+            saveNote() {
+                const body = document.getElementById('rich-editor').innerHTML;
+                if(!body) return;
+                this.db.notes.unshift({ body, date: new Date().toLocaleString() });
+                document.getElementById('rich-editor').innerHTML = "";
+                this.save();
             },
             autoCap() {
-                document.addEventListener('input', (e) => {
-                    const el = e.target;
-                    if((el.tagName === 'INPUT' && el.type === 'text') || el.id === 'rich-editor') {
-                        let v = el.value || el.innerText;
-                        if(v.length === 1) {
-                            if(el.value !== undefined) el.value = v.toUpperCase();
-                            else { 
-                                const selection = window.getSelection();
-                                const range = selection.getRangeAt(0);
-                                el.innerText = v.toUpperCase();
-                                range.setStart(el.childNodes[0], 1);
-                                range.collapse(true);
-                                selection.removeAllRanges();
-                                selection.addRange(range);
-                            }
-                        }
+                document.addEventListener('input', e => {
+                    if(e.target.tagName === 'INPUT' && e.target.value.length === 1) {
+                        e.target.value = e.target.value.toUpperCase();
                     }
                 });
             },
-            save() {
-                localStorage.setItem('z_tasks', JSON.stringify(this.tasks));
-                localStorage.setItem('z_shops', JSON.stringify(this.shops));
-                localStorage.setItem('z_notes', JSON.stringify(this.notes));
+            askPerms() { if(Notification.permission !== 'granted') Notification.requestPermission(); },
+            checkNotify() {
+                const now = new Date().toISOString().substring(0, 16);
+                this.db.tasks.forEach(t => {
+                    if(t.time === now && !t.done) new Notification("Z-CORE", { body: "Misión: " + t.name });
+                });
             },
             export() {
-                const data = { tasks: this.tasks, shops: this.shops, notes: this.notes };
-                const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'zcore_backup.json'; a.click();
+                const b = new Blob([JSON.stringify(this.db)], {type:'application/json'});
+                const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'zcore_backup.json'; a.click();
             },
-            wipe() { if(confirm("¿Borrar todo permanentemente?")) { localStorage.clear(); location.reload(); } }
+            wipe() { if(confirm("¿BORRAR TODO?")) { localStorage.clear(); location.reload(); } }
         };
-
         z.init();
     </script>
 </body>

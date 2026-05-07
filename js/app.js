@@ -1,11 +1,17 @@
-class ZCoreMaster {
+class ZCorePro {
     constructor() {
-        this.tasks = JSON.parse(localStorage.getItem('zc_tasks')) || [];
-        this.checks = JSON.parse(localStorage.getItem('zc_checks')) || [];
-        this.notes = localStorage.getItem('zc_notes_html') || "";
+        this.tasks = [];
+        this.checks = [];
+        this.notes = "";
         this.currentDay = new Date().toISOString().split('T')[0];
         
-        this.init();
+        try {
+            this.tasks = JSON.parse(localStorage.getItem('zc_tasks')) || [];
+            this.checks = JSON.parse(localStorage.getItem('zc_checks')) || [];
+            this.notes = localStorage.getItem('zc_notes_html') || "";
+        } catch(e) { console.error("LS Error", e); }
+
+        window.addEventListener('DOMContentLoaded', () => this.init());
     }
 
     init() {
@@ -25,51 +31,51 @@ class ZCoreMaster {
         this.inCat = document.getElementById('in-cat');
         this.inCheck = document.getElementById('in-check');
         this.homeTasks = document.getElementById('home-tasks');
-        this.checkList = document.getElementById('check-list');
+        this.checkListContainer = document.getElementById('check-list');
         this.editor = document.getElementById('editor-content');
         this.pctLabel = document.getElementById('pct-label');
+        this.labelMonth = document.getElementById('label-month');
+        this.stripCal = document.getElementById('strip-cal');
     }
 
     events() {
-        // Auto-Capitalization Logic (Sentence Case)
-        const cap = (e) => {
+        // Auto-Capitalization Logic
+        const capFirst = (e) => {
             const el = e.target;
-            let val = el.value || el.innerText;
-            if (!val) return;
-            
-            // Capitalize first letter of the input
+            let val = el.value || el.innerText || "";
             if (val.length === 1) {
                 if (el.value !== undefined) el.value = val.toUpperCase();
                 else el.innerText = val.toUpperCase();
             }
         };
 
-        this.inName.addEventListener('input', cap);
-        this.inCheck.addEventListener('input', cap);
-        this.editor.addEventListener('input', (e) => {
-            cap(e);
-            this.saveNotes();
-        });
+        if(this.inName) this.inName.addEventListener('input', capFirst);
+        if(this.inCheck) this.inCheck.addEventListener('input', capFirst);
+        if(this.editor) {
+            this.editor.addEventListener('input', (e) => {
+                capFirst(e);
+                this.saveNotes();
+            });
+        }
     }
 
-    // --- NAVIGATION ---
     switchView(id, btn) {
         document.querySelectorAll('.tab-pane').forEach(v => v.classList.add('hidden'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        document.getElementById(`view-${id}`).classList.remove('hidden');
-        btn.classList.add('active');
-        if (id === 'home') this.renderTasks();
+        const target = document.getElementById(`view-${id}`);
+        if(target) target.classList.remove('hidden');
+        if(btn) btn.classList.add('active');
+        if(id === 'home') this.renderTasks();
     }
 
     filterHome(type, btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        if(btn) btn.classList.add('active');
         this.renderTasks(type);
     }
 
-    // --- CALENDAR ---
     renderCal() {
-        const strip = document.getElementById('strip-cal');
+        if(!this.stripCal) return;
         const now = new Date();
         const days = [];
         for (let i = -3; i <= 3; i++) {
@@ -78,7 +84,7 @@ class ZCoreMaster {
             days.push(d);
         }
 
-        strip.innerHTML = days.map(d => {
+        this.stripCal.innerHTML = days.map(d => {
             const dStr = d.toISOString().split('T')[0];
             const active = dStr === this.currentDay;
             return `
@@ -91,7 +97,7 @@ class ZCoreMaster {
         }).join('');
 
         const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-        document.getElementById('label-month').innerText = months[now.getMonth()];
+        if(this.labelMonth) this.labelMonth.innerText = months[now.getMonth()];
     }
 
     selectDay(date) {
@@ -100,21 +106,12 @@ class ZCoreMaster {
         this.renderTasks();
     }
 
-    // --- TASKS ---
     saveTask() {
         const name = this.inName.value.trim();
         const time = this.inTime.value;
         if (!name || !time) return alert("Completa los datos.");
 
-        const task = {
-            id: Date.now(),
-            name,
-            time,
-            cat: this.inCat.value,
-            done: false,
-            notified: false
-        };
-
+        const task = { id: Date.now(), name, time, cat: this.inCat.value, done: false, notified: false };
         this.tasks.push(task);
         localStorage.setItem('zc_tasks', JSON.stringify(this.tasks));
         this.inName.value = "";
@@ -129,6 +126,7 @@ class ZCoreMaster {
     }
 
     renderTasks(filter = 'all') {
+        if(!this.homeTasks) return;
         let list = this.tasks.filter(t => t.time.startsWith(this.currentDay));
         if (filter === 'pending') list = list.filter(t => !t.done);
 
@@ -143,7 +141,6 @@ class ZCoreMaster {
         `).join('') || '<p style="text-align:center; color:#ccc; padding:40px;">No hay misiones hoy.</p>';
     }
 
-    // --- CHECKLIST ---
     addCheck() {
         const text = this.inCheck.value.trim();
         if (!text) return;
@@ -159,7 +156,8 @@ class ZCoreMaster {
     }
 
     renderChecks() {
-        this.checkList.innerHTML = this.checks.map(c => `
+        if(!this.checkListContainer) return;
+        this.checkListContainer.innerHTML = this.checks.map(c => `
             <div class="check-item ${c.done ? 'done' : ''}" onclick="zCore.toggleCheck(${c.id})">
                 <div class="check-circle"></div>
                 <span style="font-weight:700;">${c.text}</span>
@@ -167,7 +165,6 @@ class ZCoreMaster {
         `).join('');
     }
 
-    // --- STATS ---
     updateStats() {
         const now = new Date();
         const start = new Date(now);
@@ -183,19 +180,17 @@ class ZCoreMaster {
             
             const bar = document.getElementById(`bar-${i}`);
             if (bar) bar.style.height = `${Math.max(pct, 5)}%`;
-            if (dStr === new Date().toISOString().split('T')[0]) {
+            if (dStr === new Date().toISOString().split('T')[0] && this.pctLabel) {
                 this.pctLabel.innerText = `${Math.round(pct)}%`;
             }
         }
     }
 
-    // --- NOTES ---
-    format(cmd) { document.execCommand(cmd, false, null); this.editor.focus(); }
-    saveNotes() { localStorage.setItem('zc_notes_html', this.editor.innerHTML); }
-    loadNotes() { this.editor.innerHTML = this.notes; }
+    format(cmd) { document.execCommand(cmd, false, null); if(this.editor) this.editor.focus(); }
+    saveNotes() { if(this.editor) localStorage.setItem('zc_notes_html', this.editor.innerHTML); }
+    loadNotes() { if(this.editor) this.editor.innerHTML = this.notes; }
 
-    // --- NOTIFICATIONS ---
-    askNotify() { if ('Notification' in window) Notification.requestPermission().then(p => { if (p === 'granted') alert("Activado."); }); }
+    askNotify() { if ('Notification' in window) Notification.requestPermission().then(p => { if (p === 'granted') alert("Notificaciones Activadas."); }); }
     startNotifyEngine() {
         setInterval(() => {
             const now = new Date();
@@ -213,27 +208,29 @@ class ZCoreMaster {
         }, 30000);
     }
 
-    // --- DATABASE ---
     exportDB() {
-        const blob = new Blob([JSON.stringify({ tasks: this.tasks, checks: this.checks, notes: this.notes })], { type: 'application/json' });
+        const data = { tasks: this.tasks, checks: this.checks, notes: this.notes };
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `zcore_backup.json`;
+        a.download = `backup_zcore.json`;
         a.click();
     }
     importDB(e) {
         const reader = new FileReader();
         reader.onload = (ev) => {
-            const data = JSON.parse(ev.target.result);
-            localStorage.setItem('zc_tasks', JSON.stringify(data.tasks));
-            localStorage.setItem('zc_checks', JSON.stringify(data.checks));
-            localStorage.setItem('zc_notes_html', data.notes);
-            location.reload();
+            try {
+                const data = JSON.parse(ev.target.result);
+                localStorage.setItem('zc_tasks', JSON.stringify(data.tasks));
+                localStorage.setItem('zc_checks', JSON.stringify(data.checks));
+                localStorage.setItem('zc_notes_html', data.notes);
+                location.reload();
+            } catch(e) { alert("Archivo Inválido."); }
         };
         reader.readAsText(e.target.files[0]);
     }
     wipeDB() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
 }
 
-const zCore = new ZCoreMaster();
+const zCore = new ZCorePro();
 window.zCore = zCore;

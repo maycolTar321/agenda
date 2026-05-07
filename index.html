@@ -4,16 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z-Core Pro</title>
-    <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff0080">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
+            --secondary-gradient: linear-gradient(135deg, #0070f3 0%, #00dfd8 100%);
+            --bg-page: #ffffff;
+            --dark-bg: #111111;
+            --text-black: #000000;
+            --text-gray: #888888;
+            --success: #55efc4;
+            --br: 30px;
+            --font: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-page); font-family: var(--font); color: var(--text-black); overflow-x: hidden; }
+
+        main { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 120px; min-height: 100vh; }
+        .hidden { display: none !important; }
+
+        /* Header */
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 30px; }
+        .month-view { font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+
+        /* Calendar */
+        .calendar-container { display: flex; justify-content: space-between; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; }
+        .cal-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px 10px; min-width: 60px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .cal-card.active { background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .cal-card.active .day-dot { width: 6px; height: 6px; background: black; border-radius: 50%; }
+        .day-name { font-size: 0.65rem; color: #bbb; font-weight: 700; }
+        .day-num { font-size: 1.2rem; font-weight: 800; }
+
+        /* Banner */
+        .banner { background: var(--primary-gradient); border-radius: 25px; padding: 25px; color: white; margin-bottom: 30px; position: relative; box-shadow: 0 10px 30px rgba(255, 0, 128, 0.2); }
+        .banner p { font-size: 0.95rem; font-weight: 500; width: 80%; line-height: 1.4; }
+
+        /* Tabs */
+        .filter-bar { display: flex; background: #f0f0f0; padding: 5px; border-radius: 40px; margin-bottom: 30px; }
+        .filter-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+        .filter-btn.active { background: black; color: white; }
+
+        /* Cards */
+        .card-z { border-radius: var(--br); padding: 25px; margin-bottom: 20px; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .card-dark { background: var(--dark-bg); color: white; }
+        .card-light { background: white; color: black; border: 1px solid #f0f0f0; }
+        .task-time { font-size: 0.8rem; color: #888; font-weight: 700; margin-bottom: 8px; display: block; }
+        .task-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
+
+        /* Graphics */
+        .stats-box { display: flex; justify-content: space-between; align-items: flex-end; height: 100px; margin-top: 20px; }
+        .stat-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
+        .stat-bar { width: 25px; background: #f0f0f0; border-radius: 8px; height: 100px; position: relative; overflow: hidden; }
+        .stat-bar-fill { position: absolute; bottom: 0; width: 100%; background: var(--primary-gradient); border-radius: 8px; transition: height 1s; height: 0; }
+
+        /* Nav */
+        .nav-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(17,17,17,0.95); backdrop-filter: blur(10px); padding: 15px; border-radius: 40px; display: flex; justify-content: space-around; z-index: 1000; }
+        .nav-link { color: #555; font-size: 1.4rem; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: white; }
+
+        /* Forms */
+        .form-wrap { background: white; padding: 25px; border-radius: var(--br); min-height: 80vh; }
+        .input-z { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid #eee; background: #fafafa; margin-bottom: 15px; font-size: 1rem; font-family: inherit; outline: none; }
+        .btn-z { background: var(--primary-gradient); color: white; border: none; padding: 20px; border-radius: 20px; width: 100%; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+
+        /* Checklist */
+        .check-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 20px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
+        .check-circle { width: 24px; height: 24px; border: 2px solid #ddd; border-radius: 50%; }
+        .check-item.done { opacity: 0.5; }
+        .check-item.done .check-circle { background: var(--primary-gradient); border: none; }
+        
+        /* Editor */
+        .toolbar { display: flex; gap: 10px; margin-bottom: 15px; background: #eee; padding: 10px; border-radius: 15px; }
+        .toolbar button { padding: 5px 12px; border: none; background: white; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        #editor-content { min-height: 400px; padding: 20px; outline: none; font-size: 1.1rem; line-height: 1.6; background: white; border-radius: 20px; }
+    </style>
 </head>
 <body>
 
     <main>
-        <!-- APARTADO 1: HOME -->
+        <!-- HOME -->
         <div id="view-home" class="tab-pane">
             <header class="top-header">
                 <div class="month-view">
@@ -23,14 +96,13 @@
                 <div style="display:flex; gap:15px; font-size: 1.2rem;">
                     <i class="fas fa-search"></i>
                     <i class="fas fa-bell" onclick="zCore.askNotify()"></i>
-                    <div style="width:32px; height:32px; background:#ddd; border-radius:50%;"></div>
                 </div>
             </header>
 
             <div class="calendar-container" id="strip-cal"></div>
 
             <div class="banner">
-                <p>¡Optimiza tu tiempo hoy! Tienes misiones pendientes para completar.</p>
+                <p>¡Optimiza tu tiempo hoy! Tienes misiones pendientes.</p>
                 <i class="fas fa-chevron-right" style="position:absolute; right:25px; top:50%; transform:translateY(-50%);"></i>
             </div>
 
@@ -39,10 +111,9 @@
                 <button class="filter-btn" onclick="zCore.filterHome('pending', this)">Pendientes</button>
             </div>
 
-            <!-- GRAFICOS DE PRODUCTIVIDAD -->
             <div class="card-z card-light" style="margin-bottom: 25px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4 style="font-size: 0.8rem; font-weight: 800; color:#000;">PRODUCTIVIDAD</h4>
+                    <h4 style="font-size: 0.8rem; font-weight: 800;">PRODUCTIVIDAD</h4>
                     <span id="pct-label" style="font-size: 0.8rem; font-weight: 800; color:var(--primary-gradient);">0%</span>
                 </div>
                 <div class="stats-box">
@@ -57,31 +128,25 @@
             </div>
 
             <h3 style="margin-bottom:15px; font-weight:800;">Horario</h3>
-            <div id="home-tasks" class="task-list"></div>
+            <div id="home-tasks"></div>
         </div>
 
-        <!-- APARTADO 2: AGREGAR -->
+        <!-- AGREGAR -->
         <div id="view-add" class="tab-pane hidden">
             <div class="form-wrap">
-                <h2 style="font-size: 2rem; margin-bottom: 30px;">Set Schedule</h2>
-                <label style="display:block; font-size:0.9rem; font-weight:700; margin-bottom:10px; color:#666;">Task Name</label>
-                <input type="text" id="in-name" class="input-z" placeholder="Product Design Demo" spellcheck="true">
-                
-                <label style="display:block; font-size:0.9rem; font-weight:700; margin-bottom:10px; color:#666;">Select Date & Time</label>
+                <h2 style="margin-bottom: 30px;">Set Schedule</h2>
+                <input type="text" id="in-name" class="input-z" placeholder="Task Name" spellcheck="true">
                 <input type="datetime-local" id="in-time" class="input-z">
-                
-                <label style="display:block; font-size:0.9rem; font-weight:700; margin-bottom:10px; color:#666;">Category</label>
                 <select id="in-cat" class="input-z">
                     <option value="work">Work</option>
                     <option value="personal">Personal</option>
                     <option value="wellness">Wellness</option>
                 </select>
-                
                 <button class="btn-z" onclick="zCore.saveTask()">Save Schedule</button>
             </div>
         </div>
 
-        <!-- APARTADO 3: NOTAS -->
+        <!-- NOTAS -->
         <div id="view-notes" class="tab-pane hidden">
             <div class="form-wrap">
                 <h2 style="margin-bottom:20px;">Notas Pro</h2>
@@ -89,35 +154,31 @@
                     <button onclick="zCore.format('bold')">B</button>
                     <button onclick="zCore.format('italic')">I</button>
                     <button onclick="zCore.format('insertUnorderedList')">•</button>
-                    <button onclick="zCore.format('insertOrderedList')">1.</button>
                 </div>
                 <div id="editor-content" contenteditable="true" spellcheck="true" oninput="zCore.saveNotes()"></div>
             </div>
         </div>
 
-        <!-- APARTADO 4: CHECKLIST -->
+        <!-- CHECKLIST -->
         <div id="view-check" class="tab-pane hidden">
             <div class="form-wrap">
-                <h2 style="margin-bottom:20px;">Checklist Diario</h2>
+                <h2 style="margin-bottom:20px;">Checklist</h2>
                 <div style="display:flex; gap:10px; margin-bottom:20px;">
                     <input type="text" id="in-check" class="input-z" style="margin:0;" placeholder="Nuevo hábito..." spellcheck="true">
-                    <button onclick="zCore.addCheck()" class="btn-z" style="width:60px; padding:0;"><i class="fas fa-plus"></i></button>
+                    <button onclick="zCore.addCheck()" class="btn-z" style="width:60px; padding:0;">+</button>
                 </div>
                 <div id="check-list"></div>
             </div>
         </div>
 
-        <!-- APARTADO 5: BACKUP -->
+        <!-- BACKUP -->
         <div id="view-db" class="tab-pane hidden">
             <div class="form-wrap" style="text-align:center;">
                 <h2 style="margin-bottom:30px;">Base de Datos</h2>
-                <div class="card-z card-dark">
-                    <p style="margin-bottom:20px;">Mantén tus datos seguros exportando un backup.</p>
-                    <button class="btn-z" style="background:var(--secondary-gradient);" onclick="zCore.exportDB()">Exportar JSON</button>
-                    <input type="file" id="f-import" style="display:none" onchange="zCore.importDB(event)">
-                    <button class="btn-z" style="background:#333; margin-top:10px;" onclick="document.getElementById('f-import').click()">Importar JSON</button>
-                </div>
-                <button class="btn-z" style="background:#ff4757; margin-top:50px;" onclick="zCore.wipeDB()">RESET SISTEMA</button>
+                <button class="btn-z" style="background:var(--secondary-gradient);" onclick="zCore.exportDB()">Exportar Backup</button>
+                <input type="file" id="f-import" style="display:none" onchange="zCore.importDB(event)">
+                <button class="btn-z" style="background:#333; margin-top:10px;" onclick="document.getElementById('f-import').click()">Importar Backup</button>
+                <button class="btn-z" style="background:#ff4757; margin-top:50px; font-size: 0.8rem;" onclick="zCore.wipeDB()">RESET TOTAL</button>
             </div>
         </div>
     </main>

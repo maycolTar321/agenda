@@ -3,192 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Core Pro</title>
+    <title>Z-Core ULTIMATE</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff0080">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
-            --secondary-gradient: linear-gradient(135deg, #0070f3 0%, #00dfd8 100%);
-            --bg-page: #ffffff;
-            --dark-bg: #111111;
-            --text-black: #000000;
-            --text-gray: #888888;
-            --success: #55efc4;
-            --br: 30px;
-            --font: 'Inter', sans-serif;
+            --p: #ff0080; --p-glow: rgba(255, 0, 128, 0.4);
+            --s: #7928ca; --s-glow: rgba(121, 40, 202, 0.4);
+            --c: #00dfd8; --success: #00b894;
+            --bg: #ffffff; --card: #ffffff; --dark: #111111;
+            --text: #000000; --gray: #888888;
+            --grad: linear-gradient(135deg, var(--p) 0%, var(--s) 100%);
+            --br: 32px; --shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-page); font-family: var(--font); color: var(--text-black); overflow-x: hidden; }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background: var(--bg); font-family: 'Outfit', sans-serif; color: var(--text); overflow-x:hidden; }
 
-        main { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 120px; min-height: 100vh; }
+        main { max-width: 480px; margin:0 auto; padding:20px; padding-bottom:140px; min-height:100vh; position:relative; }
         .hidden { display: none !important; }
 
-        /* Header */
-        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 30px; }
-        .month-view { font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        /* Typography */
+        h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1.5px; }
+        h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; }
+        h3 { font-size: 0.9rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Calendar */
-        .calendar-container { display: flex; justify-content: space-between; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; }
-        .cal-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px 10px; min-width: 60px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .cal-card.active { background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .cal-card.active .day-dot { width: 6px; height: 6px; background: black; border-radius: 50%; }
-        .day-name { font-size: 0.65rem; color: #bbb; font-weight: 700; }
-        .day-num { font-size: 1.2rem; font-weight: 800; }
+        /* App Header */
+        .app-header { display:flex; justify-content:space-between; align-items:center; padding:15px 0 35px; }
+        .user-pill { display:flex; align-items:center; gap:12px; }
+        .avatar { width:45px; height:45px; border-radius:18px; background:var(--grad); padding:2px; }
+        .avatar-img { width:100%; height:100%; background:white; border-radius:16px; object-fit:cover; }
 
-        /* Banner */
-        .banner { background: var(--primary-gradient); border-radius: 25px; padding: 25px; color: white; margin-bottom: 30px; position: relative; box-shadow: 0 10px 30px rgba(255, 0, 128, 0.2); }
-        .banner p { font-size: 0.95rem; font-weight: 500; width: 80%; line-height: 1.4; }
+        /* Calendar Strip */
+        .cal-strip { display:flex; justify-content:space-between; margin-bottom:30px; gap:8px; }
+        .cal-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:18px 5px; border-radius:22px; cursor:pointer; transition:0.3s cubic-bezier(0.4,0,0.2,1); }
+        .cal-item.active { background: var(--dark); color:white; transform:scale(1.05); box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        .cal-item .d-name { font-size: 0.7rem; font-weight: 700; opacity: 0.5; margin-bottom:8px; }
+        .cal-item .d-num { font-size: 1.1rem; font-weight: 800; }
+        .cal-item.active .d-name { opacity: 0.8; }
 
-        /* Tabs */
-        .filter-bar { display: flex; background: #f0f0f0; padding: 5px; border-radius: 40px; margin-bottom: 30px; }
-        .filter-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
-        .filter-btn.active { background: black; color: white; }
+        /* Stats Card */
+        .glass-card { background: white; border-radius: var(--br); padding:25px; box-shadow: var(--shadow); border: 1px solid #f0f0f0; margin-bottom:30px; }
+        .stats-grid { display:flex; justify-content:space-between; align-items:flex-end; height:120px; margin-top:20px; }
+        .stat-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; }
+        .stat-bar-outer { width:22px; height:100px; background:#f4f4f4; border-radius:10px; position:relative; overflow:hidden; }
+        .stat-bar-inner { position:absolute; bottom:0; width:100%; background:var(--grad); border-radius:10px; transition: height 0.8s ease; height: 10%; }
+        .stat-label { font-size: 0.65rem; font-weight: 800; color:var(--gray); }
 
-        /* Cards */
-        .card-z { border-radius: var(--br); padding: 25px; margin-bottom: 20px; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .card-dark { background: var(--dark-bg); color: white; }
-        .card-light { background: white; color: black; border: 1px solid #f0f0f0; }
-        .task-time { font-size: 0.8rem; color: #888; font-weight: 700; margin-bottom: 8px; display: block; }
-        .task-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
+        /* Dark Mode Card */
+        .dark-card { background: var(--dark); color:white; border-radius: var(--br); padding:30px; margin-bottom:25px; position:relative; overflow:hidden; }
+        .dark-card::after { content:''; position:absolute; top:-50%; right:-20%; width:150px; height:150px; background:var(--p-glow); filter:blur(60px); }
 
-        /* Graphics */
-        .stats-box { display: flex; justify-content: space-between; align-items: flex-end; height: 100px; margin-top: 20px; }
-        .stat-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
-        .stat-bar { width: 25px; background: #f0f0f0; border-radius: 8px; height: 100px; position: relative; overflow: hidden; }
-        .stat-bar-fill { position: absolute; bottom: 0; width: 100%; background: var(--primary-gradient); border-radius: 8px; transition: height 1s; height: 0; }
+        /* Task Item */
+        .task-item { display:flex; align-items:center; gap:20px; padding:22px; background:white; border-radius:24px; margin-bottom:15px; box-shadow: 0 8px 20px rgba(0,0,0,0.02); border:1px solid #f9f9f9; transition:0.3s; cursor:pointer; }
+        .task-item:active { transform:scale(0.98); }
+        .task-check { width:28px; height:28px; border:2.5px solid #eee; border-radius:50%; transition:0.3s; display:flex; align-items:center; justify-content:center; }
+        .task-item.done { opacity:0.6; }
+        .task-item.done .task-check { background:var(--p); border-color:transparent; }
+        .task-item.done .task-check::after { content:'\f00c'; font-family:'Font Awesome 6 Free'; font-weight:900; color:white; font-size:0.8rem; }
+        .task-info h4 { font-size: 1.1rem; font-weight: 700; margin-bottom:4px; }
+        .task-info p { font-size: 0.8rem; font-weight: 700; color:var(--p); opacity:0.8; }
 
-        /* Nav */
-        .nav-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(17,17,17,0.95); backdrop-filter: blur(10px); padding: 15px; border-radius: 40px; display: flex; justify-content: space-around; z-index: 1000; }
-        .nav-link { color: #555; font-size: 1.4rem; cursor: pointer; transition: 0.3s; }
-        .nav-link.active { color: white; }
+        /* Bottom Tab Bar */
+        .bottom-tabs { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); width:92%; max-width:420px; background:rgba(17,17,17,0.95); backdrop-filter:blur(15px); padding:12px; border-radius:40px; display:flex; justify-content:space-around; z-index:1000; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .tab-icon { color:#444; font-size:1.5rem; width:55px; height:55px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:0.3s; cursor:pointer; }
+        .tab-icon.active { color:white; background:rgba(255,255,255,0.1); }
 
-        /* Forms */
-        .form-wrap { background: white; padding: 25px; border-radius: var(--br); min-height: 80vh; }
-        .input-z { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid #eee; background: #fafafa; margin-bottom: 15px; font-size: 1rem; font-family: inherit; outline: none; }
-        .btn-z { background: var(--primary-gradient); color: white; border: none; padding: 20px; border-radius: 20px; width: 100%; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        /* Inputs & Buttons */
+        .z-input { width:100%; padding:20px; border-radius:22px; border:1px solid #eee; background:#fbfbfb; margin-bottom:18px; font-size:1rem; font-family:inherit; outline:none; transition:0.3s; }
+        .z-input:focus { border-color:var(--p); background:white; box-shadow: 0 10px 20px rgba(255,0,128,0.05); }
+        .z-btn { background:var(--grad); color:white; border:none; padding:22px; border-radius:22px; width:100%; font-size:1.1rem; font-weight:800; cursor:pointer; box-shadow: 0 15px 35px var(--p-glow); transition:0.3s; }
+        .z-btn:active { transform:translateY(2px); box-shadow: none; }
 
-        /* Checklist */
-        .check-item { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 20px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
-        .check-circle { width: 24px; height: 24px; border: 2px solid #ddd; border-radius: 50%; }
-        .check-item.done { opacity: 0.5; }
-        .check-item.done .check-circle { background: var(--primary-gradient); border: none; }
-        
         /* Editor */
-        .toolbar { display: flex; gap: 10px; margin-bottom: 15px; background: #eee; padding: 10px; border-radius: 15px; }
-        .toolbar button { padding: 5px 12px; border: none; background: white; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        #editor-content { min-height: 400px; padding: 20px; outline: none; font-size: 1.1rem; line-height: 1.6; background: white; border-radius: 20px; }
+        .editor-wrap { background:white; min-height:75vh; border-radius:var(--br); padding:25px; }
+        .toolbar { display:flex; gap:12px; margin-bottom:20px; background:#f0f0f0; padding:12px; border-radius:18px; overflow-x:auto; }
+        .toolbar button { flex-shrink:0; width:40px; height:40px; border:none; background:white; border-radius:12px; font-weight:800; cursor:pointer; transition:0.2s; }
+        .toolbar button:active { background:var(--p); color:white; }
+        #rich-editor { min-height:400px; outline:none; font-size:1.1rem; line-height:1.7; }
+
+        /* Animations */
+        @keyframes pageUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+        .view { animation: pageUp 0.5s cubic-bezier(0.4,0,0.2,1); }
     </style>
 </head>
 <body>
 
     <main>
-        <!-- HOME -->
-        <div id="view-home" class="tab-pane">
-            <header class="top-header">
-                <div class="month-view">
-                    <span id="label-month">Jun</span>
-                    <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+        <!-- VIEW: HOME -->
+        <div id="v-home" class="view">
+            <header class="app-header">
+                <div class="user-pill">
+                    <div class="avatar"><div class="avatar-img"></div></div>
+                    <div>
+                        <p style="font-size: 0.8rem; font-weight: 700; color:var(--gray);">Hola,</p>
+                        <h1 id="user-display">Maycol</h1>
+                    </div>
                 </div>
-                <div style="display:flex; gap:15px; font-size: 1.2rem;">
+                <div style="display:flex; gap:20px; font-size: 1.3rem;">
                     <i class="fas fa-search"></i>
-                    <i class="fas fa-bell" onclick="zCore.askNotify()"></i>
+                    <i class="fas fa-bell" onclick="z.askPerms()" style="color:var(--p);"></i>
                 </div>
             </header>
 
-            <div class="calendar-container" id="strip-cal"></div>
+            <div class="cal-strip" id="cal-strip"></div>
 
-            <div class="banner">
-                <p>¡Optimiza tu tiempo hoy! Tienes misiones pendientes.</p>
-                <i class="fas fa-chevron-right" style="position:absolute; right:25px; top:50%; transform:translateY(-50%);"></i>
+            <div class="dark-card">
+                <p style="font-size: 1.1rem; font-weight: 600; line-height: 1.5; position:relative; z-index:2;">
+                    Optimiza tu potencial hoy. Tienes <span id="pending-count" style="color:var(--c);">0 misiones</span> por completar.
+                </p>
+                <div style="margin-top:20px; display:flex; align-items:center; gap:10px;">
+                    <div style="flex:1; height:6px; background:rgba(255,255,255,0.1); border-radius:10px;">
+                        <div id="main-progress" style="width:0%; height:100%; background:var(--c); border-radius:10px; transition:0.5s;"></div>
+                    </div>
+                    <span id="main-pct" style="font-size: 0.8rem; font-weight: 800;">0%</span>
+                </div>
             </div>
 
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="zCore.filterHome('all', this)">Todos</button>
-                <button class="filter-btn" onclick="zCore.filterHome('pending', this)">Pendientes</button>
-            </div>
-
-            <div class="card-z card-light" style="margin-bottom: 25px;">
+            <div class="glass-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4 style="font-size: 0.8rem; font-weight: 800;">PRODUCTIVIDAD</h4>
-                    <span id="pct-label" style="font-size: 0.8rem; font-weight: 800; color:var(--primary-gradient);">0%</span>
+                    <h3>Productividad Semanal</h3>
+                    <span style="font-size: 0.7rem; background:#f4f4f4; padding:6px 12px; border-radius:12px; font-weight:800;">7 DÍAS</span>
                 </div>
-                <div class="stats-box">
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-0"></div></div><span>L</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-1"></div></div><span>M</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-2"></div></div><span>M</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-3"></div></div><span>J</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-4"></div></div><span>V</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-5"></div></div><span>S</span></div>
-                    <div class="stat-bar-wrap"><div class="stat-bar"><div class="stat-bar-fill" id="bar-6"></div></div><span>D</span></div>
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-0"></div></div><span class="stat-label">L</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-1"></div></div><span class="stat-label">M</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-2"></div></div><span class="stat-label">M</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-3"></div></div><span class="stat-label">J</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-4"></div></div><span class="stat-label">V</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-5"></div></div><span class="stat-label">S</span></div>
+                    <div class="stat-col"><div class="stat-bar-outer"><div class="stat-bar-inner" id="bar-6"></div></div><span class="stat-label">D</span></div>
                 </div>
             </div>
 
-            <h3 style="margin-bottom:15px; font-weight:800;">Horario</h3>
-            <div id="home-tasks"></div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px;">
+                <h2>Misiones</h2>
+                <span style="color:var(--p); font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="z.nav('add')">+ AGREGAR</span>
+            </div>
+            <div id="home-task-list"></div>
         </div>
 
-        <!-- AGREGAR -->
-        <div id="view-add" class="tab-pane hidden">
-            <div class="form-wrap">
-                <h2 style="margin-bottom: 30px;">Set Schedule</h2>
-                <input type="text" id="in-name" class="input-z" placeholder="Task Name" spellcheck="true">
-                <input type="datetime-local" id="in-time" class="input-z">
-                <select id="in-cat" class="input-z">
-                    <option value="work">Work</option>
-                    <option value="personal">Personal</option>
-                    <option value="wellness">Wellness</option>
+        <!-- VIEW: ADD -->
+        <div id="v-add" class="view hidden">
+            <div class="editor-wrap">
+                <h2>Set Schedule</h2>
+                <input type="text" id="add-name" class="z-input" placeholder="Ej: Diseño de UI Pro" spellcheck="true">
+                <input type="datetime-local" id="add-time" class="z-input">
+                <select id="add-cat" class="z-input">
+                    <option value="Trabajo">Trabajo</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Salud">Salud / Ejercicio</option>
                 </select>
-                <button class="btn-z" onclick="zCore.saveTask()">Save Schedule</button>
+                <button class="z-btn" onclick="z.saveTask()">Guardar Misión</button>
             </div>
         </div>
 
-        <!-- NOTAS -->
-        <div id="view-notes" class="tab-pane hidden">
-            <div class="form-wrap">
-                <h2 style="margin-bottom:20px;">Notas Pro</h2>
+        <!-- VIEW: NOTES (WORD) -->
+        <div id="v-notes" class="view hidden">
+            <div class="editor-wrap">
+                <h2>Z-Notes</h2>
                 <div class="toolbar">
-                    <button onclick="zCore.format('bold')">B</button>
-                    <button onclick="zCore.format('italic')">I</button>
-                    <button onclick="zCore.format('insertUnorderedList')">•</button>
+                    <button onclick="z.exec('bold')">B</button>
+                    <button onclick="z.exec('italic')">I</button>
+                    <button onclick="z.exec('underline')">U</button>
+                    <button onclick="z.exec('insertUnorderedList')"><i class="fas fa-list"></i></button>
+                    <button onclick="z.exec('justifyLeft')"><i class="fas fa-align-left"></i></button>
+                    <button onclick="z.exec('justifyCenter')"><i class="fas fa-align-center"></i></button>
                 </div>
-                <div id="editor-content" contenteditable="true" spellcheck="true" oninput="zCore.saveNotes()"></div>
+                <div id="rich-editor" contenteditable="true" spellcheck="true" oninput="z.saveNotes()"></div>
             </div>
         </div>
 
-        <!-- CHECKLIST -->
-        <div id="view-check" class="tab-pane hidden">
-            <div class="form-wrap">
-                <h2 style="margin-bottom:20px;">Checklist</h2>
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <input type="text" id="in-check" class="input-z" style="margin:0;" placeholder="Nuevo hábito..." spellcheck="true">
-                    <button onclick="zCore.addCheck()" class="btn-z" style="width:60px; padding:0;">+</button>
+        <!-- VIEW: EXERCISES -->
+        <div id="v-fit" class="view hidden">
+            <div class="editor-wrap">
+                <h2>Z-Training</h2>
+                <div class="dark-card" style="margin-bottom:20px;">
+                    <h3 style="color:white; margin-bottom:10px;">Reto del Día</h3>
+                    <p style="font-size: 1.2rem; font-weight:800;">10 Minutos de Estiramiento</p>
                 </div>
-                <div id="check-list"></div>
+                <div id="fit-list">
+                    <!-- Exercise Items -->
+                    <div class="task-item" onclick="z.completeEx('Agua')">
+                        <div class="task-check"></div>
+                        <div class="task-info"><h4>Tomar 500ml de Agua</h4><p>WELLNESS</p></div>
+                    </div>
+                    <div class="task-item" onclick="z.completeEx('Escaleras')">
+                        <div class="task-check"></div>
+                        <div class="task-info"><h4>Subir 3 pisos</h4><p>FITNESS</p></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- BACKUP -->
-        <div id="view-db" class="tab-pane hidden">
-            <div class="form-wrap" style="text-align:center;">
-                <h2 style="margin-bottom:30px;">Base de Datos</h2>
-                <button class="btn-z" style="background:var(--secondary-gradient);" onclick="zCore.exportDB()">Exportar Backup</button>
-                <input type="file" id="f-import" style="display:none" onchange="zCore.importDB(event)">
-                <button class="btn-z" style="background:#333; margin-top:10px;" onclick="document.getElementById('f-import').click()">Importar Backup</button>
-                <button class="btn-z" style="background:#ff4757; margin-top:50px; font-size: 0.8rem;" onclick="zCore.wipeDB()">RESET TOTAL</button>
+        <!-- VIEW: SETTINGS -->
+        <div id="v-db" class="view hidden">
+            <div class="editor-wrap" style="text-align:center;">
+                <h2>Configuración</h2>
+                <div class="glass-card">
+                    <p style="margin-bottom:20px; font-weight:600;">Control de Datos Locales</p>
+                    <button class="z-btn" style="background:var(--dark); margin-bottom:15px;" onclick="z.export()">Exportar Backup (JSON)</button>
+                    <input type="file" id="f-in" style="display:none" onchange="z.import(event)">
+                    <button class="z-btn" style="background:#444;" onclick="document.getElementById('f-in').click()">Importar Backup</button>
+                </div>
+                <button class="z-btn" style="background:#ff4757; margin-top:50px; font-size:0.8rem;" onclick="z.wipe()">WIPE ALL DATA</button>
             </div>
         </div>
     </main>
 
-    <nav class="nav-bar">
-        <div class="nav-link active" onclick="zCore.switchView('home', this)"><i class="fas fa-home"></i></div>
-        <div class="nav-link" onclick="zCore.switchView('add', this)"><i class="fas fa-plus-circle"></i></div>
-        <div class="nav-link" onclick="zCore.switchView('notes', this)"><i class="fas fa-edit"></i></div>
-        <div class="nav-link" onclick="zCore.switchView('check', this)"><i class="fas fa-tasks"></i></div>
-        <div class="nav-link" onclick="zCore.switchView('db', this)"><i class="fas fa-database"></i></div>
+    <nav class="bottom-tabs">
+        <div class="tab-icon active" onclick="z.nav('home', this)"><i class="fas fa-home"></i></div>
+        <div class="tab-icon" onclick="z.nav('add', this)"><i class="fas fa-plus-circle"></i></div>
+        <div class="tab-icon" onclick="z.nav('notes', this)"><i class="fas fa-file-alt"></i></div>
+        <div class="tab-icon" onclick="z.nav('fit', this)"><i class="fas fa-dumbbell"></i></div>
+        <div class="tab-icon" onclick="z.nav('db', this)"><i class="fas fa-cog"></i></div>
     </nav>
 
     <script src="js/app.js"></script>

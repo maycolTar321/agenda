@@ -1,81 +1,80 @@
-class ZCorePro {
+class ZCoreUltimate {
     constructor() {
         this.tasks = [];
         this.checks = [];
         this.notes = "";
-        this.currentDay = new Date().toISOString().split('T')[0];
+        this.selDay = new Date().toISOString().split('T')[0];
         
-        try {
-            this.tasks = JSON.parse(localStorage.getItem('zc_tasks')) || [];
-            this.checks = JSON.parse(localStorage.getItem('zc_checks')) || [];
-            this.notes = localStorage.getItem('zc_notes_html') || "";
-        } catch(e) { console.error("LS Error", e); }
-
+        this.load();
         window.addEventListener('DOMContentLoaded', () => this.init());
+    }
+
+    load() {
+        try {
+            this.tasks = JSON.parse(localStorage.getItem('zu_tasks')) || [];
+            this.notes = localStorage.getItem('zu_notes_html') || "";
+            this.checks = JSON.parse(localStorage.getItem('zu_checks')) || [];
+        } catch(e) { console.error("Data Load Error", e); }
     }
 
     init() {
         this.cache();
-        this.events();
+        this.bind();
         this.renderCal();
         this.renderTasks();
-        this.renderChecks();
         this.loadNotes();
         this.updateStats();
-        this.startNotifyEngine();
+        this.notifyLoop();
     }
 
     cache() {
-        this.inName = document.getElementById('in-name');
-        this.inTime = document.getElementById('in-time');
-        this.inCat = document.getElementById('in-cat');
-        this.inCheck = document.getElementById('in-check');
-        this.homeTasks = document.getElementById('home-tasks');
-        this.checkListContainer = document.getElementById('check-list');
-        this.editor = document.getElementById('editor-content');
-        this.pctLabel = document.getElementById('pct-label');
-        this.labelMonth = document.getElementById('label-month');
-        this.stripCal = document.getElementById('strip-cal');
+        this.homeList = document.getElementById('home-task-list');
+        this.editor = document.getElementById('rich-editor');
+        this.addName = document.getElementById('add-name');
+        this.addTime = document.getElementById('add-time');
+        this.addCat = document.getElementById('add-cat');
+        this.pendingLabel = document.getElementById('pending-count');
+        this.mainProg = document.getElementById('main-progress');
+        this.mainPct = document.getElementById('main-pct');
+        this.calStrip = document.getElementById('cal-strip');
     }
 
-    events() {
-        // Auto-Capitalization Logic
-        const capFirst = (e) => {
+    bind() {
+        const cap = (e) => {
             const el = e.target;
             let val = el.value || el.innerText || "";
             if (val.length === 1) {
-                if (el.value !== undefined) el.value = val.toUpperCase();
-                else el.innerText = val.toUpperCase();
+                const upper = val.toUpperCase();
+                if (el.value !== undefined) el.value = upper;
+                else el.innerText = upper;
             }
         };
 
-        if(this.inName) this.inName.addEventListener('input', capFirst);
-        if(this.inCheck) this.inCheck.addEventListener('input', capFirst);
+        if(this.addName) this.addName.addEventListener('input', cap);
         if(this.editor) {
             this.editor.addEventListener('input', (e) => {
-                capFirst(e);
+                cap(e);
                 this.saveNotes();
             });
         }
+
+        // Auto-capitalize first char of any input
+        document.querySelectorAll('.z-input').forEach(i => i.addEventListener('input', cap));
     }
 
-    switchView(id, btn) {
-        document.querySelectorAll('.tab-pane').forEach(v => v.classList.add('hidden'));
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        const target = document.getElementById(`view-${id}`);
-        if(target) target.classList.remove('hidden');
+    // --- NAVIGATION ---
+    nav(id, btn) {
+        document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+        document.querySelectorAll('.tab-icon').forEach(t => t.classList.remove('active'));
+        const v = document.getElementById(`v-${id}`);
+        if(v) v.classList.remove('hidden');
         if(btn) btn.classList.add('active');
         if(id === 'home') this.renderTasks();
     }
 
-    filterHome(type, btn) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        this.renderTasks(type);
-    }
-
+    // --- CALENDAR ---
     renderCal() {
-        if(!this.stripCal) return;
+        if(!this.calStrip) return;
         const now = new Date();
         const days = [];
         for (let i = -3; i <= 3; i++) {
@@ -84,153 +83,150 @@ class ZCorePro {
             days.push(d);
         }
 
-        this.stripCal.innerHTML = days.map(d => {
+        this.calStrip.innerHTML = days.map(d => {
             const dStr = d.toISOString().split('T')[0];
-            const active = dStr === this.currentDay;
+            const active = dStr === this.selDay;
             return `
-                <div class="cal-card ${active ? 'active' : ''}" onclick="zCore.selectDay('${dStr}')">
-                    <span class="day-name">${d.toLocaleDateString('es-ES', { weekday: 'short' }).toUpperCase()}</span>
-                    <span class="day-num">${d.getDate()}</span>
-                    <div class="day-dot"></div>
+                <div class="cal-item ${active ? 'active' : ''}" onclick="z.selDate('${dStr}')">
+                    <span class="d-name">${d.toLocaleDateString('es-ES', { weekday: 'short' }).toUpperCase()}</span>
+                    <span class="d-num">${d.getDate()}</span>
                 </div>
             `;
         }).join('');
-
-        const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-        if(this.labelMonth) this.labelMonth.innerText = months[now.getMonth()];
     }
 
-    selectDay(date) {
-        this.currentDay = date;
+    selDate(date) {
+        this.selDay = date;
         this.renderCal();
         this.renderTasks();
     }
 
+    // --- TASKS ---
     saveTask() {
-        const name = this.inName.value.trim();
-        const time = this.inTime.value;
-        if (!name || !time) return alert("Completa los datos.");
+        const name = this.addName.value.trim();
+        const time = this.addTime.value;
+        if(!name || !time) return alert("Por favor, completa el título y la hora.");
 
-        const task = { id: Date.now(), name, time, cat: this.inCat.value, done: false, notified: false };
+        const task = { id: Date.now(), name, time, cat: this.addCat.value, done: false, notified: false };
         this.tasks.push(task);
-        localStorage.setItem('zc_tasks', JSON.stringify(this.tasks));
-        this.inName.value = "";
-        this.currentDay = time.split('T')[0];
-        this.switchView('home', document.querySelectorAll('.nav-link')[0]);
+        this.save();
+        this.addName.value = "";
+        this.selDay = time.split('T')[0];
+        this.nav('home', document.querySelectorAll('.tab-icon')[0]);
         this.updateStats();
     }
 
-    toggleTask(id) {
+    toggle(id) {
         const t = this.tasks.find(x => x.id === id);
-        if (t) { t.done = !t.done; localStorage.setItem('zc_tasks', JSON.stringify(this.tasks)); this.renderTasks(); this.updateStats(); }
+        if(t) { t.done = !t.done; this.save(); this.renderTasks(); this.updateStats(); }
     }
 
-    renderTasks(filter = 'all') {
-        if(!this.homeTasks) return;
-        let list = this.tasks.filter(t => t.time.startsWith(this.currentDay));
-        if (filter === 'pending') list = list.filter(t => !t.done);
+    renderTasks() {
+        if(!this.homeList) return;
+        const daily = this.tasks.filter(t => t.time.startsWith(this.selDay));
+        const pending = daily.filter(t => !t.done).length;
+        
+        if(this.pendingLabel) this.pendingLabel.innerText = `${pending} misiones`;
 
-        this.homeTasks.innerHTML = list.map(t => `
-            <div class="card-z ${t.done ? 'card-light' : 'card-dark'}" onclick="zCore.toggleTask(${t.id})">
-                <span class="task-time">${new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${t.cat.toUpperCase()}</span>
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 class="task-name">${t.name}</h3>
-                    <i class="fas ${t.done ? 'fa-check-circle' : 'fa-circle'}" style="color: ${t.done ? 'var(--success)' : 'var(--primary-gradient)'}"></i>
+        this.homeList.innerHTML = daily.sort((a,b) => new Date(a.time) - new Date(b.time)).map(t => `
+            <div class="task-item ${t.done ? 'done' : ''}" onclick="z.toggle(${t.id})">
+                <div class="task-check"></div>
+                <div class="task-info">
+                    <p>${new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${t.cat.toUpperCase()}</p>
+                    <h4>${t.name}</h4>
                 </div>
+                <i class="fas fa-trash" style="margin-left:auto; color:#eee;" onclick="event.stopPropagation(); z.delTask(${t.id})"></i>
             </div>
-        `).join('') || '<p style="text-align:center; color:#ccc; padding:40px;">No hay misiones hoy.</p>';
+        `).join('') || '<div style="text-align:center; padding:50px; color:#ccc;">No hay misiones programadas.</div>';
     }
 
-    addCheck() {
-        const text = this.inCheck.value.trim();
-        if (!text) return;
-        this.checks.push({ id: Date.now(), text, done: false });
-        localStorage.setItem('zc_checks', JSON.stringify(this.checks));
-        this.inCheck.value = "";
-        this.renderChecks();
+    delTask(id) {
+        if(confirm("¿Eliminar misión?")) {
+            this.tasks = this.tasks.filter(t => t.id !== id);
+            this.save();
+            this.renderTasks();
+            this.updateStats();
+        }
     }
 
-    toggleCheck(id) {
-        const c = this.checks.find(x => x.id === id);
-        if (c) { c.done = !c.done; localStorage.setItem('zc_checks', JSON.stringify(this.checks)); this.renderChecks(); }
-    }
+    save() { localStorage.setItem('zu_tasks', JSON.stringify(this.tasks)); }
 
-    renderChecks() {
-        if(!this.checkListContainer) return;
-        this.checkListContainer.innerHTML = this.checks.map(c => `
-            <div class="check-item ${c.done ? 'done' : ''}" onclick="zCore.toggleCheck(${c.id})">
-                <div class="check-circle"></div>
-                <span style="font-weight:700;">${c.text}</span>
-            </div>
-        `).join('');
-    }
-
+    // --- STATS ---
     updateStats() {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const todayTasks = this.tasks.filter(t => t.time.startsWith(todayStr));
+        const done = todayTasks.filter(t => t.done).length;
+        const pct = todayTasks.length > 0 ? (done / todayTasks.length) * 100 : 0;
+
+        if(this.mainProg) this.mainProg.style.width = `${pct}%`;
+        if(this.mainPct) this.mainPct.innerText = `${Math.round(pct)}%`;
+
+        // Weekly bars
         const now = new Date();
         const start = new Date(now);
-        start.setDate(now.getDate() - now.getDay() + 1); // Monday
+        start.setDate(now.getDate() - now.getDay() + 1); // Mon
 
         for (let i = 0; i < 7; i++) {
             const d = new Date(start);
             d.setDate(start.getDate() + i);
             const dStr = d.toISOString().split('T')[0];
-            const dayTasks = this.tasks.filter(t => t.time.startsWith(dStr));
-            const done = dayTasks.filter(t => t.done).length;
-            const pct = dayTasks.length > 0 ? (done / dayTasks.length) * 100 : 0;
+            const dTasks = this.tasks.filter(t => t.time.startsWith(dStr));
+            const dDone = dTasks.filter(t => t.done).length;
+            const dPct = dTasks.length > 0 ? (dDone / dTasks.length) * 100 : 0;
             
             const bar = document.getElementById(`bar-${i}`);
-            if (bar) bar.style.height = `${Math.max(pct, 5)}%`;
-            if (dStr === new Date().toISOString().split('T')[0] && this.pctLabel) {
-                this.pctLabel.innerText = `${Math.round(pct)}%`;
-            }
+            if(bar) bar.style.height = `${Math.max(dPct, 8)}%`;
         }
     }
 
-    format(cmd) { document.execCommand(cmd, false, null); if(this.editor) this.editor.focus(); }
-    saveNotes() { if(this.editor) localStorage.setItem('zc_notes_html', this.editor.innerHTML); }
+    // --- EDITOR ---
+    exec(cmd) { document.execCommand(cmd, false, null); this.editor.focus(); }
+    saveNotes() { if(this.editor) localStorage.setItem('zu_notes_html', this.editor.innerHTML); }
     loadNotes() { if(this.editor) this.editor.innerHTML = this.notes; }
 
-    askNotify() { if ('Notification' in window) Notification.requestPermission().then(p => { if (p === 'granted') alert("Notificaciones Activadas."); }); }
-    startNotifyEngine() {
+    // --- TRAINING ---
+    completeEx(name) { alert(`¡Reto completado: ${name}! +10 Puntos de Energía`); }
+
+    // --- NOTIFICATIONS ---
+    askPerms() { if ('Notification' in window) Notification.requestPermission(); }
+    notifyLoop() {
         setInterval(() => {
             const now = new Date();
             this.tasks.forEach(t => {
                 const tDate = new Date(t.time);
                 const diff = (tDate - now) / 1000 / 60;
-                if (!t.done && !t.notified && diff > 0 && diff <= 5) {
-                    if (Notification.permission === 'granted') {
-                        new Notification("Z-Core Pro", { body: `En 5 min: ${t.name}` });
+                if(!t.done && !t.notified && diff > 0 && diff <= 5) {
+                    if(Notification.permission === 'granted') {
+                        new Notification("Z-Core ULTIMATE", { body: `Misión en 5m: ${t.name}`, icon: 'favicon.ico' });
                         t.notified = true;
-                        localStorage.setItem('zc_tasks', JSON.stringify(this.tasks));
+                        this.save();
                     }
                 }
             });
         }, 30000);
     }
 
-    exportDB() {
-        const data = { tasks: this.tasks, checks: this.checks, notes: this.notes };
+    // --- DATABASE ---
+    export() {
+        const data = { tasks: this.tasks, notes: this.notes };
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `backup_zcore.json`;
+        a.download = `zcore_ultimate_backup.json`;
         a.click();
     }
-    importDB(e) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            try {
-                const data = JSON.parse(ev.target.result);
-                localStorage.setItem('zc_tasks', JSON.stringify(data.tasks));
-                localStorage.setItem('zc_checks', JSON.stringify(data.checks));
-                localStorage.setItem('zc_notes_html', data.notes);
-                location.reload();
-            } catch(e) { alert("Archivo Inválido."); }
+    import(e) {
+        const r = new FileReader();
+        r.onload = (ev) => {
+            const d = JSON.parse(ev.target.result);
+            localStorage.setItem('zu_tasks', JSON.stringify(d.tasks));
+            localStorage.setItem('zu_notes_html', d.notes);
+            location.reload();
         };
-        reader.readAsText(e.target.files[0]);
+        r.readAsText(e.target.files[0]);
     }
-    wipeDB() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+    wipe() { if(confirm("¿RESET TOTAL?")) { localStorage.clear(); location.reload(); } }
 }
 
-const zCore = new ZCorePro();
-window.zCore = zCore;
+const z = new ZCoreUltimate();
+window.z = z;
